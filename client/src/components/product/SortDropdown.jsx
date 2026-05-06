@@ -27,12 +27,12 @@ export default function SortDropdown({ value, onChange }) {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50"
+        className="flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-3 py-2 text-xs font-medium text-neutral-700 hover:bg-neutral-50 sm:px-4 sm:text-sm"
         aria-haspopup="listbox"
         aria-expanded={open}
       >
-        Sort: {current.label}
-        <ChevronDown className={`h-4 w-4 text-neutral-400 transition-transform ${open ? 'rotate-180' : ''}`} />
+        <span className="hidden sm:inline">Sort: </span>{current.label}
+        <ChevronDown className={`h-3.5 w-3.5 text-neutral-400 transition-transform sm:h-4 sm:w-4 ${open ? 'rotate-180' : ''}`} />
       </button>
 
       {open && (

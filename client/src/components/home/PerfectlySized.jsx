@@ -1,56 +1,84 @@
 import { motion } from 'framer-motion';
-import { Ruler, Briefcase, Laptop } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const sizes = [
+const categories = [
   {
-    icon: Briefcase,
-    name: 'Compact',
-    dimensions: '28 × 20 × 10 cm',
-    fits: 'Essentials, tablet, wallet',
+    name: 'Shoulder Bags',
+    slug: 'shoulder-bags',
+    image: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=400&q=80&auto=format&fit=crop',
+    count: '12 styles',
   },
   {
-    icon: Laptop,
-    name: 'Standard',
-    dimensions: '38 × 28 × 12 cm',
-    fits: '14" laptop, documents, accessories',
+    name: 'Tote Bags',
+    slug: 'tote-bags',
+    image: 'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=400&q=80&auto=format&fit=crop',
+    count: '8 styles',
   },
   {
-    icon: Ruler,
-    name: 'Spacious',
-    dimensions: '42 × 32 × 15 cm',
-    fits: '16" laptop, gym kit, lunch box',
+    name: 'Laptop Bags',
+    slug: 'laptop-bags',
+    image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80&auto=format&fit=crop',
+    count: '10 styles',
+  },
+  {
+    name: 'Crossbody',
+    slug: 'crossbody-bags',
+    image: 'https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?w=400&q=80&auto=format&fit=crop',
+    count: '6 styles',
+  },
+  {
+    name: 'Handbags',
+    slug: 'handbags',
+    image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&q=80&auto=format&fit=crop',
+    count: '9 styles',
   },
 ];
 
 export default function PerfectlySized() {
   return (
-    <section className="bg-brand-50/50 py-16">
+    <section className="bg-neutral-50 py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-10 text-center">
-          <h2 className="font-heading text-3xl font-bold text-neutral-900">
-            Perfectly Sized for Your Day
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mb-12 text-center"
+        >
+          <span className="text-sm font-medium uppercase tracking-widest text-brand-500">
+            Shop by Category
+          </span>
+          <h2 className="mt-2 font-heading text-3xl font-bold text-neutral-900 sm:text-4xl">
+            Find Your Perfect Match
           </h2>
-          <p className="mt-2 text-neutral-500">
-            From quick meetings to full work days — there's a Zimor for every occasion
-          </p>
-        </div>
+        </motion.div>
 
-        <div className="grid gap-6 sm:grid-cols-3">
-          {sizes.map(({ icon: Icon, name, dimensions, fits }, i) => (
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+          {categories.map(({ name, slug, image, count }, i) => (
             <motion.div
-              key={name}
-              initial={{ opacity: 0, y: 24 }}
+              key={slug}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
-              className="rounded-xl border border-neutral-200 bg-white p-6 text-center shadow-sm"
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: i * 0.08 }}
             >
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-brand-100 text-brand-600">
-                <Icon className="h-6 w-6" />
-              </div>
-              <h3 className="text-lg font-semibold text-neutral-800">{name}</h3>
-              <p className="mt-1 text-sm font-medium text-brand-600">{dimensions}</p>
-              <p className="mt-2 text-sm text-neutral-500">Fits: {fits}</p>
+              <Link
+                to={`/shop?category=${slug}`}
+                className="group block text-center"
+              >
+                <div className="mx-auto aspect-square w-full max-w-[160px] overflow-hidden rounded-full border-4 border-white shadow-md transition-all group-hover:border-brand-300 group-hover:shadow-lg">
+                  <img
+                    src={image}
+                    alt={name}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    loading="lazy"
+                  />
+                </div>
+                <h3 className="mt-4 text-sm font-semibold text-neutral-800 group-hover:text-brand-600 transition-colors">
+                  {name}
+                </h3>
+                <p className="text-xs text-neutral-500">{count}</p>
+              </Link>
             </motion.div>
           ))}
         </div>

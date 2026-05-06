@@ -31,7 +31,7 @@ function ProductDetailSkeleton() {
 export default function ProductDetailPage() {
   const { slug } = useParams();
   const { data, isLoading, isError } = useProduct(slug);
-  const product = data?.data?.product ?? null;
+  const product = data?.product ?? null;
 
   if (isLoading) return <ProductDetailSkeleton />;
 

@@ -31,7 +31,8 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const res = await api.post('/auth/login', data);
-      setAuth(res.data.token, res.data.user);
+      const { token, user } = res.data?.data ?? res.data;
+      setAuth(token, user);
       toast.success('Welcome back!');
       navigate('/');
     } catch (err) {

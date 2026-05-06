@@ -2,13 +2,17 @@ import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import User from '../models/User.js';
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: '/api/auth/google/callback',
-    },
+const clientID = process.env.GOOGLE_CLIENT_ID;
+const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+
+if (clientID && clientSecret && !clientID.startsWith('your_')) {
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID,
+        clientSecret,
+        callbackURL: '/api/auth/google/callback',
+      },
     async (accessToken, refreshToken, profile, done) => {
       try {
         // Check if user already exists with this Google ID
@@ -48,5 +52,8 @@ passport.use(
     }
   )
 );
+} else {
+  console.log('Google OAuth not configured — skipping Passport Google strategy');
+}
 
 export default passport;

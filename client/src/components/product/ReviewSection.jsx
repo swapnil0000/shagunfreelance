@@ -22,7 +22,7 @@ export default function ReviewSection({ productId }) {
   const [rating, setRating] = useState(0);
   const [showForm, setShowForm] = useState(false);
 
-  const reviews = data?.data?.reviews ?? [];
+  const reviews = data?.reviews ?? [];
   const hasReviewed = reviews.some((r) => r.user?._id === user?._id);
 
   const {

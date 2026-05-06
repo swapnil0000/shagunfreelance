@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import api from '../../lib/axios';
 import ProductCard from '../product/ProductCard';
 import Skeleton from '../ui/Skeleton';
@@ -8,7 +9,7 @@ import Skeleton from '../ui/Skeleton';
 function useFeaturedProducts() {
   return useQuery({
     queryKey: ['products', 'featured'],
-    queryFn: () => api.get('/products/featured').then((r) => r.data),
+    queryFn: () => api.get('/products/featured').then((r) => r.data?.data ?? r.data),
     staleTime: 5 * 60 * 1000,
   });
 }
@@ -16,7 +17,7 @@ function useFeaturedProducts() {
 function ProductSkeleton() {
   return (
     <div className="space-y-3">
-      <Skeleton className="aspect-3/4 w-full rounded-lg" />
+      <Skeleton className="aspect-3/4 w-full rounded-xl" />
       <Skeleton className="h-4 w-3/4" />
       <Skeleton className="h-4 w-1/2" />
     </div>
@@ -25,24 +26,30 @@ function ProductSkeleton() {
 
 export default function FeaturedProducts() {
   const { data, isLoading, isError } = useFeaturedProducts();
-  const products = data?.products ?? data ?? [];
+  const products = data?.products ?? [];
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-      <div className="mb-10 flex items-end justify-between">
-        <div>
-          <h2 className="font-heading text-3xl font-bold text-neutral-900">
+    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+      <div className="mb-12 flex items-end justify-between">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          <span className="text-sm font-medium uppercase tracking-widest text-brand-500">
+            Curated for you
+          </span>
+          <h2 className="mt-2 font-heading text-3xl font-bold text-neutral-900 sm:text-4xl">
             Featured Collection
           </h2>
-          <p className="mt-2 text-neutral-500">
-            Our most loved bags, handpicked for you
-          </p>
-        </div>
+        </motion.div>
         <Link
           to="/shop"
-          className="hidden items-center gap-1 text-sm font-medium text-brand-600 hover:text-brand-700 sm:flex"
+          className="group hidden items-center gap-1.5 text-sm font-medium text-brand-600 hover:text-brand-700 sm:flex"
         >
-          View All <ArrowRight className="h-4 w-4" />
+          View All
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </Link>
       </div>
 
@@ -52,7 +59,7 @@ export default function FeaturedProducts() {
         </p>
       )}
 
-      <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-5 sm:gap-6 md:grid-cols-3 lg:grid-cols-4">
         {isLoading
           ? Array.from({ length: 4 }, (_, i) => <ProductSkeleton key={i} />)
           : products.map((product) => (
@@ -60,10 +67,10 @@ export default function FeaturedProducts() {
             ))}
       </div>
 
-      <div className="mt-8 text-center sm:hidden">
+      <div className="mt-10 text-center sm:hidden">
         <Link
           to="/shop"
-          className="inline-flex items-center gap-1 text-sm font-medium text-brand-600 hover:text-brand-700"
+          className="inline-flex items-center gap-1.5 rounded-full border border-brand-600 px-6 py-2.5 text-sm font-medium text-brand-600 hover:bg-brand-50"
         >
           View All Products <ArrowRight className="h-4 w-4" />
         </Link>

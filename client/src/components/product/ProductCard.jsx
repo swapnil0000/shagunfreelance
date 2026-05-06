@@ -82,14 +82,14 @@ export default function ProductCard({ product }) {
             />
           </button>
 
-          {/* Add to cart button — visible on hover */}
+          {/* Add to cart button — visible on hover (desktop) and always visible (mobile) */}
           {!outOfStock && (
             <button
               onClick={handleAddToCart}
-              className="absolute bottom-3 left-3 right-3 flex items-center justify-center gap-2 rounded-lg bg-brand-600 py-2.5 text-sm font-medium text-white opacity-0 transition-all duration-300 hover:bg-brand-700 group-hover:opacity-100"
+              className="absolute bottom-3 left-3 right-3 flex items-center justify-center gap-2 rounded-lg bg-brand-600 py-2 text-xs font-medium text-white opacity-100 transition-all duration-300 hover:bg-brand-700 sm:py-2.5 sm:text-sm sm:opacity-0 sm:group-hover:opacity-100"
               aria-label={`Add ${product.name} to cart`}
             >
-              <ShoppingBag className="h-4 w-4" />
+              <ShoppingBag className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Add to Cart
             </button>
           )}

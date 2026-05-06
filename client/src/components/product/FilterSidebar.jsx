@@ -19,18 +19,15 @@ const PRICE_RANGES = [
 
 function FilterSection({ title, children, defaultOpen = true }) {
   const [open, setOpen] = useState(defaultOpen);
-
   return (
-    <div className="border-b border-neutral-200 py-4">
+    <div className="border-b border-neutral-200 py-4 last:border-0">
       <button
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between text-sm font-semibold text-neutral-800"
         aria-expanded={open}
       >
         {title}
-        <ChevronDown
-          className={`h-4 w-4 text-neutral-400 transition-transform ${open ? 'rotate-180' : ''}`}
-        />
+        <ChevronDown className={`h-4 w-4 text-neutral-400 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       <AnimatePresence initial={false}>
         {open && (
@@ -57,8 +54,7 @@ function FilterContent({ category, minPrice, maxPrice, onFilterChange, onClear }
   };
 
   const handlePriceChange = (range) => {
-    const isActive =
-      String(minPrice) === String(range.min) && String(maxPrice) === String(range.max);
+    const isActive = String(minPrice) === String(range.min) && String(maxPrice) === String(range.max);
     if (isActive) {
       onFilterChange({ minPrice: '', maxPrice: '' });
     } else {
@@ -70,25 +66,14 @@ function FilterContent({ category, minPrice, maxPrice, onFilterChange, onClear }
     <>
       {hasFilters && (
         <div className="mb-2 flex items-center justify-between">
-          <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">
-            Filters
-          </span>
-          <button
-            onClick={onClear}
-            className="text-xs font-medium text-brand-600 hover:text-brand-700"
-          >
-            Clear all
-          </button>
+          <span className="text-xs font-medium text-neutral-500 uppercase tracking-wide">Filters</span>
+          <button onClick={onClear} className="text-xs font-medium text-brand-600 hover:text-brand-700">Clear all</button>
         </div>
       )}
-
       <FilterSection title="Category">
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           {CATEGORIES.map((cat) => (
-            <label
-              key={cat.value}
-              className="flex cursor-pointer items-center gap-2.5 text-sm text-neutral-600 hover:text-neutral-900"
-            >
+            <label key={cat.value} className="flex cursor-pointer items-center gap-2.5 text-sm text-neutral-600 hover:text-neutral-900">
               <input
                 type="checkbox"
                 checked={category === cat.value}
@@ -100,18 +85,12 @@ function FilterContent({ category, minPrice, maxPrice, onFilterChange, onClear }
           ))}
         </div>
       </FilterSection>
-
       <FilterSection title="Price Range">
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           {PRICE_RANGES.map((range) => {
-            const isActive =
-              String(minPrice) === String(range.min) &&
-              String(maxPrice) === String(range.max);
+            const isActive = String(minPrice) === String(range.min) && String(maxPrice) === String(range.max);
             return (
-              <label
-                key={range.label}
-                className="flex cursor-pointer items-center gap-2.5 text-sm text-neutral-600 hover:text-neutral-900"
-              >
+              <label key={range.label} className="flex cursor-pointer items-center gap-2.5 text-sm text-neutral-600 hover:text-neutral-900">
                 <input
                   type="radio"
                   name="priceRange"
@@ -129,69 +108,69 @@ function FilterContent({ category, minPrice, maxPrice, onFilterChange, onClear }
   );
 }
 
-export default function FilterSidebar({ category, minPrice, maxPrice, onFilterChange, onClear }) {
-  const [mobileOpen, setMobileOpen] = useState(false);
-
+// Mobile filter button — use this in the toolbar
+export function MobileFilterButton({ onClick }) {
   return (
-    <>
-      {/* Mobile filter button */}
-      <button
-        onClick={() => setMobileOpen(true)}
-        className="flex items-center gap-2 rounded-lg border border-neutral-200 px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-50 lg:hidden"
-        aria-label="Open filters"
-      >
-        <SlidersHorizontal className="h-4 w-4" />
-        Filters
-      </button>
+    <button
+      onClick={onClick}
+      className="flex items-center gap-1.5 rounded-full border border-neutral-200 bg-white px-3.5 py-2 text-xs font-medium text-neutral-700 hover:bg-neutral-50 sm:text-sm sm:px-4 lg:hidden"
+      aria-label="Open filters"
+    >
+      <SlidersHorizontal className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+      Filters
+    </button>
+  );
+}
 
-      {/* Mobile drawer */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-40 bg-black/40 lg:hidden"
-              onClick={() => setMobileOpen(false)}
+// Mobile filter drawer
+export function MobileFilterDrawer({ isOpen, onClose, category, minPrice, maxPrice, onFilterChange, onClear }) {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-40 bg-black/40"
+            onClick={onClose}
+          />
+          <motion.aside
+            initial={{ x: '-100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '-100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="fixed inset-y-0 left-0 z-50 w-72 overflow-y-auto bg-white p-5 shadow-xl"
+          >
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-neutral-900">Filters</h2>
+              <button
+                onClick={onClose}
+                className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-neutral-100"
+                aria-label="Close filters"
+              >
+                <X className="h-5 w-5 text-neutral-500" />
+              </button>
+            </div>
+            <FilterContent
+              category={category}
+              minPrice={minPrice}
+              maxPrice={maxPrice}
+              onFilterChange={(f) => { onFilterChange(f); onClose(); }}
+              onClear={() => { onClear(); onClose(); }}
             />
-            <motion.aside
-              initial={{ x: '-100%' }}
-              animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
-              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="fixed inset-y-0 left-0 z-50 w-72 overflow-y-auto bg-white p-5 shadow-xl lg:hidden"
-            >
-              <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-semibold text-neutral-900">Filters</h2>
-                <button
-                  onClick={() => setMobileOpen(false)}
-                  className="flex h-8 w-8 items-center justify-center rounded-full hover:bg-neutral-100"
-                  aria-label="Close filters"
-                >
-                  <X className="h-5 w-5 text-neutral-500" />
-                </button>
-              </div>
-              <FilterContent
-                category={category}
-                minPrice={minPrice}
-                maxPrice={maxPrice}
-                onFilterChange={(f) => {
-                  onFilterChange(f);
-                  setMobileOpen(false);
-                }}
-                onClear={() => {
-                  onClear();
-                  setMobileOpen(false);
-                }}
-              />
-            </motion.aside>
-          </>
-        )}
-      </AnimatePresence>
+          </motion.aside>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
 
-      {/* Desktop sidebar */}
-      <aside className="hidden w-56 shrink-0 lg:block">
+// Desktop sidebar — only renders on lg+
+export default function FilterSidebar({ category, minPrice, maxPrice, onFilterChange, onClear }) {
+  return (
+    <aside className="hidden w-56 shrink-0 lg:block">
+      <div className="sticky top-20">
         <FilterContent
           category={category}
           minPrice={minPrice}
@@ -199,7 +178,7 @@ export default function FilterSidebar({ category, minPrice, maxPrice, onFilterCh
           onFilterChange={onFilterChange}
           onClear={onClear}
         />
-      </aside>
-    </>
+      </div>
+    </aside>
   );
 }

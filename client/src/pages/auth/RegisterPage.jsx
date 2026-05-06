@@ -31,7 +31,8 @@ export default function RegisterPage() {
     setLoading(true);
     try {
       const res = await api.post('/auth/register', data);
-      setAuth(res.data.token, res.data.user);
+      const { token, user } = res.data?.data ?? res.data;
+      setAuth(token, user);
       toast.success('Account created successfully!');
       navigate('/');
     } catch (err) {

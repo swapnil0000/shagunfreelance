@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingBag, User, Menu, Search, X } from 'lucide-react';
+import { ShoppingBag, User, Menu, Search, X, Heart, ChevronDown } from 'lucide-react';
 import useCartStore from '../../stores/cartStore';
 import useAuthStore from '../../stores/authStore';
 
@@ -37,107 +37,124 @@ export default function Navbar({ onOpenMobileNav }) {
   };
 
   return (
-    <nav className="sticky top-0 z-40 bg-white border-b border-neutral-200">
+    <nav className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-neutral-100">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Mobile hamburger */}
-          <button
-            onClick={onOpenMobileNav}
-            className="lg:hidden p-2 -ml-2 text-neutral-700 hover:text-brand-600"
-            aria-label="Open menu"
-          >
-            <Menu className="h-6 w-6" />
-          </button>
+          {/* Left: Mobile hamburger + Logo */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onOpenMobileNav}
+              className="lg:hidden p-2 -ml-2 text-neutral-700 hover:text-brand-600 transition-colors"
+              aria-label="Open menu"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
 
-          {/* Logo */}
-          <Link to="/" className="shrink-0">
-            <span className="font-heading text-xl sm:text-2xl font-bold text-brand-800">
-              Zimor India
-            </span>
-          </Link>
+            <Link to="/" className="shrink-0">
+              <span className="font-heading text-xl font-bold tracking-tight text-neutral-900 sm:text-2xl">
+                ZIMOR
+              </span>
+            </Link>
+          </div>
 
-          {/* Desktop nav links */}
-          <div className="hidden lg:flex items-center gap-8">
+          {/* Center: Desktop nav links */}
+          <div className="hidden lg:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.to}
                 to={link.to}
-                className="text-sm font-medium text-neutral-700 hover:text-brand-600 transition-colors"
+                className="px-4 py-2 rounded-full text-sm font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-all"
               >
                 {link.label}
               </Link>
             ))}
           </div>
 
-          {/* Right actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Search toggle */}
+          {/* Right: Actions */}
+          <div className="flex items-center gap-1">
+            {/* Search */}
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className="p-2 text-neutral-700 hover:text-brand-600"
+              className="p-2.5 rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-all"
               aria-label="Search"
             >
-              {searchOpen ? <X className="h-5 w-5" /> : <Search className="h-5 w-5" />}
+              {searchOpen ? <X className="h-[18px] w-[18px]" /> : <Search className="h-[18px] w-[18px]" />}
             </button>
+
+            {/* Wishlist */}
+            <Link
+              to="/wishlist"
+              className="hidden sm:flex p-2.5 rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-all"
+              aria-label="Wishlist"
+            >
+              <Heart className="h-[18px] w-[18px]" />
+            </Link>
 
             {/* User menu */}
             <div className="relative">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="p-2 text-neutral-700 hover:text-brand-600"
+                className="p-2.5 rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-all"
                 aria-label="User menu"
               >
-                <User className="h-5 w-5" />
+                <User className="h-[18px] w-[18px]" />
               </button>
 
               {userMenuOpen && (
                 <>
-                  <div
-                    className="fixed inset-0 z-40"
-                    onClick={() => setUserMenuOpen(false)}
-                  />
-                  <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-neutral-200 py-2 z-50">
+                  <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
+                  <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-2xl shadow-xl border border-neutral-100 py-2 z-50 overflow-hidden">
                     {isAuthenticated ? (
                       <>
-                        <p className="px-4 py-2 text-xs text-neutral-500 truncate">
-                          {user?.email}
-                        </p>
+                        <div className="px-4 py-3 border-b border-neutral-100">
+                          <p className="text-sm font-semibold text-neutral-900 truncate">{user?.name}</p>
+                          <p className="text-xs text-neutral-500 truncate">{user?.email}</p>
+                        </div>
                         <Link
                           to="/account"
                           onClick={() => setUserMenuOpen(false)}
-                          className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
+                          className="block px-4 py-2.5 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors"
                         >
                           My Account
                         </Link>
                         <Link
                           to="/account/orders"
                           onClick={() => setUserMenuOpen(false)}
-                          className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
+                          className="block px-4 py-2.5 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors"
                         >
-                          Orders
+                          My Orders
                         </Link>
-                        <button
-                          onClick={handleLogout}
-                          className="w-full text-left px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
+                        <Link
+                          to="/wishlist"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="block px-4 py-2.5 text-sm text-neutral-700 hover:bg-neutral-50 transition-colors"
                         >
-                          Logout
-                        </button>
+                          Wishlist
+                        </Link>
+                        <div className="border-t border-neutral-100 mt-1 pt-1">
+                          <button
+                            onClick={handleLogout}
+                            className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                          >
+                            Logout
+                          </button>
+                        </div>
                       </>
                     ) : (
                       <>
                         <Link
                           to="/login"
                           onClick={() => setUserMenuOpen(false)}
-                          className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
+                          className="block px-4 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-50 transition-colors"
                         >
-                          Login
+                          Sign In
                         </Link>
                         <Link
                           to="/register"
                           onClick={() => setUserMenuOpen(false)}
-                          className="block px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-50"
+                          className="block px-4 py-2.5 text-sm font-medium text-brand-600 hover:bg-brand-50 transition-colors"
                         >
-                          Register
+                          Create Account
                         </Link>
                       </>
                     )}
@@ -146,16 +163,16 @@ export default function Navbar({ onOpenMobileNav }) {
               )}
             </div>
 
-            {/* Cart icon with badge */}
+            {/* Cart */}
             <button
               onClick={toggleDrawer}
-              className="relative p-2 text-neutral-700 hover:text-brand-600"
+              className="relative p-2.5 rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-all"
               aria-label="Open cart"
             >
-              <ShoppingBag className="h-5 w-5" />
+              <ShoppingBag className="h-[18px] w-[18px]" />
               {totalItems > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-brand-600 text-[10px] font-bold text-white">
-                  {totalItems > 99 ? '99+' : totalItems}
+                <span className="absolute top-0.5 right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-brand-600 text-[9px] font-bold text-white ring-2 ring-white">
+                  {totalItems > 9 ? '9+' : totalItems}
                 </span>
               )}
             </button>
@@ -163,24 +180,21 @@ export default function Navbar({ onOpenMobileNav }) {
         </div>
       </div>
 
-      {/* Search bar (expandable) */}
+      {/* Search bar */}
       {searchOpen && (
-        <div className="border-t border-neutral-200 px-4 py-3">
-          <form onSubmit={handleSearch} className="mx-auto max-w-xl flex gap-2">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for bags..."
-              className="flex-1 rounded-lg border border-neutral-300 px-4 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
-              autoFocus
-            />
-            <button
-              type="submit"
-              className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-700 transition-colors"
-            >
-              Search
-            </button>
+        <div className="border-t border-neutral-100 bg-white px-4 py-3">
+          <form onSubmit={handleSearch} className="mx-auto max-w-lg">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search for bags..."
+                className="w-full rounded-full border border-neutral-200 bg-neutral-50 py-2.5 pl-11 pr-4 text-sm focus:border-brand-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-100"
+                autoFocus
+              />
+            </div>
           </form>
         </div>
       )}

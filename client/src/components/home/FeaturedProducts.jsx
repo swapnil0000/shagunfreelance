@@ -29,7 +29,7 @@ export default function FeaturedProducts() {
   const products = data?.products ?? [];
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+    <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <div className="mb-12 flex items-end justify-between">
         <motion.div
           initial={{ opacity: 0, y: 16 }}

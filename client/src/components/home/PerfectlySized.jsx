@@ -9,28 +9,16 @@ const categories = [
     count: '12 styles',
   },
   {
-    name: 'Tote Bags',
-    slug: 'tote-bags',
-    image: 'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=400&q=80&auto=format&fit=crop',
-    count: '8 styles',
-  },
-  {
     name: 'Laptop Bags',
     slug: 'laptop-bags',
     image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&q=80&auto=format&fit=crop',
     count: '10 styles',
   },
   {
-    name: 'Crossbody',
-    slug: 'crossbody-bags',
-    image: 'https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?w=400&q=80&auto=format&fit=crop',
-    count: '6 styles',
-  },
-  {
-    name: 'Handbags',
-    slug: 'handbags',
-    image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&q=80&auto=format&fit=crop',
-    count: '9 styles',
+    name: 'Tote Bags',
+    slug: 'tote-bags',
+    image: 'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?w=400&q=80&auto=format&fit=crop',
+    count: '8 styles',
   },
 ];
 
@@ -53,7 +41,7 @@ export default function PerfectlySized() {
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
           {categories.map(({ name, slug, image, count }, i) => (
             <motion.div
               key={slug}

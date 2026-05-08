@@ -51,9 +51,14 @@ export default function Navbar({ onOpenMobileNav }) {
             </button>
 
             <Link to="/" className="shrink-0">
-              <span className="font-heading text-xl font-bold tracking-tight text-neutral-900 sm:text-2xl">
-                ZIMOR
-              </span>
+              <div className="flex flex-col items-start leading-none">
+                <span className="text-xl font-bold tracking-[0.2em] text-neutral-900 sm:text-2xl" style={{ fontFamily: "'Playfair Display', serif" }}>
+                  ZIMOR
+                </span>
+                <span className="text-[9px] font-medium tracking-[0.35em] text-neutral-500 uppercase sm:text-[10px]">
+                  INDIA
+                </span>
+              </div>
             </Link>
           </div>
 

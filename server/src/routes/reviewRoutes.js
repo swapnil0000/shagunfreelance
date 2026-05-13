@@ -3,12 +3,16 @@ import { body } from 'express-validator';
 import validate from '../middleware/validate.js';
 import { authenticate } from '../middleware/auth.js';
 import {
+  getRecentReviewsHandler,
   getProductReviewsHandler,
   createReviewHandler,
   deleteReviewHandler,
 } from '../controllers/reviewController.js';
 
 const router = Router();
+
+// GET /api/reviews/recent — latest reviews across all products (public, homepage)
+router.get('/recent', getRecentReviewsHandler);
 
 // GET /api/reviews/:productId — get all reviews for a product (public)
 router.get('/:productId', getProductReviewsHandler);

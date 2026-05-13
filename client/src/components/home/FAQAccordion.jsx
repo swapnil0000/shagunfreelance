@@ -5,7 +5,7 @@ import Accordion from '../ui/Accordion';
 const faqs = [
   {
     title: 'What materials are Zimor bags made from?',
-    content: 'All Zimor bags are handcrafted from premium full-grain leather sourced from trusted Indian tanneries. We use vegetable-tanned leather for durability and a beautiful natural patina over time.',
+    content: 'All Zimor bags are made from premium full-grain leather sourced from trusted Indian tanneries, built for durability and a beautiful natural finish over time.',
   },
   {
     title: 'How long does shipping take?',

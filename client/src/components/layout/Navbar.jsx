@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingBag, User, Menu, Search, X, Heart, ChevronDown } from 'lucide-react';
+import { ShoppingBag, User, Menu, Heart } from 'lucide-react';
 import useCartStore from '../../stores/cartStore';
 import useAuthStore from '../../stores/authStore';
 
 export default function Navbar({ onOpenMobileNav }) {
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -21,15 +19,6 @@ export default function Navbar({ onOpenMobileNav }) {
     { to: '/contact', label: 'Contact' },
   ];
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery('');
-      setSearchOpen(false);
-    }
-  };
-
   const handleLogout = () => {
     logout();
     setUserMenuOpen(false);
@@ -39,8 +28,8 @@ export default function Navbar({ onOpenMobileNav }) {
   return (
     <nav className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-neutral-100">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Left: Mobile hamburger + Logo */}
+        <div className="relative flex h-16 items-center justify-between">
+          {/* Left: Mobile hamburger (mobile only) + Desktop logo */}
           <div className="flex items-center gap-3">
             <button
               onClick={onOpenMobileNav}
@@ -50,12 +39,16 @@ export default function Navbar({ onOpenMobileNav }) {
               <Menu className="h-5 w-5" />
             </button>
 
-            <Link to="/" className="shrink-0">
-              <div className="flex flex-col items-start leading-none">
-                 <img style={{color:'wheat'}} src="/logo.png" alt="Zimor India" className="w-30" />
-              </div>
+            {/* Desktop logo — left aligned */}
+            <Link to="/" className="hidden lg:block shrink-0">
+              <img src="/logo.png" alt="Zimor India" className="w-30" />
             </Link>
           </div>
+
+          {/* Mobile logo — absolutely centered */}
+          <Link to="/" className="lg:hidden absolute left-1/2 -translate-x-1/2 shrink-0">
+            <img src="/logo.png" alt="Zimor India" className="w-28" />
+          </Link>
 
           {/* Center: Desktop nav links */}
           <div className="hidden lg:flex items-center gap-1">
@@ -72,15 +65,6 @@ export default function Navbar({ onOpenMobileNav }) {
 
           {/* Right: Actions */}
           <div className="flex items-center gap-1">
-            {/* Search */}
-            <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="p-2.5 rounded-full text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-all"
-              aria-label="Search"
-            >
-              {searchOpen ? <X className="h-[18px] w-[18px]" /> : <Search className="h-[18px] w-[18px]" />}
-            </button>
-
             {/* Wishlist */}
             <Link
               to="/wishlist"
@@ -180,24 +164,6 @@ export default function Navbar({ onOpenMobileNav }) {
         </div>
       </div>
 
-      {/* Search bar */}
-      {searchOpen && (
-        <div className="border-t border-neutral-100 bg-white px-4 py-3">
-          <form onSubmit={handleSearch} className="mx-auto max-w-lg">
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for bags..."
-                className="w-full rounded-full border border-neutral-200 bg-neutral-50 py-2.5 pl-11 pr-4 text-sm focus:border-brand-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-100"
-                autoFocus
-              />
-            </div>
-          </form>
-        </div>
-      )}
     </nav>
   );
 }

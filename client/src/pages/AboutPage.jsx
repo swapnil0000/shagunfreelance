@@ -3,7 +3,7 @@ import { Heart, Gem, Users, MapPin, Star, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const values = [
-  { emoji: '✨', title: 'Craftsmanship', description: 'Every bag is handcrafted by skilled artisans in Varanasi — blending centuries of tradition with modern design.' },
+  { emoji: '✨', title: 'Craftsmanship', description: 'Every bag is crafted by skilled artisans in Varanasi — blending quality materials with purposeful modern design.' },
   { emoji: '💎', title: 'Quality First', description: 'Premium full-grain leather that ages beautifully. No shortcuts, no compromises, just pure quality.' },
   { emoji: '💪', title: 'Women First', description: 'Designed by women, for women. Bags that match your ambition, your hustle, and your aesthetic.' },
   { emoji: '🌿', title: 'Sustainable', description: 'Ethically sourced materials, minimal waste production, and packaging that loves the planet.' },

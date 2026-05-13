@@ -38,7 +38,6 @@ function AccordionItem({ title, children, defaultOpen = false }) {
 }
 
 export default function ProductInfo({ product }) {
-  const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || '');
   const [selectedColor, setSelectedColor] = useState(product.colors?.[0]?.name || '');
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
@@ -55,13 +54,13 @@ export default function ProductInfo({ product }) {
     : 0;
 
   const handleAddToCart = () => {
-    addItem(product, quantity, selectedSize, selectedColor);
+    addItem(product, quantity, '', selectedColor);
     toggleDrawer();
     toast.success(`${product.name} added to cart`);
   };
 
   const handleBuyNow = () => {
-    addItem(product, quantity, selectedSize, selectedColor);
+    addItem(product, quantity, '', selectedColor);
     navigate('/checkout');
   };
 
@@ -122,30 +121,7 @@ export default function ProductInfo({ product }) {
           <p className="text-sm text-neutral-600 leading-relaxed">{product.shortDescription}</p>
         )}
 
-        {/* Size selector */}
-        {product.sizes?.length > 0 && (
-          <div>
-            <p className="mb-2 text-sm font-medium text-neutral-700">
-              Size: <span className="font-semibold text-neutral-900">{selectedSize}</span>
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {product.sizes.map((size) => (
-                <button
-                  key={size}
-                  type="button"
-                  onClick={() => setSelectedSize(size)}
-                  className={`min-w-[3rem] rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
-                    selectedSize === size
-                      ? 'border-brand-600 bg-brand-600 text-white'
-                      : 'border-neutral-200 text-neutral-600 hover:border-brand-400'
-                  }`}
-                >
-                  {size}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+
 
         {/* Color selector */}
         {product.colors?.length > 0 && (
@@ -256,10 +232,9 @@ export default function ProductInfo({ product }) {
           <AccordionItem title="Product Details" defaultOpen>
             <p className="mb-3">{product.description}</p>
             <ul className="list-disc pl-4 space-y-1">
-              <li>Handcrafted by skilled artisans in Varanasi</li>
+              <li>Crafted with care by skilled artisans in Varanasi</li>
               <li>Premium materials for lasting durability</li>
               <li>Thoughtfully designed compartments</li>
-              {product.sizes?.length > 0 && <li>Sizes: {product.sizes.join(', ')}</li>}
               {product.colors?.length > 0 && <li>Colors: {product.colors.map(c => c.name).join(', ')}</li>}
             </ul>
           </AccordionItem>

@@ -50,7 +50,7 @@ export default function CartDrawer() {
                   Your cart is empty
                 </p>
                 <p className="text-sm text-neutral-500 mb-6">
-                  Discover our premium handcrafted workbags
+                  Discover our premium workbags
                 </p>
                 <Link
                   to="/shop"

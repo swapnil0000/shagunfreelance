@@ -12,7 +12,7 @@ export default function Footer() {
               Zimor India
             </h3>
             <p className="text-sm leading-relaxed mb-4">
-              Premium handcrafted workbags for the modern woman. Made with love in Varanasi, India.
+              Premium workbags built for the modern woman. Crafted with care in Varanasi, India.
             </p>
             <div className="flex items-center gap-3">
               <a

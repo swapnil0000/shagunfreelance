@@ -1,8 +1,21 @@
 import {
+  getRecentReviews,
   getProductReviews,
   createReview,
   deleteReview,
 } from '../services/reviewService.js';
+
+/**
+ * GET /api/reviews/recent
+ */
+export const getRecentReviewsHandler = async (req, res, next) => {
+  try {
+    const reviews = await getRecentReviews(10);
+    res.status(200).json({ status: 'success', data: { reviews } });
+  } catch (error) {
+    next(error);
+  }
+};
 
 /**
  * GET /api/reviews/:productId

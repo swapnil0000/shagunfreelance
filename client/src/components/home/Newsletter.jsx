@@ -70,14 +70,14 @@ export default function Newsletter() {
               }}
               className="flex-1 rounded-full border-0 bg-white/15 px-5 py-3.5 text-white placeholder:text-white/50 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white/40"
             />
-            <Button
+            <button
               type="submit"
-              loading={status === 'loading'}
-              className="rounded-full bg-white text-brand-700 hover:bg-brand-50"
+              disabled={status === 'loading'}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-brand-700 transition-all hover:bg-brand-50 disabled:opacity-60 shrink-0"
             >
               <Send className="h-4 w-4" />
               Subscribe
-            </Button>
+            </button>
           </form>
 
           {status === 'success' && (

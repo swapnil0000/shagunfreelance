@@ -14,7 +14,7 @@ export default function HomePage() {
       <HeroSection />
       <USPBar />
       <FeaturedProducts />
-      <VideoShowcase />
+      {/* <VideoShowcase /> */}
       <PerfectlySized />
       <SeeItStyled />
       <ReviewsCarousel />

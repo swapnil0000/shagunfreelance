@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 export default function HeroSection() {
   return (
@@ -24,43 +24,28 @@ export default function HeroSection() {
       <div className="relative mx-auto flex min-h-[90vh] max-w-7xl items-center px-4 py-24 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
 
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 backdrop-blur-sm"
-          >
-            <Sparkles className="h-3.5 w-3.5 text-brand-400" />
-            <span className="text-xs font-medium tracking-widest text-white/70 uppercase">
-              Premium Handcrafted Bags
-            </span>
-          </motion.div>
-
           {/* Heading */}
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
             className="font-heading text-4xl font-bold leading-[1.1] text-white sm:text-5xl lg:text-6xl xl:text-7xl"
           >
-            Crafted for
+            BUILT FOR
             <br />
             <span className="bg-gradient-to-r from-brand-300 to-brand-500 bg-clip-text text-transparent">
-              the Modern
+              WORK
             </span>
-            <br />
-            Woman
           </motion.h1>
 
           {/* Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
+            transition={{ duration: 0.7, ease: 'easeOut', delay: 0.15 }}
             className="mt-5 max-w-md text-base text-white/60 leading-relaxed sm:text-lg"
           >
-            Each bag is lovingly handcrafted by artisans in Varanasi — blending timeless craft with everyday elegance.
+            Premium workbags designed for the modern woman — crafted in Varanasi with quality that lasts.
           </motion.p>
 
           {/* CTAs */}
@@ -74,7 +59,7 @@ export default function HeroSection() {
               to="/shop"
               className="group inline-flex items-center gap-2.5 rounded-full bg-brand-600 px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-brand-600/30 transition-all hover:bg-brand-700 hover:shadow-brand-600/40 hover:shadow-xl"
             >
-              Shop the Collection
+              Explore More
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             {/* <Link
@@ -94,7 +79,7 @@ export default function HeroSection() {
           >
             {[
               { value: '2K+', label: 'Happy Customers' },
-              { value: '100%', label: 'Handcrafted' },
+              { value: '100%', label: 'Premium Quality' },
               { value: '4.9★', label: 'Avg Rating' },
             ].map((stat, i) => (
               <div key={stat.label} className="flex items-center gap-6 sm:gap-10">
@@ -109,8 +94,6 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent" />
     </section>
   );
 }

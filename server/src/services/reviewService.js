@@ -31,6 +31,18 @@ const recalculateProductRating = async (productId) => {
 };
 
 /**
+ * Get recent reviews across all products (for homepage testimonials).
+ */
+export const getRecentReviews = async (limit = 10) => {
+  return Review.find()
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .populate('user', 'name')
+    .populate('product', 'name slug')
+    .lean();
+};
+
+/**
  * Get all reviews for a product, sorted by newest first.
  */
 export const getProductReviews = async (productId) => {

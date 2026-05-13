@@ -10,6 +10,7 @@ import {
   X,
   Image,
   Loader2,
+  Star,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../lib/axios';
@@ -74,6 +75,7 @@ export default function AdminProducts() {
     onSuccess: () => {
       toast.success('Product created successfully');
       queryClient.invalidateQueries({ queryKey: ['admin-products'] });
+      queryClient.invalidateQueries({ queryKey: ['products', 'featured'] });
       closeModal();
     },
     onError: (err) => {
@@ -88,11 +90,23 @@ export default function AdminProducts() {
     onSuccess: () => {
       toast.success('Product updated successfully');
       queryClient.invalidateQueries({ queryKey: ['admin-products'] });
+      queryClient.invalidateQueries({ queryKey: ['products', 'featured'] });
       closeModal();
     },
     onError: (err) => {
       toast.error(err.response?.data?.message || 'Failed to update product');
     },
+  });
+
+  // Toggle featured mutation
+  const toggleFeaturedMutation = useMutation({
+    mutationFn: ({ id, isFeatured }) => api.put(`/products/${id}`, { isFeatured }),
+    onSuccess: (_, { isFeatured }) => {
+      toast.success(isFeatured ? 'Marked as featured' : 'Removed from featured');
+      queryClient.invalidateQueries({ queryKey: ['admin-products'] });
+      queryClient.invalidateQueries({ queryKey: ['products', 'featured'] });
+    },
+    onError: () => toast.error('Failed to update featured status'),
   });
 
   // Delete product mutation
@@ -143,6 +157,16 @@ export default function AdminProducts() {
       ...prev,
       images: prev.images.filter((_, i) => i !== index),
     }));
+  };
+
+  // Move image to index 0 (primary)
+  const setPrimaryImage = (index) => {
+    if (index === 0) return;
+    setForm((prev) => {
+      const images = [...prev.images];
+      const [selected] = images.splice(index, 1);
+      return { ...prev, images: [selected, ...images] };
+    });
   };
 
   // Open modal for creating
@@ -297,6 +321,7 @@ export default function AdminProducts() {
               </th>
               <th className="px-4 py-3 font-medium text-neutral-600">Price</th>
               <th className="px-4 py-3 font-medium text-neutral-600">Stock</th>
+              <th className="px-4 py-3 font-medium text-neutral-600">Featured</th>
               <th className="px-4 py-3 font-medium text-neutral-600">Status</th>
               <th className="px-4 py-3 font-medium text-neutral-600">
                 Actions
@@ -323,6 +348,9 @@ export default function AdminProducts() {
                     <Skeleton className="h-4 w-12" />
                   </td>
                   <td className="px-4 py-3">
+                    <Skeleton className="h-6 w-6 rounded-full" />
+                  </td>
+                  <td className="px-4 py-3">
                     <Skeleton className="h-5 w-16" />
                   </td>
                   <td className="px-4 py-3">
@@ -333,7 +361,7 @@ export default function AdminProducts() {
             ) : products.length === 0 ? (
               <tr>
                 <td
-                  colSpan={7}
+                  colSpan={8}
                   className="px-4 py-8 text-center text-neutral-500"
                 >
                   No products found.
@@ -366,6 +394,26 @@ export default function AdminProducts() {
                   </td>
                   <td className="px-4 py-3 text-neutral-700">
                     {product.stock}
+                  </td>
+                  <td className="px-4 py-3">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        toggleFeaturedMutation.mutate({
+                          id: product._id,
+                          isFeatured: !product.isFeatured,
+                        })
+                      }
+                      disabled={toggleFeaturedMutation.isPending}
+                      title={product.isFeatured ? 'Remove from featured' : 'Mark as featured'}
+                      className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
+                        product.isFeatured
+                          ? 'bg-amber-50 text-amber-500 hover:bg-amber-100'
+                          : 'text-neutral-300 hover:bg-neutral-100 hover:text-amber-400'
+                      }`}
+                    >
+                      <Star className={`h-4 w-4 ${product.isFeatured ? 'fill-current' : ''}`} />
+                    </button>
                   </td>
                   <td className="px-4 py-3">
                     <Badge
@@ -437,6 +485,7 @@ export default function AdminProducts() {
         removeColor={removeColor}
         handleImageUpload={handleImageUpload}
         removeImage={removeImage}
+        setPrimaryImage={setPrimaryImage}
         handleSubmit={handleSubmit}
         uploading={uploading}
         isSaving={isSaving}
@@ -467,6 +516,7 @@ function ProductFormModal({
   removeColor,
   handleImageUpload,
   removeImage,
+  setPrimaryImage,
   handleSubmit,
   uploading,
   isSaving,
@@ -615,18 +665,42 @@ function ProductFormModal({
               </fieldset>
 
               {/* Images */}
-              <fieldset className="space-y-4">
-                <legend className="text-sm font-semibold text-neutral-700 mb-2">
+              <fieldset className="space-y-3">
+                <legend className="text-sm font-semibold text-neutral-700 mb-1">
                   Images
                 </legend>
+                <p className="text-xs text-neutral-500">
+                  First image is the <span className="font-medium text-brand-600">primary</span> image shown on product cards. Click the star on any image to make it primary.
+                </p>
                 <div className="flex flex-wrap gap-3">
                   {form.images.map((img, idx) => (
                     <div key={idx} className="relative group">
                       <img
                         src={img.url}
                         alt={img.alt || `Product image ${idx + 1}`}
-                        className="h-20 w-20 rounded-lg object-cover border border-neutral-200"
+                        className={`h-20 w-20 rounded-lg object-cover border-2 transition-all ${
+                          idx === 0 ? 'border-brand-500' : 'border-neutral-200'
+                        }`}
                       />
+                      {/* Primary badge */}
+                      {idx === 0 && (
+                        <span className="absolute -top-2 -left-2 rounded-full bg-brand-500 px-1.5 py-0.5 text-[10px] font-semibold text-white leading-none">
+                          PRIMARY
+                        </span>
+                      )}
+                      {/* Set as primary button (non-primary images) */}
+                      {idx !== 0 && (
+                        <button
+                          type="button"
+                          onClick={() => setPrimaryImage(idx)}
+                          className="absolute -top-2 -left-2 rounded-full bg-white border border-neutral-300 p-0.5 text-neutral-400 opacity-0 group-hover:opacity-100 hover:text-brand-500 hover:border-brand-500 transition-all"
+                          aria-label={`Set image ${idx + 1} as primary`}
+                          title="Set as primary"
+                        >
+                          <Star className="h-3 w-3" />
+                        </button>
+                      )}
+                      {/* Remove button */}
                       <button
                         type="button"
                         onClick={() => removeImage(idx)}

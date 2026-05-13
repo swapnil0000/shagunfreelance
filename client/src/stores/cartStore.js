@@ -126,12 +126,10 @@ const useCartStore = create((set, get) => ({
     return calcDiscount(get().coupon, get().subtotal);
   },
   get shipping() {
-    const sub = get().subtotal;
-    if (sub === 0) return 0;
-    return sub >= 999 ? 0 : 99;
+    return 0;
   },
   get total() {
-    return get().subtotal - get().discount + get().shipping;
+    return get().subtotal - get().discount;
   },
 }));
 

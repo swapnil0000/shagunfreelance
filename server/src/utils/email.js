@@ -42,9 +42,13 @@ export const sendOrderConfirmationEmail = async (order) => {
     </table>
     <p><strong>Subtotal:</strong> ₹${order.subtotal.toFixed(2)}</p>
     <p><strong>Discount:</strong> ₹${order.discount.toFixed(2)}</p>
-    <p><strong>Shipping:</strong> ₹${order.shippingCost.toFixed(2)}</p>
+    <p><strong>Shipping:</strong> Free</p>
     <p><strong>Total:</strong> ₹${order.total.toFixed(2)}</p>
     <p>Thank you for shopping with Zimor India!</p>
+    <p style="margin-top:16px;font-size:12px;color:#666;">
+      Zimor India | D 59/198-KA-1-P, Shivpurwa, Varanasi, UP – 221010<br/>
+      📞 +91 89536 96928 | ✉️ support@zimorindia.com
+    </p>
   `;
 
   await sendEmail({

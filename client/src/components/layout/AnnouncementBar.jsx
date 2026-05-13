@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Sparkles } from 'lucide-react';
 
 const messages = [
-  '✨ Free Shipping on Orders Over ₹999',
+  '🚚 Free Shipping on All Orders',
   '💎 Premium Handcrafted Workbags',
   '🇮🇳 Made in Varanasi with Love',
   '🎁 Use code WELCOME10 for 10% off',

@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Truck, ShieldCheck, Gem, RefreshCw, Sparkles } from 'lucide-react';
 
 const usps = [
-  { icon: Truck, title: 'Free Shipping', description: 'Orders above ₹999', emoji: '🚚' },
+  { icon: Truck, title: 'Free Shipping', description: 'On all orders', emoji: '🚚' },
   { icon: Gem, title: 'Handcrafted', description: 'Premium leather', emoji: '💎' },
   { icon: RefreshCw, title: '7-Day Returns', description: 'No questions asked', emoji: '↩️' },
   { icon: ShieldCheck, title: 'Secure Pay', description: 'Razorpay protected', emoji: '🔒' },

@@ -158,8 +158,8 @@ export const createRazorpayOrder = async (userId, cartItems, shippingAddress, co
     discount = await applyCoupon(couponCode, subtotal);
   }
 
-  // 4. Determine shipping cost
-  const shippingCost = subtotal >= 999 ? 0 : 99;
+  // 4. Shipping is always free
+  const shippingCost = 0;
 
   // 5. Calculate total
   const total = subtotal - discount + shippingCost;
@@ -234,8 +234,8 @@ export const createCODOrder = async (userId, cartItems, shippingAddress, couponC
     discount = await applyCoupon(couponCode, subtotal);
   }
 
-  // 4. Determine shipping cost (free >= ₹999, else ₹99)
-  const shippingCost = subtotal >= 999 ? 0 : 99;
+  // 4. Shipping is always free
+  const shippingCost = 0;
 
   // 5. Calculate total
   const total = subtotal - discount + shippingCost;

@@ -17,7 +17,8 @@ const generateInvoice = (order, res) => {
 
   // Company header
   doc.fontSize(20).text('Zimor India', { align: 'center' });
-  doc.fontSize(10).text('Premium Women\'s Workbags — Varanasi, UP', { align: 'center' });
+  doc.fontSize(10).text('D 59/198-KA-1-P, Shivpurwa, Varanasi, UP – 221010', { align: 'center' });
+  doc.fontSize(10).text('+91 89536 96928 | support@zimorindia.com', { align: 'center' });
   doc.moveDown();
 
   // Invoice title
@@ -83,7 +84,7 @@ const generateInvoice = (order, res) => {
     doc.text(`Discount: -₹${order.discount.toFixed(2)}`, col.price, y);
     y += 15;
   }
-  doc.text(`Shipping: ₹${order.shippingCost.toFixed(2)}`, col.price, y);
+  doc.text(`Shipping: Free`, col.price, y);
   y += 15;
   doc.font('Helvetica-Bold');
   doc.text(`Total: ₹${order.total.toFixed(2)}`, col.price, y);

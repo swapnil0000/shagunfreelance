@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { NavLink, Outlet, Navigate } from 'react-router-dom';
+import { NavLink, Outlet, Navigate, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   Package,
   ShoppingCart,
   Users,
   Ticket,
+  Settings,
   Menu,
   X,
 } from 'lucide-react';
@@ -17,14 +18,19 @@ const navItems = [
   { to: '/admin/orders', label: 'Orders', icon: ShoppingCart },
   { to: '/admin/customers', label: 'Customers', icon: Users },
   { to: '/admin/coupons', label: 'Coupons', icon: Ticket },
+  { to: '/admin/settings', label: 'Settings', icon: Settings },
 ];
 
 export default function AdminLayout() {
   const { user, isAuthenticated } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
 
-  // Redirect non-admin users
-  if (!isAuthenticated || user?.role !== 'admin') {
+  if (!isAuthenticated) {
+    return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace />;
+  }
+
+  if (user?.role !== 'admin') {
     return <Navigate to="/" replace />;
   }
 

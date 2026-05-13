@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { CreditCard, Banknote, ChevronLeft, ShieldCheck, Truck } from 'lucide-react';
 import { toast } from 'sonner';
@@ -9,6 +9,19 @@ import Button from '../ui/Button';
 export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
   const [paymentMethod, setPaymentMethod] = useState('razorpay');
   const [loading, setLoading] = useState(false);
+  const [razorpayReady, setRazorpayReady] = useState(!!window.Razorpay);
+
+  useEffect(() => {
+    if (window.Razorpay) return;
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => setRazorpayReady(true);
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
   const { items, subtotal, discount, shipping, total, coupon, clearCart } = useCartStore();
 
   const formatCurrency = (amount) => `₹${amount.toLocaleString('en-IN')}`;
@@ -24,13 +37,13 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
         color: item.color,
       }));
 
-      const { data } = await api.post('/orders/razorpay/create', {
+      const { data: responseData } = await api.post('/orders/razorpay/create', {
         cartItems,
         shippingAddress,
         couponCode: coupon?.code || null,
       });
 
-      const { razorpayOrderId, amount, key, orderId } = data;
+      const { razorpayOrderId, amount, key, orderId } = responseData.data;
 
       // 2. Open Razorpay checkout modal
       const options = {
@@ -49,8 +62,8 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
               razorpaySignature: response.razorpay_signature,
             });
 
+            onSuccess(verifyRes.data.data?.order || verifyRes.data.data || verifyRes.data);
             clearCart();
-            onSuccess(verifyRes.data.order || verifyRes.data);
           } catch (err) {
             toast.error(err.response?.data?.message || 'Payment verification failed');
           }
@@ -68,6 +81,12 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
           },
         },
       };
+
+      if (!razorpayReady || !window.Razorpay) {
+        toast.error('Payment gateway is still loading. Please try again in a moment.');
+        setLoading(false);
+        return;
+      }
 
       const rzp = new window.Razorpay(options);
       rzp.on('payment.failed', (response) => {
@@ -91,14 +110,14 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
         color: item.color,
       }));
 
-      const { data } = await api.post('/orders/cod', {
+      const { data: codData } = await api.post('/orders/cod', {
         cartItems,
         shippingAddress,
         couponCode: coupon?.code || null,
       });
 
+      onSuccess(codData.data?.order || codData.data || codData);
       clearCart();
-      onSuccess(data.order || data);
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to place order. Please try again.');
     } finally {
@@ -266,8 +285,13 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
           <ChevronLeft className="h-4 w-4" />
           Back to Shipping
         </Button>
-        <Button onClick={handlePlaceOrder} loading={loading} className="sm:ml-auto">
-          {paymentMethod === 'razorpay' ? 'Pay Now' : 'Place Order (COD)'}
+        <Button
+          onClick={handlePlaceOrder}
+          loading={loading}
+          disabled={paymentMethod === 'razorpay' && !razorpayReady}
+          className="sm:ml-auto"
+        >
+          {paymentMethod === 'razorpay' && !razorpayReady ? 'Loading...' : paymentMethod === 'razorpay' ? 'Pay Now' : 'Place Order (COD)'}
         </Button>
       </div>
     </motion.div>

@@ -25,13 +25,13 @@ export default function CheckoutPage() {
   // Protected route — redirect to login if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate('/login', { replace: true });
+      navigate('/login?redirect=/checkout', { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
-  // Redirect to cart if empty (only on shipping step)
+  // Redirect to cart if empty — never on confirmation step
   useEffect(() => {
-    if (items.length === 0 && currentStep < 3) {
+    if (items.length === 0 && currentStep === 1) {
       navigate('/cart', { replace: true });
     }
   }, [items.length, currentStep, navigate]);

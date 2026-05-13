@@ -11,9 +11,9 @@ import api from '../lib/axios';
 
 const contactCards = [
   { icon: Mail, title: 'Email', detail: 'support@zimorindia.com', link: 'mailto:support@zimorindia.com', color: 'from-blue-500 to-blue-600' },
-  { icon: Phone, title: 'Phone', detail: '+91 98765 43210', link: 'tel:+919876543210', color: 'from-green-500 to-green-600' },
-  { icon: MessageCircle, title: 'WhatsApp', detail: 'Chat now', link: 'https://wa.me/919876543210', color: 'from-emerald-500 to-emerald-600' },
-  { icon: MapPin, title: 'Studio', detail: 'Varanasi, UP', link: null, color: 'from-purple-500 to-purple-600' },
+  { icon: Phone, title: 'Phone', detail: '+91 89536 96928', link: 'tel:+918953696928', color: 'from-green-500 to-green-600' },
+  { icon: MessageCircle, title: 'WhatsApp', detail: 'Chat now', link: 'https://wa.me/918953696928', color: 'from-emerald-500 to-emerald-600' },
+  { icon: MapPin, title: 'Address', detail: 'Shivpurwa, Varanasi, UP', link: null, color: 'from-purple-500 to-purple-600' },
 ];
 
 export default function ContactPage() {
@@ -154,7 +154,7 @@ export default function ContactPage() {
                 className="h-40 w-full object-cover"
               />
               <div className="bg-neutral-50 p-3 text-center">
-                <p className="text-xs font-medium text-neutral-700">📍 Varanasi, Uttar Pradesh, India</p>
+                <p className="text-xs font-medium text-neutral-700">📍 D 59/198-KA-1-P, Shivpurwa, Varanasi, UP – 221010</p>
               </div>
             </div>
           </motion.div>

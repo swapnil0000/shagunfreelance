@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
@@ -16,6 +16,7 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const setAuth = useAuthStore((state) => state.setAuth);
 
   const {
@@ -34,7 +35,8 @@ export default function RegisterPage() {
       const { token, user } = res.data?.data ?? res.data;
       setAuth(token, user);
       toast.success('Account created successfully!');
-      navigate('/');
+      const redirect = searchParams.get('redirect') || (user.role === 'admin' ? '/admin' : '/');
+      navigate(redirect);
     } catch (err) {
       const message =
         err.response?.data?.message || 'Registration failed. Please try again.';

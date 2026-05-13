@@ -15,6 +15,7 @@ import wishlistRoutes from './routes/wishlistRoutes.js';
 import newsletterRoutes from './routes/newsletterRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
+import settingsRoutes from './routes/settingsRoutes.js';
 
 const app = express();
 
@@ -22,7 +23,7 @@ const app = express();
 app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(hpp());
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // General rate limiter: 100 requests per 15 minutes on /api
@@ -54,6 +55,7 @@ app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/settings', settingsRoutes);
 
 // Global error handler
 app.use(errorHandler);

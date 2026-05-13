@@ -38,6 +38,7 @@ const AdminProducts = lazy(() => import(/* webpackChunkName: "admin" */ './pages
 const AdminOrders = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminOrders'));
 const AdminCustomers = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminCustomers'));
 const AdminCoupons = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminCoupons'));
+const AdminSettings = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminSettings'));
 
 function Loading() {
   return (
@@ -86,6 +87,7 @@ export default function App() {
               <Route path="orders" element={<AdminOrders />} />
               <Route path="customers" element={<AdminCustomers />} />
               <Route path="coupons" element={<AdminCoupons />} />
+              <Route path="settings" element={<AdminSettings />} />
             </Route>
 
             {/* 404 */}

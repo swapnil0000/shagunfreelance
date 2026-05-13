@@ -6,6 +6,7 @@ import SeeItStyled from '../components/home/SeeItStyled';
 import ReviewsCarousel from '../components/home/ReviewsCarousel';
 import FAQAccordion from '../components/home/FAQAccordion';
 import Newsletter from '../components/home/Newsletter';
+import VideoShowcase from '../components/home/VideoShowcase';
 
 export default function HomePage() {
   return (
@@ -13,6 +14,7 @@ export default function HomePage() {
       <HeroSection />
       <USPBar />
       <FeaturedProducts />
+      <VideoShowcase />
       <PerfectlySized />
       <SeeItStyled />
       <ReviewsCarousel />

@@ -112,15 +112,15 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
-                <span className="text-sm">Varanasi, Uttar Pradesh, India</span>
+                <span className="text-sm">D 59/198-KA-1-P, Shivpurwa, Varanasi, Uttar Pradesh – 221010</span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 shrink-0" />
-                <span className="text-sm">+91 98765 43210</span>
+                <a href="tel:+918953696928" className="text-sm hover:text-white transition-colors">+91 89536 96928</a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 shrink-0" />
-                <span className="text-sm">hello@zimorindia.com</span>
+                <a href="mailto:support@zimorindia.com" className="text-sm hover:text-white transition-colors">support@zimorindia.com</a>
               </li>
             </ul>
           </div>

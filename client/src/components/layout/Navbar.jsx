@@ -52,12 +52,7 @@ export default function Navbar({ onOpenMobileNav }) {
 
             <Link to="/" className="shrink-0">
               <div className="flex flex-col items-start leading-none">
-                <span className="text-xl font-bold tracking-[0.2em] text-neutral-900 sm:text-2xl" style={{ fontFamily: "'Playfair Display', serif" }}>
-                  ZIMOR
-                </span>
-                <span className="text-[9px] font-medium tracking-[0.35em] text-neutral-500 uppercase sm:text-[10px]">
-                  INDIA
-                </span>
+                 <img style={{color:'wheat'}} src="/logo.png" alt="Zimor India" className="w-30" />
               </div>
             </Link>
           </div>

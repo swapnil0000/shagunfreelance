@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { Truck } from 'lucide-react';
 import useCartStore from '../../stores/cartStore';
 import CouponInput from './CouponInput';
 
@@ -38,24 +37,8 @@ export default function CartSummary() {
 
         <div className="flex justify-between">
           <span className="text-neutral-600">Shipping</span>
-          <span className="font-medium text-neutral-900 tabular-nums">
-            {shipping === 0 ? (
-              <span className="text-success">Free</span>
-            ) : (
-              `₹${shipping}`
-            )}
-          </span>
+          <span className="font-medium text-success">Free</span>
         </div>
-
-        {/* Free shipping hint */}
-        {subtotal > 0 && subtotal < 999 && (
-          <div className="flex items-center gap-2 rounded-lg bg-brand-50 px-3 py-2 text-xs text-brand-700">
-            <Truck className="h-3.5 w-3.5 shrink-0" />
-            <span>
-              Add ₹{(999 - subtotal).toLocaleString('en-IN')} more for free shipping
-            </span>
-          </div>
-        )}
 
         {/* Divider */}
         <div className="border-t border-neutral-200 pt-3">

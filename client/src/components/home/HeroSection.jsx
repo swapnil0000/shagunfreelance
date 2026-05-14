@@ -78,7 +78,7 @@ export default function HeroSection() {
             className="mt-12 flex items-center gap-6 sm:gap-10"
           >
             {[
-              { value: '2K+', label: 'Happy Customers' },
+              { value: '10+', label: 'Happy Customers' },
               { value: '100%', label: 'Premium Quality' },
               { value: '4.9★', label: 'Avg Rating' },
             ].map((stat, i) => (

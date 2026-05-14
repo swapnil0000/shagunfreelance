@@ -28,13 +28,19 @@ const productSchema = new mongoose.Schema({
   isActive:         { type: Boolean, default: true },
   averageRating:    { type: Number, default: 0, min: 0, max: 5 },
   numReviews:       { type: Number, default: 0 },
-  material:         { type: String },
-  dimensions:       { type: String },
+  features:         [{ type: String }],
+  material:         [{ type: String }],
+  hardware:         [{ type: String }],
+  innerLining:      [{ type: String }],
+  careInstructions: [{ type: String }],
+  dimensionLength:  { type: String },
+  dimensionHeight:  { type: String },
+  dimensionWidth:   { type: String },
+  strapDrop:        { type: String },
   weight:           { type: String },
-  careInstructions: { type: String },
+  keyHighlights:    [{ type: String }],
 }, { timestamps: true });
 
-// Indexes (slug index is created automatically by unique: true)
 productSchema.index({ category: 1 });
 productSchema.index({ isFeatured: 1 });
 productSchema.index({ price: 1 });

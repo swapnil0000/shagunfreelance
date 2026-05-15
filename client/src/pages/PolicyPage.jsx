@@ -11,10 +11,6 @@ const policies = {
         text: 'We ship across India within 5–7 business days from the date of order confirmation. During festive seasons or sales, delivery may take an additional 2–3 days.',
       },
       {
-        heading: 'Free Shipping',
-        text: 'All orders above ₹999 qualify for free standard shipping. Orders below ₹999 incur a flat shipping fee of ₹99.',
-      },
-      {
         heading: 'Tracking Your Order',
         text: 'Once your order is dispatched, you will receive an email and SMS with tracking details. You can also track your order from your account dashboard.',
       },

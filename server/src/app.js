@@ -21,7 +21,10 @@ const app = express();
 
 // Security middleware
 app.use(helmet());
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+const allowedOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(',').map((o) => o.trim())
+  : [];
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(hpp());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));

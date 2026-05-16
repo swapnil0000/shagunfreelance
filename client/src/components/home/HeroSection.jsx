@@ -10,54 +10,15 @@ const stats = [
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-[80vh] lg:min-h-screen overflow-hidden bg-neutral-950">
+    <section className="relative lg:h-[88vh] overflow-hidden bg-neutral-950">
+      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen lg:h-full">
 
-      {/* ── DESKTOP: hero.jpeg full-bleed background ── */}
-      <div className="hidden lg:block absolute inset-0 z-0">
-        <img
-          src="/hero.jpeg"
-          alt=""
-          aria-hidden="true"
-          className="h-full w-full object-cover"
-          style={{ objectPosition: '75% center' }}
-        />
-        {/* Left-to-right gradient so text stays readable */}
-        <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/95 via-neutral-950/75 to-neutral-950/20" />
-        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/60 via-transparent to-transparent" />
-      </div>
+        {/* Left — Content */}
+        <div className="relative flex flex-col justify-center px-8 pt-10 pb-12 sm:px-12 lg:px-14 lg:py-0 xl:px-20 order-2 lg:order-1">
+          <div className="absolute inset-0 bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-800/30 pointer-events-none" />
+          <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-white/5 blur-3xl pointer-events-none" />
 
-      {/* ── MOBILE: image.png stacked above content ── */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        className="relative lg:hidden overflow-hidden"
-        style={{ height: '52vh' }}
-      >
-        <img
-          src="/image.png"
-          alt="Zimor India luxury workbag"
-          className="h-full w-full object-cover object-top"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-neutral-950/80" />
-        {/* Mobile badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="absolute bottom-4 right-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/15 px-4 py-3 text-white"
-        >
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-white/70">New Arrival</p>
-          <p className="mt-0.5 font-heading text-sm font-semibold leading-tight">Signature Tote</p>
-          <p className="mt-0.5 text-[10px] text-white/50">Handcrafted · Varanasi</p>
-        </motion.div>
-      </motion.div>
-
-      {/* ── CONTENT: shared, desktop overlaid / mobile below image ── */}
-      <div className="relative z-10 lg:absolute lg:inset-0 lg:flex lg:items-center">
-        <div className="w-full max-w-7xl mx-auto px-8 pt-10 pb-12 sm:px-12 lg:px-14 xl:px-20 lg:py-0">
-          <div className="max-w-lg lg:-mt-10">
-
+          <div className="relative z-10 max-w-lg">
             {/* Brand tag */}
             <motion.div
               initial={{ opacity: 0, x: -16 }}
@@ -110,12 +71,7 @@ export default function HeroSection() {
                 Explore Collection
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
-              <Link
-                to="/shop"
-                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-7 py-3.5 text-sm font-medium text-white/75 backdrop-blur-sm transition-all hover:border-white/40 hover:bg-white/8 hover:text-white"
-              >
-                View All Bags
-              </Link>
+             
             </motion.div>
 
             {/* Stats */}
@@ -135,23 +91,47 @@ export default function HeroSection() {
                 </div>
               ))}
             </motion.div>
-
           </div>
         </div>
+
+        {/* Right — image.png (both desktop and mobile) */}
+        <motion.div
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, ease: 'easeOut' }}
+          className="relative min-h-[55vh] lg:min-h-0 lg:h-[88vh] order-1 lg:order-2 overflow-hidden"
+        >
+          {/* Desktop: image2.jpeg (976×1088) — contain to show full image, dark bg fills gaps */}
+          <img
+            src="/image2.jpeg"
+            alt="Zimor India luxury workbag"
+            className="hidden lg:block h-full w-full object-cover"
+          />
+          {/* Mobile: image.png */}
+          <img
+            src="/image.png"
+            alt="Zimor India luxury workbag"
+            className="block lg:hidden h-full w-full object-cover object-top"
+          />
+          {/* Blend left edge into dark content panel */}
+          <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/60 via-neutral-950/20 to-transparent lg:from-neutral-950/70 lg:via-neutral-950/25 lg:to-transparent" />
+          {/* Bottom fade */}
+          <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-neutral-950/60 to-transparent" />
+
+          {/* Floating product badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.7 }}
+            className="absolute bottom-6 right-4 sm:bottom-10 sm:right-8 lg:bottom-12 lg:right-10 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 px-4 py-3 lg:px-5 lg:py-4 text-white shadow-xl"
+          >
+            <p className="text-[10px] lg:text-xs font-semibold uppercase tracking-widest text-white/70">New Arrival</p>
+            <p className="mt-0.5 lg:mt-1 font-heading text-sm lg:text-base font-semibold leading-tight">Signature Tote</p>
+            <p className="mt-0.5 text-[10px] lg:text-xs text-white/50">Handcrafted · Varanasi</p>
+          </motion.div>
+        </motion.div>
+
       </div>
-
-      {/* ── DESKTOP: floating badge pinned bottom-right ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut', delay: 0.7 }}
-        className="hidden lg:block absolute bottom-12 right-12 z-10 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 px-5 py-4 text-white shadow-xl"
-      >
-        <p className="text-xs font-semibold uppercase tracking-widest text-white/70">New Arrival</p>
-        <p className="mt-1 font-heading text-base font-semibold leading-tight">Signature Tote</p>
-        <p className="mt-0.5 text-xs text-white/50">Handcrafted · Varanasi</p>
-      </motion.div>
-
     </section>
   );
 }

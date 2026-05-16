@@ -78,9 +78,7 @@ export default function ConfirmationStep({ order }) {
 
             <div className="flex justify-between">
               <span className="text-neutral-600">Payment Method</span>
-              <span className="font-medium text-neutral-900 capitalize">
-                {order.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Razorpay'}
-              </span>
+              <span className="font-medium text-neutral-900">Online Payment</span>
             </div>
 
             <div className="flex justify-between">

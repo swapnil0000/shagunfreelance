@@ -41,32 +41,37 @@ export default function ShopPage() {
     <section className="min-h-screen bg-white">
       {/* Hero Banner */}
       <div className="relative bg-gradient-to-br from-brand-50 via-white to-accent-50 border-b border-neutral-100">
-        <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20">
+        <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
+            transition={{ duration: 0.4 }}
+            className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2"
           >
-            <h1 className="font-heading text-3xl font-bold text-neutral-900 sm:text-4xl lg:text-5xl">
-              Our Collection
-            </h1>
-            <p className="mx-auto mt-3 max-w-lg text-base text-neutral-500 sm:text-lg">
-              Handcrafted bags designed for the modern woman. Find your perfect match.
+            <div>
+              <p className="text-xs font-medium uppercase tracking-widest text-neutral-400 mb-1">
+                Zimor India
+              </p>
+              <h1 className="font-heading text-2xl font-bold text-neutral-900 sm:text-3xl">
+                Our Collection
+              </h1>
+              <p className="mt-1.5 text-sm text-neutral-500 max-w-sm">
+                Handcrafted bags designed for the modern woman. Find your perfect match.
+              </p>
+            </div>
+            <p className="text-sm text-neutral-400 shrink-0">
+              {pagination.total > 0
+                ? `${pagination.total} product${pagination.total !== 1 ? 's' : ''}`
+                : ''}
             </p>
           </motion.div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         {/* Toolbar */}
-        <div className="mb-8 flex items-center justify-between">
-          <p className="text-sm text-neutral-500">
-            {pagination.total > 0
-              ? `${pagination.total} product${pagination.total !== 1 ? 's' : ''}`
-              : 'Browse our collection'}
-          </p>
+        <div className="mb-6 flex items-center justify-end">
           <SortDropdown value={sort} onChange={handleSortChange} />
         </div>
 

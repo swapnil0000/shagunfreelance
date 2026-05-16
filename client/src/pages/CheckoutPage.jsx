@@ -22,14 +22,12 @@ export default function CheckoutPage() {
   const [shippingAddress, setShippingAddress] = useState(null);
   const [completedOrder, setCompletedOrder] = useState(null);
 
-  // Protected route — redirect to login if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login?redirect=/checkout', { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
-  // Redirect to cart if empty — never on confirmation step
   useEffect(() => {
     if (items.length === 0 && currentStep === 1) {
       navigate('/cart', { replace: true });
@@ -56,93 +54,100 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Page Title */}
-        <h1 className="text-2xl font-bold text-neutral-900 mb-8 text-center font-heading">
-          Checkout
-        </h1>
-
-        {/* Step Indicator */}
-        <div className="mb-10">
-          <div className="flex items-center justify-center">
-            {STEPS.map((step, idx) => {
-              const Icon = step.icon;
-              const isActive = currentStep === step.id;
-              const isCompleted = currentStep > step.id;
-
-              return (
-                <div key={step.id} className="flex items-center">
-                  {/* Step circle */}
-                  <div className="flex flex-col items-center">
-                    <div
-                      className={`flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors duration-300 ${
-                        isCompleted
-                          ? 'border-success bg-success text-white'
-                          : isActive
-                          ? 'border-brand-600 bg-brand-600 text-white'
-                          : 'border-neutral-300 bg-white text-neutral-400'
-                      }`}
-                    >
-                      {isCompleted ? (
-                        <CheckCircle className="h-5 w-5" />
-                      ) : (
-                        <Icon className="h-5 w-5" />
-                      )}
-                    </div>
-                    <span
-                      className={`mt-2 text-xs font-medium ${
-                        isActive
-                          ? 'text-brand-600'
-                          : isCompleted
-                          ? 'text-success'
-                          : 'text-neutral-400'
-                      }`}
-                    >
-                      {step.label}
-                    </span>
-                  </div>
-
-                  {/* Connector line */}
-                  {idx < STEPS.length - 1 && (
-                    <div
-                      className={`mx-3 h-0.5 w-12 sm:w-20 transition-colors duration-300 ${
-                        currentStep > step.id
-                          ? 'bg-success'
-                          : 'bg-neutral-200'
-                      }`}
-                    />
-                  )}
-                </div>
-              );
-            })}
+    <div className="min-h-screen bg-neutral-50">
+      {/* Top bar */}
+      {/* <div className="bg-white border-b border-neutral-100">
+        <div className="mx-auto max-w-3xl px-4 py-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between">
+            <h1 className="text-lg font-bold text-neutral-900 font-heading tracking-tight">
+              Zimor India
+            </h1>
+            <span className="text-sm text-neutral-400">Secure Checkout</span>
           </div>
         </div>
+      </div> */}
+
+      <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
+        {/* Step Indicator */}
+        {currentStep < 3 && (
+          <div className="mb-8">
+            <div className="flex items-center justify-center gap-0">
+              {STEPS.map((step, idx) => {
+                const Icon = step.icon;
+                const isActive = currentStep === step.id;
+                const isCompleted = currentStep > step.id;
+
+                return (
+                  <div key={step.id} className="flex items-center">
+                    <div className="flex flex-col items-center">
+                      <div
+                        className={`flex h-9 w-9 items-center justify-center rounded-full border-2 transition-all duration-300 ${
+                          isCompleted
+                            ? 'border-neutral-900 bg-neutral-900 text-white'
+                            : isActive
+                            ? 'border-neutral-900 bg-white text-neutral-900'
+                            : 'border-neutral-200 bg-white text-neutral-300'
+                        }`}
+                      >
+                        {isCompleted ? (
+                          <CheckCircle className="h-4 w-4" />
+                        ) : (
+                          <Icon className="h-4 w-4" />
+                        )}
+                      </div>
+                      <span
+                        className={`mt-1.5 text-[11px] font-medium ${
+                          isActive
+                            ? 'text-neutral-900'
+                            : isCompleted
+                            ? 'text-neutral-500'
+                            : 'text-neutral-300'
+                        }`}
+                      >
+                        {step.label}
+                      </span>
+                    </div>
+
+                    {idx < STEPS.length - 1 && (
+                      <div
+                        className={`mx-2 mb-4 h-px w-14 sm:w-24 transition-colors duration-300 ${
+                          currentStep > step.id ? 'bg-neutral-900' : 'bg-neutral-200'
+                        }`}
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* Step Content */}
-        <AnimatePresence mode="wait">
-          {currentStep === 1 && (
-            <ShippingForm
-              key="shipping"
-              onNext={handleShippingNext}
-              savedAddress={shippingAddress}
-            />
-          )}
-          {currentStep === 2 && (
-            <PaymentStep
-              key="payment"
-              shippingAddress={shippingAddress}
-              onBack={handlePaymentBack}
-              onSuccess={handleOrderSuccess}
-            />
-          )}
-          {currentStep === 3 && (
-            <ConfirmationStep
-              key="confirmation"
-              order={completedOrder}
-            />
-          )}
-        </AnimatePresence>
+        <div className={`${currentStep < 3 ? 'bg-white rounded-2xl border border-neutral-200 p-6 sm:p-8' : ''}`}>
+          <AnimatePresence mode="wait">
+            {currentStep === 1 && (
+              <ShippingForm
+                key="shipping"
+                onNext={handleShippingNext}
+                savedAddress={shippingAddress}
+              />
+            )}
+            {currentStep === 2 && (
+              <PaymentStep
+                key="payment"
+                shippingAddress={shippingAddress}
+                onBack={handlePaymentBack}
+                onSuccess={handleOrderSuccess}
+              />
+            )}
+            {currentStep === 3 && (
+              <ConfirmationStep
+                key="confirmation"
+                order={completedOrder}
+              />
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );

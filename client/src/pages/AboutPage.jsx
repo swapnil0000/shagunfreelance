@@ -302,7 +302,7 @@ export default function AboutPage() {
             <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-3xl border-2 border-brand-200" />
             <div className="relative overflow-hidden rounded-3xl bg-neutral-100">
               <img
-                src="/about-craft.jpeg"
+                src="/about.jpeg"
                 alt="Zimor artisan crafting a bag"
                 className="w-full object-cover aspect-[4/5]"
               />
@@ -324,9 +324,9 @@ export default function AboutPage() {
                 ))}
               </div>
               <p className="text-xs font-medium text-neutral-700 leading-snug">
-                "Fits my laptop, phone, and still looks chic."
+                "I can easily fit my phone, charger, diary, makeup pouch. Perfect everyday work bag."
               </p>
-              <p className="mt-1 text-[10px] text-neutral-400">— Riya, Bangalore</p>
+              <p className="mt-1 text-[10px] text-neutral-400">— Chesta, rajasthan</p>
             </motion.div>
           </motion.div>
 

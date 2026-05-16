@@ -357,8 +357,8 @@ export default function AdminProducts() {
                       title={product.isFeatured ? 'Remove from featured' : 'Mark as featured'}
                       className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
                         product.isFeatured
-                          ? 'bg-amber-50 text-amber-500 hover:bg-amber-100'
-                          : 'text-neutral-300 hover:bg-neutral-100 hover:text-amber-400'
+                          ? 'bg-neutral-900 text-white hover:bg-neutral-800'
+                          : 'text-neutral-300 hover:bg-neutral-100 hover:text-neutral-700'
                       }`}
                     >
                       <Star className={`h-4 w-4 ${product.isFeatured ? 'fill-current' : ''}`} />

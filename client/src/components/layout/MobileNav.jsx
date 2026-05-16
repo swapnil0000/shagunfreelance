@@ -111,7 +111,7 @@ export default function MobileNav({ isOpen, onClose }) {
                 className="flex items-center justify-between w-full rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-medium text-neutral-700 hover:bg-neutral-100 transition-colors"
               >
                 <span className="flex items-center gap-2">
-                  <MessageCircle className="h-4 w-4 text-emerald-500" />
+                  <MessageCircle className="h-4 w-4 text-neutral-600" />
                   Chat on WhatsApp
                 </span>
                 <ArrowRight className="h-4 w-4 text-neutral-400" />

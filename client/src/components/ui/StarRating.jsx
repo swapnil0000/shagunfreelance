@@ -42,7 +42,7 @@ export default function StarRating({
             <Star
               className={`${starSize} ${
                 isFilled
-                  ? 'fill-amber-400 text-amber-400'
+                  ? 'fill-neutral-800 text-neutral-800'
                   : 'fill-none text-neutral-300'
               } transition-colors`}
             />

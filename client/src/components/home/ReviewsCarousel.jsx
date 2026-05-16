@@ -26,7 +26,7 @@ const FALLBACK = [
   },
 ];
 
-const COLORS = ['bg-rose-400','bg-violet-400','bg-sky-400','bg-amber-400','bg-emerald-400','bg-pink-400'];
+const COLORS = ['bg-neutral-700','bg-neutral-600','bg-neutral-800','bg-neutral-500','bg-neutral-900','bg-neutral-400'];
 function avatarColor(name = '') {
   let n = 0; for (const c of name) n += c.charCodeAt(0);
   return COLORS[n % COLORS.length];
@@ -43,7 +43,7 @@ function StarPicker({ value, onChange }) {
       {[1,2,3,4,5].map(i => (
         <Star
           key={i}
-          className={`h-7 w-7 cursor-pointer transition-all ${(hov||value) >= i ? 'fill-amber-400 text-amber-400 scale-110' : 'fill-neutral-700 text-neutral-700'}`}
+          className={`h-7 w-7 cursor-pointer transition-all ${(hov||value) >= i ? 'fill-white text-white scale-110' : 'fill-neutral-700 text-neutral-700'}`}
           onMouseEnter={() => setHov(i)}
           onMouseLeave={() => setHov(0)}
           onClick={() => onChange(i)}
@@ -170,7 +170,7 @@ export default function ReviewsCarousel() {
     <section className="relative overflow-hidden bg-neutral-950 py-20 sm:py-28">
 
       {/* Ambient glow */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-600/10 blur-[100px]" />
+      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/5 blur-[100px]" />
 
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
 
@@ -181,7 +181,7 @@ export default function ReviewsCarousel() {
           </span>
           <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-5 py-2 backdrop-blur-sm">
             {[1,2,3,4,5].map(i => (
-              <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+              <Star key={i} className="h-3.5 w-3.5 fill-white text-white" />
             ))}
             <span className="ml-1 text-sm font-bold text-white">{avg}</span>
             <span className="text-neutral-600">·</span>
@@ -219,7 +219,7 @@ export default function ReviewsCarousel() {
               {/* Stars */}
               <div className="mt-6 flex gap-1">
                 {[1,2,3,4,5].map(i => (
-                  <Star key={i} className={`h-4 w-4 ${i <= r.rating ? 'fill-amber-400 text-amber-400' : 'fill-neutral-700 text-neutral-700'}`} />
+                  <Star key={i} className={`h-4 w-4 ${i <= r.rating ? 'fill-white text-white' : 'fill-neutral-700 text-neutral-700'}`} />
                 ))}
               </div>
 

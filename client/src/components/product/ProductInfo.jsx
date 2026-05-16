@@ -158,7 +158,7 @@ export default function ProductInfo({ product }) {
           {outOfStock ? (
             <span className="text-red-500">Out of Stock</span>
           ) : product.stock <= 5 ? (
-            <span className="text-amber-600">Only {product.stock} left in stock — order soon</span>
+            <span className="text-neutral-700 font-semibold">Only {product.stock} left in stock — order soon</span>
           ) : (
             <span className="text-green-600">In Stock</span>
           )}

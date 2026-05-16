@@ -27,6 +27,12 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
   const formatCurrency = (amount) => `₹${amount.toLocaleString('en-IN')}`;
 
   const handleRazorpayPayment = async () => {
+    // Guard before API call — avoids creating a dangling server order
+    if (!razorpayReady || !window.Razorpay) {
+      toast.error('Payment gateway is still loading. Please try again in a moment.');
+      return;
+    }
+
     setLoading(true);
     try {
       // 1. Create Razorpay order on server
@@ -43,7 +49,7 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
         couponCode: coupon?.code || null,
       });
 
-      const { razorpayOrderId, amount, key, orderId } = responseData.data;
+      const { razorpayOrderId, amount, key } = responseData.data;
 
       // 2. Open Razorpay checkout modal
       const options = {
@@ -62,10 +68,11 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
               razorpaySignature: response.razorpay_signature,
             });
 
-            onSuccess(verifyRes.data.data?.order || verifyRes.data.data || verifyRes.data);
             clearCart();
+            onSuccess(verifyRes.data.data?.order || verifyRes.data.data || verifyRes.data);
           } catch (err) {
             toast.error(err.response?.data?.message || 'Payment verification failed');
+            setLoading(false);
           }
         },
         prefill: {
@@ -73,7 +80,7 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
           contact: shippingAddress.phone,
         },
         theme: {
-          color: '#b8624a',
+          color: '#1a1a1a',
         },
         modal: {
           ondismiss: () => {
@@ -81,12 +88,6 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
           },
         },
       };
-
-      if (!razorpayReady || !window.Razorpay) {
-        toast.error('Payment gateway is still loading. Please try again in a moment.');
-        setLoading(false);
-        return;
-      }
 
       const rzp = new window.Razorpay(options);
       rzp.on('payment.failed', (response) => {

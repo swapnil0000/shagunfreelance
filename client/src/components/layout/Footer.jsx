@@ -19,7 +19,7 @@ export default function Footer() {
                 href="https://www.instagram.com/zimorindia?igsh=cXY3d2NndzV6ZDJx"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-full bg-neutral-800 hover:bg-pink-600 transition-colors"
+                className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-600 transition-colors"
                 aria-label="Instagram"
               >
                 <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -30,7 +30,7 @@ export default function Footer() {
                 href="https://www.facebook.com/share/14bLzKkkW8Z/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-full bg-neutral-800 hover:bg-blue-600 transition-colors"
+                className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-600 transition-colors"
                 aria-label="Facebook"
               >
                 <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -41,7 +41,7 @@ export default function Footer() {
                 href="https://pin.it/mkjTzYeZt"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-full bg-neutral-800 hover:bg-red-600 transition-colors"
+                className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-600 transition-colors"
                 aria-label="Pinterest"
               >
                 <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
@@ -52,7 +52,7 @@ export default function Footer() {
                 href="https://youtube.com/@zimorindia-z3p4i?si=hnCIC6MWVIkTxX0v"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-full bg-neutral-800 hover:bg-red-600 transition-colors"
+                className="p-2 rounded-full bg-neutral-800 hover:bg-neutral-600 transition-colors"
                 aria-label="YouTube"
               >
                 <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">

@@ -93,7 +93,7 @@ export default function AboutPage() {
     <div className="bg-white overflow-x-hidden">
 
       {/* ── HERO ── */}
-      <section className="relative min-h-screen flex flex-col justify-end">
+      <section className="relative min-h-[100px] flex flex-col justify-end">
         <div className="absolute inset-0">
           <img
             src="/about-hero.jpeg"
@@ -116,13 +116,13 @@ export default function AboutPage() {
           <div className="h-16 w-px bg-white/20" />
         </div>
 
-        <div className="relative mx-auto w-full max-w-6xl px-6 pb-20 pt-40 sm:px-10 lg:px-16">
+        <div className="relative mx-auto w-full max-w-6xl px-6 pb-20 pt-10 sm:px-10 lg:px-16">
           <motion.div initial="hidden" animate="show" variants={fadeUp}>
 
             {/* Badge */}
             <span className="inline-flex items-center gap-2 rounded-full border border-brand-400/40 bg-brand-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-brand-300 mb-7 backdrop-blur-sm">
               <Sparkles className="h-3 w-3 shrink-0" />
-              Work Bags · Designed &amp; Made in India
+               PREMIUM WOMEN’S WORK BAGS. MADE IN INDIA
             </span>
 
             {/* Heading */}
@@ -435,7 +435,7 @@ export default function AboutPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/90 via-neutral-950/70 to-neutral-950/30" />
 
-        <div className="relative px-8 py-20 sm:px-16 sm:py-28 lg:px-24">
+        {/* <div className="relative px-8 py-20 sm:px-16 sm:py-28 lg:px-24">
           <div className="max-w-lg">
             <motion.div
               initial="hidden"
@@ -470,7 +470,7 @@ export default function AboutPage() {
               </div>
             </motion.div>
           </div>
-        </div>
+        </div> */}
       </section>
 
     </div>

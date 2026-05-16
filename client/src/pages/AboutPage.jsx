@@ -105,7 +105,7 @@ export default function AboutPage() {
         </div>
 
         {/* Vertical decorative label */}
-        <div className="absolute top-1/3 right-8 -translate-y-1/2 hidden md:flex flex-col items-center gap-3">
+        {/* <div className="absolute top-1/3 right-8 -translate-y-1/2 hidden md:flex flex-col items-center gap-3">
           <div className="h-16 w-px bg-white/20" />
           <span
             className="text-[10px] font-semibold tracking-[0.35em] text-white/40 uppercase"
@@ -114,7 +114,7 @@ export default function AboutPage() {
             Made in India · Est. 2025
           </span>
           <div className="h-16 w-px bg-white/20" />
-        </div>
+        </div> */}
 
         <div className="relative mx-auto w-full max-w-6xl px-6 pb-20 pt-10 sm:px-10 lg:px-16">
           <motion.div initial="hidden" animate="show" variants={fadeUp}>

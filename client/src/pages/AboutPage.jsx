@@ -1,94 +1,75 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, MoveDown, Laptop, SlidersHorizontal, Leaf, Sparkles } from 'lucide-react';
+import { ArrowRight, MoveDown, Briefcase, ShieldCheck, Package, MapPin, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const stats = [
-  { value: '2,000+', label: 'Bags Delivered' },
-  { value: '50+', label: 'Artisans' },
-  { value: '4.9★', label: 'Customer Rating' },
-  { value: '100%', label: 'Handcrafted' },
+  { value: '10+',   label: 'Bags Delivered' },
+  { value: '4.9★',  label: 'Customer Rating' },
+  { value: '100%',  label: 'Premium Material' },
 ];
 
 const features = [
   {
-    icon: Laptop,
-    title: 'Laptop-Ready Interior',
-    description: 'Padded sleeve fits up to 15″ laptops — no more juggling a separate bag.',
+    icon: Briefcase,
+    title: 'Designed for the Modern Working Woman',
+    description:
+      'Thoughtfully crafted to match your workday — from office meetings to everyday hustle with style and functionality.',
   },
   {
-    icon: SlidersHorizontal,
-    title: 'Adjustable Straps',
-    description: 'Switch from shoulder to crossbody in seconds. Your bag, your way.',
+    icon: ShieldCheck,
+    title: 'Premium Quality That Lasts',
+    description:
+      'Made with durable premium materials and fine hand-finished detailing for long-lasting everyday use.',
   },
   {
-    icon: Sparkles,
-    title: 'Ages Beautifully',
-    description: 'Full-grain leather develops a rich patina. Looks better at year five than day one.',
+    icon: Package,
+    title: 'Smart & Spacious Organization',
+    description:
+      'Fits your essentials effortlessly — laptop, documents, charger, makeup, and more — without compromising elegance.',
   },
   {
-    icon: Leaf,
-    title: 'Sustainably Made',
-    description: 'Ethically sourced leather, minimal waste, eco-friendly packaging.',
+    icon: MapPin,
+    title: 'Proudly Designed & Made in India',
+    description:
+      'Every Zimor bag is designed, developed, and manufactured in-house with attention to quality, comfort, and timeless design.',
   },
 ];
 
 const values = [
   {
     number: '01',
-    title: 'Crafted by Hand',
+    title: 'Designed for the Modern Working Woman',
     description:
-      'Every stitch, every buckle, every seam is done by artisan hands in Varanasi — a city whose leather craft tradition spans centuries.',
+      'Thoughtfully crafted to match your workday — from office meetings to everyday hustle with style and functionality.',
   },
   {
     number: '02',
-    title: 'Built to Last',
+    title: 'Premium Quality That Lasts',
     description:
-      'We use only full-grain leather — the strongest, most beautiful cut. No shortcuts, no synthetic linings, no compromises.',
+      'Made with durable premium materials and fine hand-finished detailing for long-lasting everyday use.',
   },
   {
     number: '03',
-    title: 'Designed for Women',
+    title: 'Smart & Spacious Organization',
     description:
-      'Created by women who carry bags every day. Every pocket, strap, and clasp is placed where it actually makes sense.',
+      'Fits your essentials effortlessly — laptop, documents, charger, makeup, and more — without compromising elegance.',
   },
   {
     number: '04',
-    title: 'Proudly Indian',
+    title: 'Proudly Designed & Made in India',
     description:
-      'Made in Varanasi. Fair wages for our artisans. Premium quality that competes with — and beats — imported luxury.',
+      'Every Zimor bag is designed, developed, and manufactured in-house with attention to quality, comfort, and timeless design.',
   },
 ];
 
 const milestones = [
   {
-    year: '2023',
-    text: 'First collection launched — 3 shoulder bag styles, handcrafted in Varanasi. Sold out in 3 days.',
-  },
-  {
-    year: '2024',
-    text: 'Added totes and mini bags. Reached 1,000 happy customers across 15 Indian cities.',
-  },
-  {
     year: '2025',
-    text: '2,000+ bags delivered. Expanding into new leather finishes and sustainable lining fabrics.',
-  },
-];
-
-const team = [
-  {
-    name: 'Priya Sharma',
-    role: 'Founder & Head Designer',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80&auto=format&fit=crop',
+    text: 'The idea for Zimor India was born from a desire to change how women carry work. We invested months into R&D, premium material sourcing, and countless prototypes to craft bags that feel both sophisticated and functional.',
   },
   {
-    name: 'Anita Verma',
-    role: 'Head of Production',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80&auto=format&fit=crop',
-  },
-  {
-    name: 'Kavya Singh',
-    role: 'Creative Director',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&q=80&auto=format&fit=crop',
+    year: '2026',
+    text: 'Introduced our first three signature collections — designed and manufactured in-house for ambitious women who value timeless style and everyday performance.',
   },
 ];
 
@@ -115,9 +96,9 @@ export default function AboutPage() {
       <section className="relative min-h-screen flex flex-col justify-end">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=1920&q=80&auto=format&fit=crop"
-            alt="Woman with Zimor shoulder bag"
-            className="h-full w-full object-cover object-top"
+            src="/about-hero.jpeg"
+            alt="Zimor bag being crafted"
+            className="h-full w-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/50 to-neutral-950/10" />
           <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/60 to-transparent" />
@@ -130,7 +111,7 @@ export default function AboutPage() {
             className="text-[10px] font-semibold tracking-[0.35em] text-white/40 uppercase"
             style={{ writingMode: 'vertical-rl' }}
           >
-            Varanasi · Est. 2023
+            Made in India · Est. 2025
           </span>
           <div className="h-16 w-px bg-white/20" />
         </div>
@@ -141,18 +122,16 @@ export default function AboutPage() {
             {/* Badge */}
             <span className="inline-flex items-center gap-2 rounded-full border border-brand-400/40 bg-brand-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-brand-300 mb-7 backdrop-blur-sm">
               <Sparkles className="h-3 w-3 shrink-0" />
-              Hand &amp; Shoulder Bags · Made in India
+              Work Bags · Designed &amp; Made in India
             </span>
 
             {/* Heading */}
             <h1 className="font-heading text-5xl font-bold text-white sm:text-6xl lg:text-7xl xl:text-[5.5rem] leading-[1.02] max-w-2xl">
-              Carry It.
+              Carry Confidence.
               <br />
               <span className="italic text-brand-300 underline decoration-brand-500/50 decoration-2 underline-offset-8">
-                Own Every
+                Lead Every Room.
               </span>
-              <br />
-              Room.
             </h1>
 
             {/* Decorative rule */}
@@ -160,7 +139,7 @@ export default function AboutPage() {
 
             {/* Subtitle */}
             <p className="mt-4 max-w-sm text-base text-white/60 leading-relaxed">
-              Zimor crafts premium leather hand bags and shoulder bags for women who mean business — and still want to look stunning doing it.
+              Crafted in India with premium materials and timeless design, Zimor work bags are made for modern women balancing work, style, and everyday life.
             </p>
 
             {/* CTAs */}
@@ -169,7 +148,7 @@ export default function AboutPage() {
                 to="/shop"
                 className="inline-flex items-center gap-2 rounded-full bg-brand-500 px-8 py-3.5 text-sm font-semibold text-white transition-all hover:bg-brand-400 hover:gap-3 shadow-lg shadow-brand-900/40"
               >
-                Shop Bags <ArrowRight className="h-4 w-4" />
+                Shop Work Bags <ArrowRight className="h-4 w-4" />
               </Link>
               <a
                 href="#story"
@@ -180,22 +159,22 @@ export default function AboutPage() {
             </div>
 
             {/* Trust line */}
-            <p className="mt-5 flex items-center gap-1.5 text-[11px] text-white/30">
+            <p className="mt-5 flex flex-wrap items-center gap-1.5 text-[11px] text-white/30">
               <span className="text-accent-400 tracking-tight">★★★★★</span>
               <span className="mx-1 text-white/15">·</span>
               4.9 rated
               <span className="mx-1 text-white/15">·</span>
-              2,000+ bags delivered
+              10+ bags delivered
               <span className="mx-1 text-white/15">·</span>
-              Handcrafted in Varanasi
+              Proudly Made in India
             </p>
 
           </motion.div>
         </div>
 
-        {/* Stats strip */}
+        {/* Stats strip — 3 columns */}
         <div className="relative border-t border-white/10 bg-white/5 backdrop-blur-md">
-          <div className="mx-auto grid max-w-4xl grid-cols-2 sm:grid-cols-4 divide-x divide-white/10">
+          <div className="mx-auto grid max-w-3xl grid-cols-3 divide-x divide-white/10">
             {stats.map(({ value, label }, i) => (
               <motion.div
                 key={label}
@@ -240,7 +219,7 @@ export default function AboutPage() {
                 <div className="h-10 w-10 rounded-xl bg-brand-100 flex items-center justify-center">
                   <Icon className="h-5 w-5 text-brand-600" />
                 </div>
-                <h3 className="text-sm font-bold text-neutral-900">{title}</h3>
+                <h3 className="text-sm font-bold text-neutral-900 leading-snug">{title}</h3>
                 <p className="text-sm text-neutral-500 leading-relaxed">{description}</p>
               </motion.div>
             ))}
@@ -261,18 +240,21 @@ export default function AboutPage() {
           >
             <span className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-500">Our Story</span>
             <h2 className="mt-3 font-heading text-4xl font-bold text-neutral-900 sm:text-5xl leading-tight">
-              From Varanasi's
+              A Vision to Change
               <br />
-              <span className="italic text-brand-600">Craft Lanes</span>
+              <span className="italic text-brand-600">How Women</span>
               <br />
-              to Your Shoulder.
+              Carry Work.
             </h2>
 
             <p className="mt-6 text-neutral-600 leading-relaxed max-w-md">
-              We started Zimor with one question: why should Indian women choose between an overpriced import and a generic local bag? There had to be a better answer.
+              We started Zimor with a vision to redefine women's work bags in India — creating designs that are elegant, functional, and built for everyday hustle. Every Zimor bag is thoughtfully designed and manufactured by our own team, ensuring attention to detail, premium craftsmanship, and lasting quality.
             </p>
             <p className="mt-4 text-neutral-600 leading-relaxed max-w-md">
-              The answer was Varanasi — a city whose leather artisans have been perfecting their craft for generations. We partnered with them to build bags that are unmistakably premium, thoughtfully designed, and proudly Indian.
+              Made with durable premium materials and handcrafted finishing, our bags support modern women through work, travel, meetings, and everyday life — without compromising on style.
+            </p>
+            <p className="mt-4 text-sm font-semibold text-brand-700 italic max-w-md">
+              Zimor is more than a bag brand. It's a movement to change the way women carry work.
             </p>
 
             {/* Timeline */}
@@ -320,8 +302,8 @@ export default function AboutPage() {
             <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-3xl border-2 border-brand-200" />
             <div className="relative overflow-hidden rounded-3xl bg-neutral-100">
               <img
-                src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=700&q=80&auto=format&fit=crop"
-                alt="Woman carrying Zimor shoulder bag"
+                src="/about-craft.jpeg"
+                alt="Zimor artisan crafting a bag"
                 className="w-full object-cover aspect-[4/5]"
               />
             </div>
@@ -410,7 +392,7 @@ export default function AboutPage() {
                 <span className="italic text-brand-300">Choose Zimor.</span>
               </h2>
               <p className="mt-4 text-sm text-neutral-400 max-w-xs leading-relaxed">
-                Four non-negotiables that guide every bag we design, every stitch we make, every order we ship.
+                Four non-negotiables that guide every bag we design, every stitch we make, and every order we ship.
               </p>
             </motion.div>
 
@@ -429,7 +411,7 @@ export default function AboutPage() {
                     {number}
                   </span>
                   <div>
-                    <h3 className="text-lg font-bold text-white group-hover:text-brand-300 transition-colors">
+                    <h3 className="text-lg font-bold text-white group-hover:text-brand-300 transition-colors leading-snug">
                       {title}
                     </h3>
                     <p className="mt-2 text-sm text-neutral-400 leading-relaxed max-w-sm">
@@ -444,61 +426,12 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── TEAM ── */}
-      <section className="mx-auto max-w-6xl px-6 py-1 sm:px-10 lg:px-16">
-        {/* <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-          variants={fadeUp}
-          className="mb-14"
-        >
-          <span className="text-xs font-semibold uppercase tracking-[0.25em] text-brand-500">
-            The People Behind the Bags
-          </span>
-          <h2 className="mt-2 font-heading text-4xl font-bold text-neutral-900 sm:text-5xl leading-tight">
-            Meet the <span className="italic text-brand-600">Team.</span>
-          </h2>
-        </motion.div>
-
-        <div className="grid gap-6 sm:grid-cols-3">
-          {team.map(({ name, role, image }, i) => (
-            <motion.div
-              key={name}
-              custom={i}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-              variants={fadeUp}
-              className="group"
-            >
-              <div className="overflow-hidden rounded-2xl bg-neutral-100 aspect-[3/4]">
-                <img
-                  src={image}
-                  alt={name}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-              </div>
-              <div className="mt-4 flex items-end justify-between">
-                <div>
-                  <h3 className="text-base font-bold text-neutral-900">{name}</h3>
-                  <p className="text-sm text-neutral-500">{role}</p>
-                </div>
-                <div className="h-8 w-8 rounded-full border border-brand-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                  <ArrowRight className="h-3.5 w-3.5 text-brand-500" />
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div> */}
-      </section>
-
       {/* ── CTA ── */}
       <section className="mx-6 mb-16 sm:mx-10 lg:mx-16 overflow-hidden rounded-3xl relative">
         <img
-          src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1920&q=80&auto=format&fit=crop"
-          alt="Women with handbags"
-          className="absolute inset-0 h-full w-full object-cover object-top"
+          src="/about-leather.jpeg"
+          alt="Premium leather materials used in Zimor bags"
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/90 via-neutral-950/70 to-neutral-950/30" />
 
@@ -519,14 +452,14 @@ export default function AboutPage() {
                 <span className="italic text-brand-300">made for you.</span>
               </h2>
               <p className="mt-5 text-white/60 text-sm leading-relaxed max-w-xs">
-                Hand bags, shoulder bags, totes — all handcrafted in Varanasi and delivered to your door.
+                Work bags designed and made in India — for ambitious women who carry work with style every day.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 <Link
                   to="/shop"
                   className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-sm font-bold text-neutral-900 transition-all hover:bg-brand-50 hover:gap-3 hover:shadow-2xl"
                 >
-                  Shop All Bags <ArrowRight className="h-4 w-4" />
+                  Shop Work Bags <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   to="/contact"

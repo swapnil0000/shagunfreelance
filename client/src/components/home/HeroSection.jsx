@@ -1,6 +1,12 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Star, ShieldCheck, Truck } from 'lucide-react';
+
+const TICKER = [
+  'Premium Workbags', 'Crafted in Varanasi', 'Free Shipping All Orders',
+  'Handmade with Love', 'Premium Workbags', 'Crafted in Varanasi',
+  'Free Shipping All Orders', 'Handmade with Love',
+];
 
 const stats = [
   { value: '10+', label: 'Happy Customers' },
@@ -8,130 +14,335 @@ const stats = [
   { value: '4.9★', label: 'Avg Rating' },
 ];
 
+const float = (delay = 0, y = 10) => ({
+  animate: { y: [0, -y, 0] },
+  transition: { duration: 3.5, repeat: Infinity, ease: 'easeInOut', delay },
+});
+
 export default function HeroSection() {
   return (
-    <section className="relative lg:h-[88vh] overflow-hidden bg-neutral-950">
-      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen lg:h-full">
+    <section className="overflow-hidden bg-neutral-950">
 
-        {/* Left — Content */}
-        <div className="relative flex flex-col justify-center px-8 pt-10 pb-12 sm:px-12 lg:px-14 lg:py-0 xl:px-20 order-2 lg:order-1">
-          <div className="absolute inset-0 bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-800/30 pointer-events-none" />
-          <div className="absolute bottom-0 left-0 h-64 w-64 rounded-full bg-white/5 blur-3xl pointer-events-none" />
+      {/* ── DESKTOP: split left / right ── */}
+      <div className="hidden lg:grid lg:grid-cols-2 h-[88vh] min-h-[640px]">
 
-          <div className="relative z-10 max-w-lg">
-            {/* Brand tag */}
-            <motion.div
-              initial={{ opacity: 0, x: -16 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-              className="mb-6 inline-flex items-center gap-3"
+        {/* ── LEFT: content panel ── */}
+        <div className="relative flex flex-col justify-between bg-neutral-950 px-14 py-10 xl:px-20 overflow-hidden">
+
+          {/* Decorative: large watermark year */}
+          <div
+            aria-hidden
+            className="pointer-events-none select-none absolute -bottom-6 -left-4 text-[180px] font-black leading-none text-white/[0.03]"
+          >
+            ZIMOR
+          </div>
+
+          {/* Decorative: right-edge divider line */}
+          <motion.div
+            initial={{ scaleY: 0 }}
+            animate={{ scaleY: 1 }}
+            transition={{ duration: 1, ease: 'easeOut', delay: 0.3 }}
+            className="absolute right-0 top-0 h-full w-px origin-top bg-gradient-to-b from-transparent via-white/10 to-transparent"
+          />
+
+          {/* ── Top bar ── */}
+          <div className="relative z-10 flex items-center justify-between">
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+              className="flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.28em] text-white/30"
             >
-              <div className="h-px w-8 bg-white/50" />
-              <span className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">
+              <span className="h-px w-6 bg-white/20 block" />
+              Est. 2024 · Varanasi, India
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.45, duration: 0.6 }}
+              className="flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-3 py-1.5"
+            >
+              {[1, 2, 3, 4, 5].map((i) => (
+                <Star key={i} className="h-2.5 w-2.5 fill-white text-white" />
+              ))}
+              <span className="ml-1.5 text-[11px] font-semibold text-white">4.9</span>
+            </motion.div>
+          </div>
+
+          {/* ── Center: headline + subtitle + CTAs ── */}
+          <div className="relative z-10">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              className="mb-5 flex items-center gap-3"
+            >
+              <div className="h-px w-8 bg-white/40" />
+              <span className="text-xs font-semibold uppercase tracking-[0.22em] text-white/50">
                 Zimor India
               </span>
             </motion.div>
 
-            {/* Heading */}
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 }}
-              className="font-heading text-5xl font-bold leading-[1.05] text-white sm:text-6xl xl:text-7xl"
-            >
-              BUILT FOR
-              <br />
-              <span className="bg-gradient-to-b from-white to-neutral-400 bg-clip-text text-transparent">
-                WORK.
-              </span>
-            </motion.h1>
+            <div className="overflow-hidden">
+              <motion.h1
+                initial={{ y: 80 }}
+                animate={{ y: 0 }}
+                transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                className="font-heading font-black leading-[0.88] text-white"
+                style={{ fontSize: 'clamp(60px, 6vw, 96px)' }}
+              >
+                BUILT
+                <br />
+                FOR
+                <br />
+                <span className="bg-gradient-to-b from-white to-neutral-500 bg-clip-text text-transparent">
+                  WORK.
+                </span>
+              </motion.h1>
+            </div>
 
-            {/* Subtitle */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.22 }}
-              className="mt-5 text-base leading-relaxed text-white/55 sm:text-lg"
+              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.3 }}
+              className="mt-5 max-w-[300px] text-[15px] leading-relaxed text-white/50"
             >
-              Premium workbags designed for the modern woman —{' '}
-              <span className="text-white/75">crafted in Varanasi</span> with quality that lasts.
+              Premium workbags for the modern woman —{' '}
+              <span className="text-white/80">crafted in Varanasi</span> with quality that lasts.
             </motion.p>
 
-            {/* CTAs */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.34 }}
-              className="mt-8 flex flex-wrap items-center gap-3"
+              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.44 }}
+              className="mt-8 flex items-center gap-5"
             >
               <Link
                 to="/shop"
-                className="group inline-flex items-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-neutral-900 shadow-lg transition-all hover:bg-neutral-100 hover:shadow-xl"
+                className="group inline-flex items-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-neutral-900 shadow-xl transition-all hover:bg-neutral-100 hover:scale-[1.03] hover:shadow-2xl"
               >
-                Explore Collection
+                Shop Collection
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
-             
+              <Link to="/shop" className="text-sm font-medium text-white/40 transition-colors hover:text-white/70">
+                View all →
+              </Link>
             </motion.div>
 
-            {/* Stats */}
+            {/* Trust pills */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.48 }}
-              className="mt-10 flex items-center gap-7 border-t border-white/10 pt-8"
+              transition={{ duration: 0.7, delay: 0.58 }}
+              className="mt-6 flex items-center gap-3"
             >
-              {stats.map((stat, i) => (
-                <div key={stat.label} className="flex items-center gap-7">
-                  {i > 0 && <div className="h-8 w-px bg-white/10" />}
-                  <div>
-                    <p className="text-2xl font-bold text-white">{stat.value}</p>
-                    <p className="mt-0.5 text-xs tracking-wide text-white/40">{stat.label}</p>
-                  </div>
-                </div>
-              ))}
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/50">
+                <ShieldCheck className="h-3 w-3" /> Secure Payments
+              </span>
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/50">
+                <Truck className="h-3 w-3" /> Free Shipping
+              </span>
             </motion.div>
           </div>
+
+          {/* ── Bottom: stats ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: 'easeOut', delay: 0.62 }}
+            className="relative z-10 flex items-center gap-8 border-t border-white/10 pt-6"
+          >
+            {stats.map((stat, i) => (
+              <div key={stat.label} className="flex items-center gap-8">
+                {i > 0 && <div className="h-7 w-px bg-white/10" />}
+                <div>
+                  <p className="text-2xl font-bold text-white">{stat.value}</p>
+                  <p className="mt-0.5 text-[11px] uppercase tracking-wider text-white/35">{stat.label}</p>
+                </div>
+              </div>
+            ))}
+          </motion.div>
         </div>
 
-        {/* Right — image.png (both desktop and mobile) */}
+        {/* ── RIGHT: image panel with floating UI ── */}
         <motion.div
           initial={{ opacity: 0, scale: 1.04 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9, ease: 'easeOut' }}
-          className="relative min-h-[55vh] lg:min-h-0 lg:h-[88vh] order-1 lg:order-2 overflow-hidden"
+          transition={{ duration: 1, ease: 'easeOut' }}
+          className="relative overflow-hidden bg-neutral-950"
         >
-          {/* Desktop: image2.jpeg (976×1088) — contain to show full image, dark bg fills gaps */}
-          <img
-            src="/image2.jpeg"
-            alt="Zimor India luxury workbag"
-            className="hidden lg:block h-full w-full object-cover"
-          />
-          {/* Mobile: image.png */}
+          {/* Bag image */}
           <img
             src="/image.png"
             alt="Zimor India luxury workbag"
-            className="block lg:hidden h-full w-full object-cover object-top"
+            className="h-full w-full object-cover object-top"
           />
-          {/* Blend left edge into dark content panel */}
-          <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/60 via-neutral-950/20 to-transparent lg:from-neutral-950/70 lg:via-neutral-950/25 lg:to-transparent" />
-          {/* Bottom fade */}
-          <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-neutral-950/60 to-transparent" />
 
-          {/* Floating product badge */}
+          {/* Left-edge blend */}
+          <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/80 via-neutral-950/25 to-transparent" />
+          {/* Bottom fade */}
+          <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-neutral-950/80 to-transparent" />
+          {/* Subtle top fade */}
+          <div className="absolute top-0 inset-x-0 h-20 bg-gradient-to-b from-neutral-950/40 to-transparent" />
+
+          {/* ── Floating: "New Collection" pill — top right ── */}
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            {...float(0, 6)}
+            className="absolute top-8 right-8"
+          >
+            <div className="flex items-center gap-2 rounded-full border border-white/15 bg-black/40 px-4 py-2 backdrop-blur-md shadow-lg">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white/60 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+              </span>
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-white">New Collection</span>
+            </div>
+          </motion.div>
+
+          {/* ── Floating: review card — middle right ── */}
+          <motion.div
+            initial={{ opacity: 0, x: 24 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 1.1, duration: 0.6 }}
+            {...float(0.5, 8)}
+            className="absolute top-[38%] right-7"
+          >
+            <div className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur-md px-4 py-3.5 shadow-xl max-w-[180px]">
+              <div className="flex gap-0.5 mb-2">
+                {[1,2,3,4,5].map(i => <Star key={i} className="h-3 w-3 fill-white text-white" />)}
+              </div>
+              <p className="text-xs font-medium text-white leading-snug">"Perfect for work, gets compliments every day!"</p>
+              <p className="mt-1.5 text-[10px] text-white/40">— Priya S., Mumbai</p>
+            </div>
+          </motion.div>
+
+          {/* ── Floating: product info card — bottom right ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 0.6 }}
+            {...float(1, 6)}
+            className="absolute bottom-10 right-8"
+          >
+            <div className="rounded-2xl border border-white/10 bg-black/40 px-5 py-4 text-white backdrop-blur-md shadow-xl">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-white/50">New Arrival</p>
+              <p className="mt-1 font-heading text-sm font-bold">Signature Tote</p>
+              <p className="mt-0.5 text-[11px] text-white/40">Handcrafted · Varanasi</p>
+              <div className="mt-2.5 pt-2.5 border-t border-white/10 flex items-center justify-between">
+                <span className="text-xs font-bold text-white">₹2,499</span>
+                <span className="text-[10px] text-white/40 line-through">₹3,499</span>
+              </div>
+            </div>
+          </motion.div>
+
+        </motion.div>
+      </div>
+
+      {/* ── Scrolling ticker (desktop only) ── */}
+      <div className="hidden lg:flex overflow-hidden border-t border-white/8 bg-white/[0.03] py-3">
+        <motion.div
+          animate={{ x: ['0%', '-50%'] }}
+          transition={{ duration: 28, ease: 'linear', repeat: Infinity }}
+          className="flex shrink-0 whitespace-nowrap"
+        >
+          {[...TICKER, ...TICKER].map((item, i) => (
+            <span
+              key={i}
+              className="inline-flex items-center gap-5 px-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/25"
+            >
+              {item}
+              <span className="text-white/15">◆</span>
+            </span>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* ── MOBILE: stacked ── */}
+      <div className="lg:hidden">
+        <div
+          className="relative overflow-hidden"
+          style={{ height: '70vw', maxHeight: '420px', minHeight: '260px' }}
+        >
+          <img
+            src="/image.png"
+            alt="Zimor India luxury workbag"
+            className="h-full w-full object-cover object-top"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/20 via-transparent to-neutral-950/80" />
+
+          <div className="absolute top-4 left-4 flex items-center gap-2">
+            <div className="h-px w-5 bg-white/40" />
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-white/60">Zimor India</span>
+          </div>
+
+          <div className="absolute bottom-4 right-4 rounded-xl border border-white/10 bg-black/30 px-3 py-2.5 backdrop-blur-sm text-white">
+            <p className="text-[9px] font-semibold uppercase tracking-widest text-white/50">New Arrival</p>
+            <p className="mt-0.5 text-xs font-semibold">Signature Tote</p>
+            <p className="text-[9px] text-white/40">Handcrafted · Varanasi</p>
+          </div>
+        </div>
+
+        <div className="bg-neutral-950 px-8 pt-10 pb-14 sm:px-12">
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="font-heading text-[52px] font-black leading-[0.88] text-white sm:text-[64px]"
+          >
+            BUILT<br />FOR<br />
+            <span className="bg-gradient-to-b from-white to-neutral-500 bg-clip-text text-transparent">
+              WORK.
+            </span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="mt-5 text-sm leading-relaxed text-white/50 sm:text-base"
+          >
+            Premium workbags for the modern woman —{' '}
+            <span className="text-white/80">crafted in Varanasi</span> with quality that lasts.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.27 }}
+            className="mt-7"
+          >
+            <Link
+              to="/shop"
+              className="group inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-bold text-neutral-900 shadow-lg transition-all hover:bg-neutral-100"
+            >
+              Shop Collection
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.7 }}
-            className="absolute bottom-6 right-4 sm:bottom-10 sm:right-8 lg:bottom-12 lg:right-10 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 px-4 py-3 lg:px-5 lg:py-4 text-white shadow-xl"
+            transition={{ duration: 0.7, delay: 0.38 }}
+            className="mt-8 flex items-center gap-6 border-t border-white/10 pt-7"
           >
-            <p className="text-[10px] lg:text-xs font-semibold uppercase tracking-widest text-white/70">New Arrival</p>
-            <p className="mt-0.5 lg:mt-1 font-heading text-sm lg:text-base font-semibold leading-tight">Signature Tote</p>
-            <p className="mt-0.5 text-[10px] lg:text-xs text-white/50">Handcrafted · Varanasi</p>
+            {stats.map((stat, i) => (
+              <div key={stat.label} className="flex items-center gap-6">
+                {i > 0 && <div className="h-7 w-px bg-white/10" />}
+                <div>
+                  <p className="text-xl font-bold text-white">{stat.value}</p>
+                  <p className="mt-0.5 text-[11px] uppercase tracking-wide text-white/35">{stat.label}</p>
+                </div>
+              </div>
+            ))}
           </motion.div>
-        </motion.div>
-
+        </div>
       </div>
+
     </section>
   );
 }

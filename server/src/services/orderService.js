@@ -168,6 +168,9 @@ export const createRazorpayOrder = async (userId, cartItems, shippingAddress, co
   const orderNumber = await generateOrderNumber();
 
   // 7. Create Razorpay order (amount in paise)
+  if (!razorpay) {
+    throw new AppError('Payment gateway is not configured. Please contact support.', 503);
+  }
   const razorpayOrder = await razorpay.orders.create({
     amount: Math.round(total * 100),
     currency: 'INR',

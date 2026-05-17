@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ScrollToTop from './components/shared/ScrollToTop';
 
 // Layout (loaded eagerly since it wraps everything)
 const Layout = lazy(() => import('./components/layout/Layout'));
@@ -51,6 +52,7 @@ function Loading() {
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Suspense fallback={<Loading />}>
         <Routes>
           <Route element={<Layout />}>

@@ -41,19 +41,31 @@ router.post(
 );
 
 // ─── Google OAuth ────────────────────────────────────────────────────────────
-router.get(
-  '/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
-);
+router.get('/google', (req, res, next) => {
+  const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
+    .split(',').map(u => u.trim());
+  const requested = req.query.origin ? decodeURIComponent(req.query.origin) : '';
+  const origin = allowedOrigins.includes(requested) ? requested : allowedOrigins[0];
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    state: Buffer.from(origin).toString('base64'),
+  })(req, res, next);
+});
 
-router.get(
-  '/google/callback',
+router.get('/google/callback', (req, res, next) => {
+  const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
+    .split(',').map(u => u.trim());
+  let origin = allowedOrigins[0];
+  try {
+    const decoded = Buffer.from(req.query.state || '', 'base64').toString();
+    if (allowedOrigins.includes(decoded)) origin = decoded;
+  } catch (_) { /* use default */ }
+
   passport.authenticate('google', {
     session: false,
-    failureRedirect: `${process.env.CLIENT_URL?.split(',')[0] || 'http://localhost:5173'}/login?error=google_failed`,
-  }),
-  googleCallback
-);
+    failureRedirect: `${origin}/login?error=google_failed`,
+  })(req, res, next);
+}, googleCallback);
 
 // ─── Forgot Password ─────────────────────────────────────────────────────────
 router.post(

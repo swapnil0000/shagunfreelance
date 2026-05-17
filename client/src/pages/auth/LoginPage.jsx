@@ -68,7 +68,8 @@ export default function LoginPage() {
 
   const handleGoogleLogin = () => {
     const baseURL = import.meta.env.VITE_API_URL || '/api';
-    window.location.href = `${baseURL}/auth/google`;
+    const origin = encodeURIComponent(window.location.origin);
+    window.location.href = `${baseURL}/auth/google?origin=${origin}`;
   };
 
   return (

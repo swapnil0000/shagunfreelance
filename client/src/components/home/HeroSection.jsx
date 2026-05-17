@@ -265,7 +265,7 @@ export default function HeroSection() {
       <div className="lg:hidden">
         <div
           className="relative overflow-hidden"
-          style={{ height: '70vw', maxHeight: '420px', minHeight: '260px' }}
+          style={{ height: '560px', maxHeight: '560px', minHeight: '260px' }}
         >
           <img
             src="/image.png"
@@ -274,10 +274,10 @@ export default function HeroSection() {
           />
           <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/20 via-transparent to-neutral-950/80" />
 
-          <div className="absolute top-4 left-4 flex items-center gap-2">
+          {/* <div className="absolute top-4 left-4 flex items-center gap-2">
             <div className="h-px w-5 bg-white/40" />
             <span className="text-[10px] font-semibold uppercase tracking-widest text-white/60">Zimor India</span>
-          </div>
+          </div> */}
 
           <div className="absolute bottom-4 right-4 rounded-xl border border-white/10 bg-black/30 px-3 py-2.5 backdrop-blur-sm text-white">
             <p className="text-[9px] font-semibold uppercase tracking-widest text-white/50">New Arrival</p>
@@ -305,8 +305,8 @@ export default function HeroSection() {
             transition={{ duration: 0.7, delay: 0.15 }}
             className="mt-5 text-sm leading-relaxed text-white/50 sm:text-base"
           >
-            Premium workbags for the modern woman —{' '}
-            <span className="text-white/80">crafted with care</span> with quality that lasts.
+            PREMIUM WOMEN’S WORK BAGS <br/>
+            <span className="text-white/80"> • MADE IN INDIA </span> 
           </motion.p>
 
           <motion.div

@@ -50,6 +50,7 @@ const INITIAL_FORM = {
   strapDrop: '',
   weight: '',
   keyHighlights: [],
+  stylingGuide: [],
 };
 
 // Converts a field that may be a legacy string or an array to an array
@@ -197,6 +198,7 @@ export default function AdminProducts() {
       strapDrop: product.strapDrop || '',
       weight: product.weight || '',
       keyHighlights: toArray(product.keyHighlights),
+      stylingGuide: toArray(product.stylingGuide),
     });
     setModalOpen(true);
   };
@@ -258,6 +260,7 @@ export default function AdminProducts() {
       strapDrop: form.strapDrop.trim() || undefined,
       weight: form.weight.trim() || undefined,
       keyHighlights: form.keyHighlights.filter((h) => h.trim()),
+      stylingGuide: form.stylingGuide.filter((s) => s.trim()),
     };
 
     if (editingProduct) {
@@ -553,14 +556,13 @@ function ProductFormModal({
                 </div>
                 <div>
                   <label htmlFor="description" className="mb-1.5 block text-sm font-medium text-neutral-700">
-                    Description
+                    Description <span className="text-neutral-400 font-normal">(optional)</span>
                   </label>
                   <textarea
                     id="description"
                     rows={3}
                     value={form.description}
                     onChange={(e) => updateField('description', e.target.value)}
-                    required
                     placeholder="Product description..."
                     className="w-full rounded-lg border border-neutral-300 px-4 py-2.5 text-sm text-neutral-800 placeholder:text-neutral-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
                   />
@@ -799,6 +801,21 @@ function ProductFormModal({
                   updateItem={updateItem}
                   removeItem={removeItem}
                   placeholder="Highlight"
+                />
+              </fieldset>
+
+              {/* ── Styling Guide ── */}
+              <fieldset className="space-y-3">
+                <legend className="text-sm font-semibold text-neutral-700 mb-2">Styling Guide</legend>
+                <BulletList
+                  label="Style tip"
+                  hint='Each entry is a styling suggestion shown on the product page (e.g. "Work Ready – Pair with a blazer and trousers").'
+                  field="stylingGuide"
+                  items={form.stylingGuide}
+                  addItem={addItem}
+                  updateItem={updateItem}
+                  removeItem={removeItem}
+                  placeholder="Style tip"
                 />
               </fieldset>
 

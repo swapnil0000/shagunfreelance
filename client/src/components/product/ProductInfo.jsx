@@ -231,33 +231,64 @@ export default function ProductInfo({ product }) {
         <div className="border-t border-neutral-200 pt-1">
           <AccordionItem title="Product Details" defaultOpen>
             <p className="mb-3">{product.description}</p>
-            <ul className="list-disc pl-4 space-y-1">
-              <li>Crafted with care by skilled artisans in Varanasi</li>
-              <li>Premium materials for lasting durability</li>
-              <li>Thoughtfully designed compartments</li>
-              {product.colors?.length > 0 && <li>Colors: {product.colors.map(c => c.name).join(', ')}</li>}
-            </ul>
+            {product.features?.length > 0 && (
+              <ul className="list-disc pl-4 space-y-1">
+                {product.features.map((f, i) => <li key={i}>{f}</li>)}
+              </ul>
+            )}
           </AccordionItem>
 
           <AccordionItem title="Material & Care">
-            <ul className="list-disc pl-4 space-y-1">
-              {product.material && <li><strong>Material:</strong> {product.material}</li>}
-              {product.weight && <li><strong>Weight:</strong> {product.weight}</li>}
-              {product.careInstructions
-                ? <li><strong>Care:</strong> {product.careInstructions}</li>
-                : <>
-                    <li>Wipe with a soft damp cloth</li>
-                    <li>Avoid direct sunlight and moisture</li>
-                  </>
-              }
+            <ul className="list-disc pl-4 space-y-1.5">
+              {product.material?.length > 0 && (
+                <>
+                  <li><strong>Material:</strong></li>
+                  {product.material.map((m, i) => <li key={i} className="ml-2">{m}</li>)}
+                </>
+              )}
+              {product.innerLining?.length > 0 && (
+                <>
+                  <li><strong>Inner Lining:</strong></li>
+                  {product.innerLining.map((l, i) => <li key={i} className="ml-2">{l}</li>)}
+                </>
+              )}
+              {product.hardware?.length > 0 && (
+                <>
+                  <li><strong>Hardware:</strong></li>
+                  {product.hardware.map((h, i) => <li key={i} className="ml-2">{h}</li>)}
+                </>
+              )}
+              {product.careInstructions?.length > 0 && (
+                <>
+                  <li><strong>Care Instructions:</strong></li>
+                  {product.careInstructions.map((c, i) => <li key={i} className="ml-2">{c}</li>)}
+                </>
+              )}
+              {!product.material?.length && !product.careInstructions?.length && (
+                <>
+                  <li>Wipe with a soft damp cloth</li>
+                  <li>Avoid direct sunlight and moisture</li>
+                </>
+              )}
             </ul>
           </AccordionItem>
 
-          {(product.dimensions || product.weight) && (
+          {(product.dimensionLength || product.dimensionHeight || product.dimensionWidth || product.strapDrop || product.weight) && (
             <AccordionItem title="Dimensions">
               <ul className="list-disc pl-4 space-y-1">
-                {product.dimensions && <li>{product.dimensions}</li>}
+                {product.dimensionLength && <li>Length: {product.dimensionLength}</li>}
+                {product.dimensionHeight && <li>Height: {product.dimensionHeight}</li>}
+                {product.dimensionWidth && <li>Width: {product.dimensionWidth}</li>}
+                {product.strapDrop && <li>Strap Drop: {product.strapDrop}</li>}
                 {product.weight && <li>Weight: {product.weight}</li>}
+              </ul>
+            </AccordionItem>
+          )}
+
+          {product.stylingGuide?.length > 0 && (
+            <AccordionItem title="Styling Guide">
+              <ul className="list-disc pl-4 space-y-1.5">
+                {product.stylingGuide.map((s, i) => <li key={i}>{s}</li>)}
               </ul>
             </AccordionItem>
           )}

@@ -216,6 +216,9 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
                   {formatCurrency(total)}
                 </span>
               </div>
+              <p className="text-[10px] text-neutral-400 text-right">
+                18% GST Included.
+              </p>
             </div>
           </div>
         </div>

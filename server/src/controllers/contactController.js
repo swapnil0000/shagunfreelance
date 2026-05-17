@@ -1,5 +1,6 @@
 import ContactMessage from '../models/ContactMessage.js';
 import AppError from '../utils/AppError.js';
+import { sendContactEmails } from '../utils/email.js';
 
 /**
  * POST /api/contact
@@ -15,6 +16,9 @@ export const createMessage = async (req, res, next) => {
       message,
       isRead: false,
     });
+
+    // Send notification to admin + auto-reply to customer (non-blocking)
+    sendContactEmails({ name, email, phone, subject, message });
 
     res.status(201).json({
       status: 'success',

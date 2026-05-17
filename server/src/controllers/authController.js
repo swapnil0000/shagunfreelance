@@ -49,7 +49,8 @@ export const login = async (req, res, next) => {
  */
 export const googleCallback = (req, res) => {
   const token = signToken(req.user._id, req.user.role);
-  const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+  // CLIENT_URL may be comma-separated — always use the first one
+  const clientUrl = (process.env.CLIENT_URL || 'http://localhost:5173').split(',')[0].trim();
   res.redirect(`${clientUrl}/login?token=${token}`);
 };
 

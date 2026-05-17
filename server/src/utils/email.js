@@ -94,6 +94,48 @@ export const sendOrderStatusEmail = async (order, newStatus) => {
 };
 
 /**
+ * Send contact form notification to admin + auto-reply to customer.
+ */
+export const sendContactEmails = async ({ name, email, phone, subject, message }) => {
+  // 1. Notify Zimor India team
+  await sendEmail({
+    to: process.env.EMAIL_USER,
+    subject: `New Contact Form Message — ${subject || 'No Subject'}`,
+    html: `
+      <h2 style="color:#1a1a1a;">New Contact Form Submission</h2>
+      <table style="border-collapse:collapse;width:100%;font-size:14px;">
+        <tr><td style="padding:8px;font-weight:bold;color:#555;width:120px;">Name</td><td style="padding:8px;">${name}</td></tr>
+        <tr style="background:#f9f9f9;"><td style="padding:8px;font-weight:bold;color:#555;">Email</td><td style="padding:8px;"><a href="mailto:${email}">${email}</a></td></tr>
+        <tr><td style="padding:8px;font-weight:bold;color:#555;">Phone</td><td style="padding:8px;">${phone || 'Not provided'}</td></tr>
+        <tr style="background:#f9f9f9;"><td style="padding:8px;font-weight:bold;color:#555;">Subject</td><td style="padding:8px;">${subject || 'No Subject'}</td></tr>
+        <tr><td style="padding:8px;font-weight:bold;color:#555;vertical-align:top;">Message</td><td style="padding:8px;">${message}</td></tr>
+      </table>
+      <p style="margin-top:16px;font-size:12px;color:#888;">Reply directly to this email to respond to ${name}.</p>
+    `,
+  });
+
+  // 2. Auto-reply to the customer
+  await sendEmail({
+    to: email,
+    subject: 'We received your message — Zimor India',
+    html: `
+      <h2 style="color:#1a1a1a;">Hi ${name}, we got your message!</h2>
+      <p style="font-size:14px;color:#444;line-height:1.6;">
+        Thank you for reaching out to Zimor India. We have received your message and our team will get back to you within <strong>2–4 hours</strong>.
+      </p>
+      <div style="background:#f9f9f9;border-left:3px solid #1a1a1a;padding:12px 16px;margin:16px 0;font-size:13px;color:#555;">
+        <strong>Your message:</strong><br/>${message}
+      </div>
+      <p style="font-size:14px;color:#444;">For urgent queries, reach us on WhatsApp: <strong>+91 89536 96928</strong></p>
+      <p style="margin-top:24px;font-size:12px;color:#888;">
+        Zimor India | D 59/198-KA-1-P, Shivpurwa, Varanasi, UP – 221010<br/>
+        📞 +91 89536 96928 | ✉️ support@zimorindia.com
+      </p>
+    `,
+  });
+};
+
+/**
  * Send password reset email with a reset link.
  */
 export const sendPasswordResetEmail = async (email, resetToken) => {

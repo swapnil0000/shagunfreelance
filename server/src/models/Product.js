@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const productSchema = new mongoose.Schema({
   name:             { type: String, required: true, trim: true },
   slug:             { type: String, required: true, unique: true },
-  description:      { type: String, required: true },
+  description:      { type: String, default: '' },
   shortDescription: { type: String },
   price:            { type: Number, required: true, min: 0 },
   compareAtPrice:   { type: Number, min: 0 },
@@ -39,6 +39,7 @@ const productSchema = new mongoose.Schema({
   strapDrop:        { type: String },
   weight:           { type: String },
   keyHighlights:    [{ type: String }],
+  stylingGuide:     [{ type: String }],
 }, { timestamps: true });
 
 productSchema.index({ category: 1 });

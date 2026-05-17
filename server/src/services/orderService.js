@@ -270,7 +270,10 @@ export const createCODOrder = async (userId, cartItems, shippingAddress, couponC
     );
   }
 
-  // 10. Send order confirmation email
+  // 10. Populate user email before sending confirmation
+  await order.populate('user', 'email name');
+
+  // 11. Send order confirmation email
   await sendOrderConfirmationEmail(order);
 
   return order;

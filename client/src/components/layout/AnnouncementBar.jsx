@@ -4,8 +4,7 @@ import { Sparkles } from 'lucide-react';
 const messages = [
   '🚚 Free Shipping on All Orders',
   '💎 Premium Quality Workbags',
-  '🇮🇳 Made in Varanasi with Love',
-  '🎁 Use code WELCOME10 for 10% off',
+  '🇮🇳 Made in India with Love',
 ];
 
 export default function AnnouncementBar() {

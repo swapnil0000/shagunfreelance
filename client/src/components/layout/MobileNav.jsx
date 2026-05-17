@@ -118,7 +118,7 @@ export default function MobileNav({ isOpen, onClose }) {
               </a>
 
               <p className="pt-1 text-center text-[10px] text-neutral-400 tracking-wide">
-                Handcrafted in Varanasi · Est. 2023
+                Premium Material · Est. 2023
               </p>
             </div>
 

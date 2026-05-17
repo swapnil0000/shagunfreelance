@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
@@ -18,6 +18,26 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const setAuth = useAuthStore((state) => state.setAuth);
+
+  // Handle Google OAuth redirect — server sends back ?token=xxx after OAuth
+  useEffect(() => {
+    const oauthToken = searchParams.get('token');
+    if (!oauthToken) return;
+
+    api.get('/auth/me', {
+      headers: { Authorization: `Bearer ${oauthToken}` },
+    })
+      .then((res) => {
+        const user = res.data?.data?.user ?? res.data?.data;
+        setAuth(oauthToken, user);
+        toast.success('Welcome!');
+        const redirect = searchParams.get('redirect') || (user.role === 'admin' ? '/admin' : '/');
+        navigate(redirect, { replace: true });
+      })
+      .catch(() => {
+        toast.error('Google login failed. Please try again.');
+      });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {
     register,

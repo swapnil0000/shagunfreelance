@@ -98,7 +98,7 @@ export default function ContactPage() {
             className="text-[10px] font-semibold tracking-[0.35em] text-white/35 uppercase"
             style={{ writingMode: 'vertical-rl' }}
           >
-            Varanasi · Est. 2023
+            Est. 2023
           </span>
           <div className="h-14 w-px bg-white/20" />
         </div>

@@ -3,28 +3,28 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight, Play } from 'lucide-react';
 
 const looks = [
-  {
-    title: 'Office Power',
-    description: 'Command the boardroom with structured elegance',
-    category: 'laptop-bags',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=80&auto=format&fit=crop',
-    // To add video in future, add: video: 'https://your-cdn.com/reel.mp4'
-    video: null,
-  },
+  // {
+  //   title: 'Office Power',
+  //   description: 'Command the boardroom with structured elegance',
+  //   category: 'laptop-bags',
+  //   image: './brandgitl.jpeg',
+  //   // To add video in future, add: video: 'https://your-cdn.com/reel.mp4'
+  //   video: null,
+  // },
   {
     title: 'Weekend Vibes',
     description: 'Effortless style for brunch and beyond',
     category: 'shoulder-bags',
-    image: 'https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=600&q=80&auto=format&fit=crop',
-    video: null,
+     image: './brandgitl.jpeg',
+     video: null,
   },
-  {
-    title: 'Travel Ready',
-    description: 'Spacious, chic, and always by your side',
-    category: 'tote-bags',
-    image: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80&auto=format&fit=crop',
-    video: null,
-  },
+  // {
+  //   title: 'Travel Ready',
+  //   description: 'Spacious, chic, and always by your side',
+  //   category: 'tote-bags',
+  //   image: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80&auto=format&fit=crop',
+  //   video: null,
+  // },
 ];
 
 export default function SeeItStyled() {

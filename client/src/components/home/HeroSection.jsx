@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Star, ShieldCheck, Truck } from 'lucide-react';
 
 const TICKER = [
-  'Premium Workbags', 'Crafted in Varanasi', 'Free Shipping All Orders',
-  'Handmade with Love', 'Premium Workbags', 'Crafted in Varanasi',
+  'Premium Workbags', 'Premium Material', 'Free Shipping All Orders',
+  'Handmade with Love', 'Premium Workbags', 'Premium Material',
   'Free Shipping All Orders', 'Handmade with Love',
 ];
 
@@ -53,11 +53,11 @@ export default function HeroSection() {
               transition={{ delay: 0.3, duration: 0.6 }}
               className="flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.28em] text-white/30"
             >
-              <span className="h-px w-6 bg-white/20 block" />
-              Est. 2024 · Varanasi, India
+              {/* <span className="h-px w-6 bg-white/20 block" /> */}
+             
             </motion.p>
 
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45, duration: 0.6 }}
@@ -67,7 +67,7 @@ export default function HeroSection() {
                 <Star key={i} className="h-2.5 w-2.5 fill-white text-white" />
               ))}
               <span className="ml-1.5 text-[11px] font-semibold text-white">4.9</span>
-            </motion.div>
+            </motion.div> */}
           </div>
 
           {/* ── Center: headline + subtitle + CTAs ── */}
@@ -108,8 +108,8 @@ export default function HeroSection() {
               transition={{ duration: 0.7, ease: 'easeOut', delay: 0.3 }}
               className="mt-5 max-w-[300px] text-[15px] leading-relaxed text-white/50"
             >
-              Premium workbags for the modern woman —{' '}
-              <span className="text-white/80">crafted in Varanasi</span> with quality that lasts.
+              PREMIUM WOMEN’S WORK BAGS 
+              <span className="text-white/80"> • MADE IN INDIA</span>
             </motion.p>
 
             <motion.div
@@ -231,7 +231,7 @@ export default function HeroSection() {
             <div className="rounded-2xl border border-white/10 bg-black/40 px-5 py-4 text-white backdrop-blur-md shadow-xl">
               <p className="text-[10px] font-semibold uppercase tracking-widest text-white/50">New Arrival</p>
               <p className="mt-1 font-heading text-sm font-bold">Signature Tote</p>
-              <p className="mt-0.5 text-[11px] text-white/40">Handcrafted · Varanasi</p>
+              <p className="mt-0.5 text-[11px] text-white/40">Premium Material</p>
               <div className="mt-2.5 pt-2.5 border-t border-white/10 flex items-center justify-between">
                 <span className="text-xs font-bold text-white">₹2,499</span>
                 <span className="text-[10px] text-white/40 line-through">₹3,499</span>
@@ -282,7 +282,7 @@ export default function HeroSection() {
           <div className="absolute bottom-4 right-4 rounded-xl border border-white/10 bg-black/30 px-3 py-2.5 backdrop-blur-sm text-white">
             <p className="text-[9px] font-semibold uppercase tracking-widest text-white/50">New Arrival</p>
             <p className="mt-0.5 text-xs font-semibold">Signature Tote</p>
-            <p className="text-[9px] text-white/40">Handcrafted · Varanasi</p>
+            <p className="text-[9px] text-white/40">Premium Material</p>
           </div>
         </div>
 
@@ -306,7 +306,7 @@ export default function HeroSection() {
             className="mt-5 text-sm leading-relaxed text-white/50 sm:text-base"
           >
             Premium workbags for the modern woman —{' '}
-            <span className="text-white/80">crafted in Varanasi</span> with quality that lasts.
+            <span className="text-white/80">crafted with care</span> with quality that lasts.
           </motion.p>
 
           <motion.div

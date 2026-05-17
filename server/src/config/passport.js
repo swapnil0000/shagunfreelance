@@ -4,14 +4,15 @@ import User from '../models/User.js';
 
 const clientID = process.env.GOOGLE_CLIENT_ID;
 const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+const backendURL = process.env.BACKEND_URL || 'http://localhost:5000';
 
-if (clientID && clientSecret && !clientID.startsWith('your_')) {
+if (clientID && clientSecret && !clientID.startsWith('your_') && !clientID.startsWith('...')) {
   passport.use(
     new GoogleStrategy(
       {
         clientID,
         clientSecret,
-        callbackURL: '/api/auth/google/callback',
+        callbackURL: `${backendURL}/api/auth/google/callback`,
       },
     async (accessToken, refreshToken, profile, done) => {
       try {

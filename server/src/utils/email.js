@@ -13,13 +13,26 @@ const createTransporter = () => {
 };
 
 const sendEmail = async ({ to, subject, html }) => {
-  const transporter = createTransporter();
-  await transporter.sendMail({
-    from: `"Zimor India" <${process.env.EMAIL_USER}>`,
-    to,
-    subject,
-    html,
-  });
+  if (!to) {
+    console.warn('[email] Skipped — no recipient address for subject:', subject);
+    return;
+  }
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || process.env.EMAIL_USER === '...') {
+    console.warn('[email] Skipped — EMAIL_USER / EMAIL_PASS not configured');
+    return;
+  }
+  try {
+    const transporter = createTransporter();
+    await transporter.sendMail({
+      from: `"Zimor India" <${process.env.EMAIL_USER}>`,
+      to,
+      subject,
+      html,
+    });
+    console.log('[email] Sent to', to, '|', subject);
+  } catch (err) {
+    console.error('[email] Failed to send to', to, '—', err.message);
+  }
 };
 
 /**
@@ -51,8 +64,9 @@ export const sendOrderConfirmationEmail = async (order) => {
     </p>
   `;
 
+  const recipient = typeof order.user === 'object' ? order.user?.email : null;
   await sendEmail({
-    to: order.shippingAddress?.email || order.user?.email,
+    to: recipient,
     subject: `Order Confirmation — ${order.orderNumber}`,
     html,
   });
@@ -71,8 +85,9 @@ export const sendOrderStatusEmail = async (order, newStatus) => {
     <p>— Zimor India</p>
   `;
 
+  const recipient = typeof order.user === 'object' ? order.user?.email : null;
   await sendEmail({
-    to: order.shippingAddress?.email || order.user?.email,
+    to: recipient,
     subject: `Order ${order.orderNumber} — Status Update: ${newStatus}`,
     html,
   });

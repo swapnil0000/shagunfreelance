@@ -100,7 +100,7 @@ export default function VideoShowcase() {
                 Crafted with Passion
               </h2>
               <p className="mt-4 text-sm text-white/70 leading-relaxed sm:text-base">
-                Every stitch tells a story of tradition, skill, and love — straight from the heart of Varanasi.
+                Every stitch tells a story of tradition, skill, and love — crafted with passion and purpose.
               </p>
               <Link
                 to="/shop"

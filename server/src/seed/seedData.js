@@ -153,7 +153,7 @@ const products = [
 // ── Sample coupons ──────────────────────────────────────────────────
 const coupons = [
   {
-    code: 'WELCOME10',
+    // code: 'WELCOME10',
     discountType: 'percentage',
     discountValue: 10,
     minOrderAmount: 500,

@@ -1,20 +1,30 @@
 import { useSearchParams } from 'react-router-dom';
-import { useState } from 'react';
+import { X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import useProducts from '../hooks/useProducts';
 import ProductGrid from '../components/product/ProductGrid';
 import SortDropdown from '../components/product/SortDropdown';
+
+const CATEGORY_LABELS = {
+  'shoulder-bags': 'Shoulder Bags',
+  'tote-bags': 'Tote Bags',
+  'laptop-bags': 'Laptop Bags',
+  'crossbody-bags': 'Crossbody Bags',
+  'handbags': 'Handbags',
+};
 
 export default function ShopPage() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const sort = searchParams.get('sort') || 'newest';
   const page = Number(searchParams.get('page')) || 1;
+  const category = searchParams.get('category') || '';
 
   const filters = {
     sort,
     page,
     limit: 12,
+    ...(category && { category }),
   };
 
   const { data, isLoading } = useProducts(filters);
@@ -53,11 +63,20 @@ export default function ShopPage() {
                 Zimor India
               </p>
               <h1 className="font-heading text-2xl font-bold text-neutral-900 sm:text-3xl">
-                Our Collection
+                {category ? (CATEGORY_LABELS[category] ?? 'Collection') : 'Our Collection'}
               </h1>
               <p className="mt-1.5 text-sm text-neutral-500 max-w-sm">
                 Handcrafted bags designed for the modern woman. Find your perfect match.
               </p>
+              {category && (
+                <button
+                  onClick={() => updateParams({ category: '', page: 1 })}
+                  className="mt-2 inline-flex items-center gap-1 rounded-full bg-brand-50 border border-brand-200 px-3 py-1 text-xs font-medium text-brand-700 hover:bg-brand-100 transition-colors"
+                >
+                  {CATEGORY_LABELS[category] ?? category}
+                  <X className="h-3 w-3" />
+                </button>
+              )}
             </div>
             <p className="text-sm text-neutral-400 shrink-0">
               {pagination.total > 0

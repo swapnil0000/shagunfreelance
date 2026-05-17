@@ -1,26 +1,56 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import useProducts from '../../hooks/useProducts';
 
-const categories = [
-  {
-    name: 'Shoulder Bags',
-    slug: 'shoulder-bags',
-    images: ["./bag2.jpeg"],
-    count: '12 styles',
-  },
-  {
-    name: 'Laptop Bags',
-    slug: 'laptop-bags',
-    images: ["./bag3.jpeg"],
-    count: '10 styles',
-  },
-  {
-    name: 'Tote Bags',
-    slug: 'tote-bags',
-    images: ["./bag1.jpeg"],
-    count: '8 styles',
-  },
+const CATEGORIES = [
+  { name: 'Shoulder Bags', slug: 'shoulder-bags' },
+  { name: 'Laptop Bags', slug: 'laptop-bags' },
+  { name: 'Tote Bags', slug: 'tote-bags' },
 ];
+
+function CategoryCard({ name, slug, index }) {
+  const { data, isLoading } = useProducts({ category: slug, limit: 1 });
+  const image = data?.products?.[0]?.images?.[0]?.url;
+  const count = data?.pagination?.total ?? 0;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay: index * 0.08 }}
+    >
+      <Link to={`/shop?category=${slug}`} className="group block text-center">
+        <div className="mx-auto aspect-square w-full max-w-[160px] overflow-hidden rounded-full border-4 border-white shadow-md transition-all group-hover:border-brand-300 group-hover:shadow-lg">
+          {isLoading ? (
+            <div className="h-full w-full animate-pulse bg-neutral-200" />
+          ) : image ? (
+            <img
+              src={image}
+              alt={name}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+              loading="lazy"
+            />
+          ) : (
+            <div className="h-full w-full bg-neutral-100" />
+          )}
+        </div>
+
+        <h3 className="mt-4 text-sm font-semibold text-neutral-800 group-hover:text-brand-600 transition-colors">
+          {name}
+        </h3>
+
+        {isLoading ? (
+          <div className="mx-auto mt-1 h-3 w-16 animate-pulse rounded bg-neutral-200" />
+        ) : (
+          <p className="text-xs text-neutral-500">
+            {count > 0 ? `${count} style${count !== 1 ? 's' : ''}` : 'Coming soon'}
+          </p>
+        )}
+      </Link>
+    </motion.div>
+  );
+}
 
 export default function PerfectlySized() {
   return (
@@ -42,32 +72,8 @@ export default function PerfectlySized() {
         </motion.div>
 
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-          {categories.map(({ name, slug, images, count }, i) => (
-            <motion.div
-              key={slug}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
-            >
-              <Link
-                to={`/shop?category=${slug}`}
-                className="group block text-center"
-              >
-                <div className="mx-auto aspect-square w-full max-w-[160px] overflow-hidden rounded-full border-4 border-white shadow-md transition-all group-hover:border-brand-300 group-hover:shadow-lg">
-                  <img
-                    src={images[0]}
-                    alt={name}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    loading="lazy"
-                  />
-                </div>
-                <h3 className="mt-4 text-sm font-semibold text-neutral-800 group-hover:text-brand-600 transition-colors">
-                  {name}
-                </h3>
-                <p className="text-xs text-neutral-500">{count}</p>
-              </Link>
-            </motion.div>
+          {CATEGORIES.map((cat, i) => (
+            <CategoryCard key={cat.slug} {...cat} index={i} />
           ))}
         </div>
       </div>

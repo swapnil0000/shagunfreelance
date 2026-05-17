@@ -89,8 +89,8 @@ export default function ProfilePage() {
   const profileMutation = useMutation({
     mutationFn: (data) => api.put('/auth/me', data).then((r) => r.data),
     onSuccess: (data) => {
-      const updatedUser = data.user || data;
-      updateUser(updatedUser);
+      const updatedUser = data.data?.user;
+      if (updatedUser) updateUser(updatedUser);
       queryClient.invalidateQueries({ queryKey: ['my-orders'] });
       toast.success('Profile updated');
     },
@@ -104,8 +104,8 @@ export default function ProfilePage() {
     mutationFn: (addresses) =>
       api.put('/auth/me', { addresses }).then((r) => r.data),
     onSuccess: (data) => {
-      const updatedUser = data.user || data;
-      updateUser(updatedUser);
+      const updatedUser = data.data?.user;
+      if (updatedUser) updateUser(updatedUser);
       toast.success('Addresses updated');
     },
     onError: () => {

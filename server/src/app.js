@@ -19,6 +19,9 @@ import settingsRoutes from './routes/settingsRoutes.js';
 
 const app = express();
 
+// Trust Render's proxy so rate limiting is per real client IP
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet());
 const allowedOrigins = process.env.CLIENT_URL
@@ -29,15 +32,15 @@ app.use(hpp());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// General rate limiter: 100 requests per 15 minutes on /api
+// General rate limiter: 500 requests per 15 minutes per IP on /api
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 500,
   message: { error: 'Too many requests, please try again later' },
 });
 app.use('/api', limiter);
 
-// Auth rate limiter: 20 requests per 15 minutes on /api/auth
+// Auth rate limiter: 20 requests per 15 minutes per IP on /api/auth
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 20,

@@ -94,8 +94,8 @@ export default function ProfilePage() {
       queryClient.invalidateQueries({ queryKey: ['my-orders'] });
       toast.success('Profile updated');
     },
-    onError: () => {
-      toast.error('Failed to update profile');
+    onError: (err) => {
+      toast.error(err.response?.data?.message || 'Failed to update profile');
     },
   });
 
@@ -108,8 +108,8 @@ export default function ProfilePage() {
       if (updatedUser) updateUser(updatedUser);
       toast.success('Addresses updated');
     },
-    onError: () => {
-      toast.error('Failed to update addresses');
+    onError: (err) => {
+      toast.error(err.response?.data?.message || 'Failed to update addresses');
     },
   });
 

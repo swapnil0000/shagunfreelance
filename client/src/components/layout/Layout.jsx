@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import { Toaster } from 'sonner';
 import AnnouncementBar from './AnnouncementBar';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -45,6 +46,7 @@ export default function Layout() {
 
       <Footer />
       <WhatsAppFloat />
+      <Toaster position="top-right" richColors closeButton duration={4000} />
     </div>
   );
 }

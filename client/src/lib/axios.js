@@ -16,11 +16,13 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle 401 — clear auth and redirect to login
+// Handle 401 — clear auth and redirect to login (skip on auth pages to avoid redirect loops)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const AUTH_PATHS = ['/login', '/register', '/forgot-password', '/reset-password'];
+    const onAuthPage = AUTH_PATHS.some((p) => window.location.pathname.startsWith(p));
+    if (error.response?.status === 401 && !onAuthPage) {
       useAuthStore.getState().logout();
       window.location.href = '/login';
     }

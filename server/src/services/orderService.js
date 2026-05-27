@@ -208,13 +208,15 @@ export const createRazorpayOrder = async (userId, cartItems, shippingAddress, co
  * Decrement stock for each order item atomically.
  */
 const decrementStock = async (items) => {
-  const operations = items.map((item) =>
-    Product.updateOne(
-      { _id: item.product },
-      { $inc: { stock: -item.quantity } }
-    )
-  );
-  await Promise.all(operations);
+  const operations = items.map((item) => ({
+    updateOne: {
+      filter: { _id: item.product },
+      update: { $inc: { stock: -item.quantity } },
+    },
+  }));
+  if (operations.length) {
+    await Product.bulkWrite(operations);
+  }
 };
 
 /**
@@ -276,8 +278,11 @@ export const createCODOrder = async (userId, cartItems, shippingAddress, couponC
   // 10. Populate user email before sending confirmation
   await order.populate('user', 'email name');
 
-  // 11. Send order confirmation email
-  await sendOrderConfirmationEmail(order);
+  // 11. Send order confirmation email — fire-and-forget so SMTP latency
+  // doesn't block the checkout response (sendEmail already swallows errors).
+  sendOrderConfirmationEmail(order).catch((err) =>
+    console.error('[email] order confirmation failed:', err.message)
+  );
 
   return order;
 };
@@ -395,8 +400,10 @@ export const verifyRazorpayPayment = async (razorpayOrderId, razorpayPaymentId, 
     );
   }
 
-  // 7. Send confirmation email
-  await sendOrderConfirmationEmail(order);
+  // 7. Send confirmation email — fire-and-forget (don't block payment verify)
+  sendOrderConfirmationEmail(order).catch((err) =>
+    console.error('[email] order confirmation failed:', err.message)
+  );
 
   return order;
 };
@@ -436,8 +443,10 @@ export const updateOrderStatus = async (orderId, newStatus, note) => {
 
   await order.save();
 
-  // Send status update email to customer
-  await sendOrderStatusEmail(order, newStatus);
+  // Send status update email to customer — fire-and-forget
+  sendOrderStatusEmail(order, newStatus).catch((err) =>
+    console.error('[email] order status update failed:', err.message)
+  );
 
   return order;
 };

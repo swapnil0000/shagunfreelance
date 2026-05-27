@@ -1,6 +1,12 @@
 import Product from '../models/Product.js';
 import AppError from '../utils/AppError.js';
 
+// Fields needed to render a product card / cart line. Excludes the heavy text
+// arrays (description, features, careInstructions, stylingGuide, dimensions...)
+// which are only needed on the product detail page.
+const CARD_FIELDS =
+  'name slug price compareAtPrice images averageRating numReviews stock sizes colors category isFeatured';
+
 /**
  * Get products with filtering, sorting, and pagination.
  */
@@ -32,7 +38,7 @@ export const getProducts = async ({ category, minPrice, maxPrice, search, sort, 
   const skip = (page - 1) * limit;
 
   const [products, total] = await Promise.all([
-    Product.find(query).sort(sortBy).skip(skip).limit(limit).lean(),
+    Product.find(query).select(CARD_FIELDS).sort(sortBy).skip(skip).limit(limit).lean(),
     Product.countDocuments(query),
   ]);
 
@@ -51,7 +57,7 @@ export const getProducts = async ({ category, minPrice, maxPrice, search, sort, 
  * Get featured products (active and featured).
  */
 export const getFeaturedProducts = async () => {
-  return Product.find({ isActive: true, isFeatured: true }).lean();
+  return Product.find({ isActive: true, isFeatured: true }).select(CARD_FIELDS).lean();
 };
 
 /**

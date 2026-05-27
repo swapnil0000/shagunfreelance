@@ -6,6 +6,7 @@ import * as productService from '../services/productService.js';
 export const getProducts = async (req, res, next) => {
   try {
     const result = await productService.getProducts(req.query);
+    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     res.status(200).json({ status: 'success', data: result });
   } catch (error) {
     next(error);
@@ -18,6 +19,7 @@ export const getProducts = async (req, res, next) => {
 export const getFeaturedProducts = async (req, res, next) => {
   try {
     const products = await productService.getFeaturedProducts();
+    res.set('Cache-Control', 'public, max-age=120, stale-while-revalidate=600');
     res.status(200).json({ status: 'success', data: { products } });
   } catch (error) {
     next(error);
@@ -30,6 +32,7 @@ export const getFeaturedProducts = async (req, res, next) => {
 export const getProductBySlug = async (req, res, next) => {
   try {
     const product = await productService.getProductBySlug(req.params.slug);
+    res.set('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
     res.status(200).json({ status: 'success', data: { product } });
   } catch (error) {
     next(error);

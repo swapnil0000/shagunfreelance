@@ -27,6 +27,8 @@ const userSchema = new mongoose.Schema({
 
 // Indexes (email index is created automatically by unique: true)
 userSchema.index({ googleId: 1 });
+// Password-reset lookups query by token; sparse since it's unset for most users.
+userSchema.index({ resetPasswordToken: 1 }, { sparse: true });
 
 // Pre-save: hash password with bcrypt (12 rounds) if modified
 userSchema.pre('save', async function (next) {

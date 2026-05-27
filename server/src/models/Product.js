@@ -42,9 +42,12 @@ const productSchema = new mongoose.Schema({
   stylingGuide:     [{ type: String }],
 }, { timestamps: true });
 
-productSchema.index({ category: 1 });
-productSchema.index({ isFeatured: 1 });
-productSchema.index({ price: 1 });
+// Every listing query filters on isActive; compound indexes cover the common
+// filter + sort combinations so Mongo can serve them without a collection scan.
+productSchema.index({ isActive: 1, createdAt: -1 });
+productSchema.index({ isActive: 1, isFeatured: 1 });
+productSchema.index({ isActive: 1, category: 1 });
+productSchema.index({ isActive: 1, price: 1 });
 productSchema.index({ name: 'text', description: 'text' });
 
 const Product = mongoose.model('Product', productSchema);

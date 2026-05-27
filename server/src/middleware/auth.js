@@ -17,7 +17,10 @@ export const authenticate = async (req, res, next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const user = await User.findById(decoded.userId);
+    // Only _id and role are read off req.user anywhere in the app, so project a
+    // lean slice instead of loading the full document (incl. the addresses array)
+    // on every authenticated request.
+    const user = await User.findById(decoded.userId).select('name email role').lean();
     if (!user) {
       throw new AppError('User belonging to this token no longer exists.', 401);
     }

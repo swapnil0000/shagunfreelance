@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Toaster } from 'sonner';
 import AnnouncementBar from './AnnouncementBar';
 import Navbar from './Navbar';
@@ -13,8 +13,7 @@ import CursorTrailer from '../shared/CursorTrailer';
 
 const pageVariants = {
   initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' } },
-  exit: { opacity: 0, y: -8, transition: { duration: 0.15 } },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.25, ease: 'easeOut' } },
 };
 
 export default function Layout() {
@@ -31,17 +30,17 @@ export default function Layout() {
       <CartDrawer />
 
       <main className="flex-1">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            variants={pageVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-          >
-            <Outlet />
-          </motion.div>
-        </AnimatePresence>
+        {/* Keyed remount re-runs the enter animation on navigation. No exit
+            animation, so a new (lazy-loaded) route can paint immediately
+            instead of waiting ~150ms for the previous page to animate out. */}
+        <motion.div
+          key={location.pathname}
+          variants={pageVariants}
+          initial="initial"
+          animate="animate"
+        >
+          <Outlet />
+        </motion.div>
       </main>
 
       <Footer />

@@ -7,7 +7,9 @@ const unwrap = (r) => r.data?.data ?? r.data;
 export default function useProducts(filters) {
   return useQuery({
     queryKey: ['products', filters],
-    queryFn: () => api.get('/products', { params: filters }).then(unwrap),
+    // Pass React Query's signal so superseded requests (rapid filter/sort
+    // changes) are aborted instead of racing to resolve.
+    queryFn: ({ signal }) => api.get('/products', { params: filters, signal }).then(unwrap),
     staleTime: 5 * 60 * 1000,
     placeholderData: (prev) => prev,
   });
@@ -16,7 +18,7 @@ export default function useProducts(filters) {
 export function useProduct(slug) {
   return useQuery({
     queryKey: ['product', slug],
-    queryFn: () => api.get(`/products/${slug}`).then(unwrap),
+    queryFn: ({ signal }) => api.get(`/products/${slug}`, { signal }).then(unwrap),
     enabled: !!slug,
     staleTime: 5 * 60 * 1000,
   });
@@ -25,7 +27,7 @@ export function useProduct(slug) {
 export function useProductReviews(productId) {
   return useQuery({
     queryKey: ['reviews', productId],
-    queryFn: () => api.get(`/reviews/${productId}`).then(unwrap),
+    queryFn: ({ signal }) => api.get(`/reviews/${productId}`, { signal }).then(unwrap),
     enabled: !!productId,
     staleTime: 2 * 60 * 1000,
   });
@@ -44,9 +46,11 @@ export function useCreateReview() {
 
 export function useRelatedProducts(category, excludeSlug) {
   return useQuery({
-    queryKey: ['products', 'related', category, excludeSlug],
-    queryFn: () =>
-      api.get('/products', { params: { category, limit: 4 } }).then(unwrap),
+    // Own namespace (not under ['products']) so a future products invalidation
+    // doesn't needlessly drop the related-products cache.
+    queryKey: ['related-products', category, excludeSlug],
+    queryFn: ({ signal }) =>
+      api.get('/products', { params: { category, limit: 4 }, signal }).then(unwrap),
     enabled: !!category,
     staleTime: 5 * 60 * 1000,
   });

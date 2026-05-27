@@ -11,8 +11,41 @@ function loadCart() {
   }
 }
 
+// Debounce localStorage writes: rapid +/- clicks coalesce into one synchronous
+// write per frame-ish window instead of blocking the main thread on every tick.
+let persistTimer = null;
+let pendingPersist = null;
+
+function flushPersist() {
+  if (!pendingPersist) return;
+  try {
+    localStorage.setItem(CART_KEY, JSON.stringify(pendingPersist));
+  } catch {
+    // ignore quota / private-mode errors
+  }
+  pendingPersist = null;
+}
+
 function persist(items, coupon) {
-  localStorage.setItem(CART_KEY, JSON.stringify({ items, coupon }));
+  pendingPersist = { items, coupon };
+  if (persistTimer) return;
+  persistTimer = setTimeout(() => {
+    persistTimer = null;
+    flushPersist();
+  }, 300);
+}
+
+function cancelPersist() {
+  if (persistTimer) {
+    clearTimeout(persistTimer);
+    persistTimer = null;
+  }
+  pendingPersist = null;
+}
+
+// Make sure a queued write isn't lost if the page is closed within the debounce window.
+if (typeof window !== 'undefined') {
+  window.addEventListener('pagehide', flushPersist);
 }
 
 function calcDiscount(coupon, subtotal) {
@@ -37,7 +70,7 @@ function computeDerived(items, coupon) {
 
 const saved = loadCart();
 
-const useCartStore = create((set, get) => ({
+const useCartStore = create((set) => ({
   items: saved.items,
   coupon: saved.coupon,
   isDrawerOpen: false,
@@ -108,6 +141,7 @@ const useCartStore = create((set, get) => ({
     }),
 
   clearCart: () => {
+    cancelPersist();
     localStorage.removeItem(CART_KEY);
     set({ items: [], coupon: null, ...computeDerived([], null) });
   },

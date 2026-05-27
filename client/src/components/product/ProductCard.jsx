@@ -1,18 +1,19 @@
+import { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, ShoppingBag } from 'lucide-react';
-import { motion } from 'framer-motion';
 import useCartStore from '../../stores/cartStore';
 import useWishlistStore from '../../stores/wishlistStore';
 import StarRating from '../ui/StarRating';
 import { cld, cldSrcSet } from '../../lib/cloudinary';
 
-export default function ProductCard({ product }) {
+function ProductCard({ product }) {
   const addItem = useCartStore((s) => s.addItem);
   const toggleDrawer = useCartStore((s) => s.toggleDrawer);
-  const { addItem: addToWishlist, removeItem: removeFromWishlist, isInWishlist } =
-    useWishlistStore();
-
-  const wishlisted = isInWishlist(product._id);
+  const addToWishlist = useWishlistStore((s) => s.addItem);
+  const removeFromWishlist = useWishlistStore((s) => s.removeItem);
+  // Subscribe only to THIS product's membership, so the whole grid no longer
+  // re-renders when any single wishlist item changes.
+  const wishlisted = useWishlistStore((s) => s.items.includes(product._id));
   const outOfStock = product.stock <= 0;
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
   const discountPercent = hasDiscount
@@ -38,12 +39,7 @@ export default function ProductCard({ product }) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      className="group relative"
-    >
+    <div className="group relative">
       <Link to={`/product/${product.slug}`} className="block">
         {/* Image */}
         <div className="relative aspect-3/4 overflow-hidden rounded-lg bg-neutral-100">
@@ -124,6 +120,8 @@ export default function ProductCard({ product }) {
           </div>
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 }
+
+export default memo(ProductCard);

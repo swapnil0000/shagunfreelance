@@ -1,9 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
+// Resolve once, synchronously: don't render the trailer at all on touch devices
+// or when the user prefers reduced motion.
+function trailerEnabled() {
+  if (typeof window === 'undefined') return false;
+  return (
+    !window.matchMedia('(pointer: coarse)').matches &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+}
+
 export default function CursorTrailer() {
+  const [enabled] = useState(trailerEnabled);
   const [visible, setVisible] = useState(false);
-  const isTouch = useRef(false);
+  const visibleRef = useRef(false);
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -12,34 +23,53 @@ export default function CursorTrailer() {
   const springY = useSpring(cursorY, { damping: 25, stiffness: 200 });
 
   useEffect(() => {
-    // Skip on touch devices
-    if (typeof window === 'undefined') return;
-    if (window.matchMedia('(pointer: coarse)').matches) {
-      isTouch.current = true;
-      return;
-    }
+    if (!enabled) return;
 
-    const handleMove = (e) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-      if (!visible) setVisible(true);
+    let frame = null;
+    let lastX = 0;
+    let lastY = 0;
+
+    const flush = () => {
+      frame = null;
+      cursorX.set(lastX);
+      cursorY.set(lastY);
     };
 
-    const handleLeave = () => setVisible(false);
-    const handleEnter = () => setVisible(true);
+    const handleMove = (e) => {
+      lastX = e.clientX;
+      lastY = e.clientY;
+      if (!visibleRef.current) {
+        visibleRef.current = true;
+        setVisible(true);
+      }
+      // Coalesce many mousemove events into one update per animation frame.
+      if (frame == null) frame = requestAnimationFrame(flush);
+    };
+
+    const handleLeave = () => {
+      visibleRef.current = false;
+      setVisible(false);
+    };
+    const handleEnter = () => {
+      visibleRef.current = true;
+      setVisible(true);
+    };
 
     window.addEventListener('mousemove', handleMove, { passive: true });
     document.addEventListener('mouseleave', handleLeave);
     document.addEventListener('mouseenter', handleEnter);
 
     return () => {
+      if (frame) cancelAnimationFrame(frame);
       window.removeEventListener('mousemove', handleMove);
       document.removeEventListener('mouseleave', handleLeave);
       document.removeEventListener('mouseenter', handleEnter);
     };
-  }, [cursorX, cursorY, visible]);
+    // cursorX/cursorY are stable motion values; visibility is tracked via ref so
+    // the listener is attached exactly once.
+  }, [enabled, cursorX, cursorY]);
 
-  if (isTouch.current) return null;
+  if (!enabled) return null;
 
   return (
     <motion.div

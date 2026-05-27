@@ -174,8 +174,12 @@ export default function HeroSection() {
         >
           {/* Bag image */}
           <img
-            src="/image.png"
+            src="/image.jpg"
             alt="Zimor India luxury workbag"
+            width="1080"
+            height="1448"
+            fetchpriority="high"
+            decoding="async"
             className="h-full w-full object-cover object-top"
           />
 
@@ -268,8 +272,12 @@ export default function HeroSection() {
           style={{ height: '560px', maxHeight: '560px', minHeight: '260px' }}
         >
           <img
-            src="/image.png"
+            src="/image.jpg"
             alt="Zimor India luxury workbag"
+            width="1080"
+            height="1448"
+            fetchpriority="high"
+            decoding="async"
             className="h-full w-full object-cover object-top"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/20 via-transparent to-neutral-950/80" />

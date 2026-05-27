@@ -15,7 +15,7 @@ const looks = [
     title: 'Weekend Vibes',
     description: 'Effortless style for brunch and beyond',
     category: 'shoulder-bags',
-     image: './brandgitl.jpeg',
+     image: '/brandgitl.jpeg',
      video: null,
   },
   // {

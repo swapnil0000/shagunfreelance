@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Plus, Minus, Trash2 } from 'lucide-react';
+import { cld } from '../../lib/cloudinary';
 
 export default function CartItem({ item, onRemove, onUpdateQty }) {
   const { product, quantity, size, color } = item;
@@ -14,10 +15,11 @@ export default function CartItem({ item, onRemove, onUpdateQty }) {
         className="shrink-0"
       >
         <img
-          src={imageUrl}
+          src={cld(imageUrl, { w: 224 })}
           alt={product.name}
           className="h-24 w-24 sm:h-28 sm:w-28 rounded-lg object-cover bg-neutral-100"
           loading="lazy"
+          decoding="async"
         />
       </Link>
 

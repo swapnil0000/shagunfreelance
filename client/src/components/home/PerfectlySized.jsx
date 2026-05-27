@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import useProducts from '../../hooks/useProducts';
+import { cld } from '../../lib/cloudinary';
 
 const CATEGORIES = [
   { name: 'Shoulder Bags', slug: 'shoulder-bags' },
@@ -26,10 +27,11 @@ function CategoryCard({ name, slug, index }) {
             <div className="h-full w-full animate-pulse bg-neutral-200" />
           ) : image ? (
             <img
-              src={image}
+              src={cld(image, { w: 320 })}
               alt={name}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
               loading="lazy"
+              decoding="async"
             />
           ) : (
             <div className="h-full w-full bg-neutral-100" />

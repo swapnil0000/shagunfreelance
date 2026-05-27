@@ -305,6 +305,8 @@ export default function AboutPage() {
                 src="/about.jpeg"
                 alt="Zimor artisan crafting a bag"
                 className="w-full object-cover aspect-[4/5]"
+                loading="lazy"
+                decoding="async"
               />
             </div>
 
@@ -432,6 +434,8 @@ export default function AboutPage() {
           src="/about-leather.jpeg"
           alt="Premium leather materials used in Zimor bags"
           className="absolute inset-0 h-full w-full object-cover object-center"
+          loading="lazy"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/90 via-neutral-950/70 to-neutral-950/30" />
 

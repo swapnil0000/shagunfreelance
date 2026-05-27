@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import api from '../../lib/axios';
 import useCartStore from '../../stores/cartStore';
 import Button from '../ui/Button';
+import { cld } from '../../lib/cloudinary';
 
 const PAYMENT_METHODS = [
   { icon: Smartphone, label: 'UPI' },
@@ -165,9 +166,11 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
               {items.map((item, idx) => (
                 <div key={idx} className="flex items-center gap-3">
                   <img
-                    src={item.product.images?.[0]?.url || '/placeholder.png'}
+                    src={cld(item.product.images?.[0]?.url || '/placeholder.png', { w: 96 })}
                     alt={item.product.name}
                     className="h-11 w-11 rounded-lg object-cover shrink-0 border border-neutral-200"
+                    loading="lazy"
+                    decoding="async"
                   />
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium text-neutral-800 truncate">

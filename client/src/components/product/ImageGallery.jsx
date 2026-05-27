@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { cld, cldSrcSet } from '../../lib/cloudinary';
 
 export default function ImageGallery({ images = [] }) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -9,10 +10,13 @@ export default function ImageGallery({ images = [] }) {
       {/* Main image */}
       <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-neutral-100">
         <img
-          key={activeIndex}
-          src={gallery[activeIndex]?.url}
+          src={cld(gallery[activeIndex]?.url, { w: 800 })}
+          srcSet={cldSrcSet(gallery[activeIndex]?.url, [600, 800, 1200])}
+          sizes="(max-width: 768px) 100vw, 50vw"
           alt={gallery[activeIndex]?.alt || 'Product'}
           className="h-full w-full object-cover"
+          fetchpriority="high"
+          decoding="async"
           draggable={false}
         />
         {/* Mobile nav arrows */}
@@ -60,10 +64,11 @@ export default function ImageGallery({ images = [] }) {
               aria-label={`View image ${i + 1}`}
             >
               <img
-                src={img.url}
+                src={cld(img.url, { w: 160 })}
                 alt={img.alt || `Thumbnail ${i + 1}`}
                 className="h-full w-full object-cover"
                 loading="lazy"
+                decoding="async"
               />
             </button>
           ))}

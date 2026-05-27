@@ -31,10 +31,12 @@ export default function Newsletter() {
       {/* Background image */}
       <div className="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1920&q=80&auto=format&fit=crop"
+          src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1280&q=70&auto=format&fit=crop"
           alt=""
           className="h-full w-full object-cover"
           aria-hidden="true"
+          loading="lazy"
+          decoding="async"
         />
         <div className="absolute inset-0 bg-brand-900/85 backdrop-blur-sm" />
       </div>

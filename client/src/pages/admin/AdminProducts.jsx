@@ -18,6 +18,7 @@ import Button from '../../components/ui/Button';
 import Input from '../../components/ui/Input';
 import Badge from '../../components/ui/Badge';
 import Skeleton from '../../components/ui/Skeleton';
+import { cld } from '../../lib/cloudinary';
 
 const CATEGORIES = [
   { value: 'shoulder-bags', label: 'Shoulder Bags' },
@@ -339,7 +340,7 @@ export default function AdminProducts() {
                 <tr key={product._id} className="hover:bg-neutral-50">
                   <td className="px-4 py-3">
                     {product.images?.[0]?.url ? (
-                      <img src={product.images[0].url} alt={product.name} className="h-10 w-10 rounded-md object-cover" />
+                      <img src={cld(product.images[0].url, { w: 80 })} alt={product.name} className="h-10 w-10 rounded-md object-cover" loading="lazy" decoding="async" />
                     ) : (
                       <div className="flex h-10 w-10 items-center justify-center rounded-md bg-neutral-100">
                         <Image className="h-5 w-5 text-neutral-400" />

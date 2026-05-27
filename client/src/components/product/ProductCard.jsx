@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import useCartStore from '../../stores/cartStore';
 import useWishlistStore from '../../stores/wishlistStore';
 import StarRating from '../ui/StarRating';
+import { cld, cldSrcSet } from '../../lib/cloudinary';
 
 export default function ProductCard({ product }) {
   const addItem = useCartStore((s) => s.addItem);
@@ -47,10 +48,13 @@ export default function ProductCard({ product }) {
         {/* Image */}
         <div className="relative aspect-3/4 overflow-hidden rounded-lg bg-neutral-100">
           <img
-            src={mainImage}
+            src={cld(mainImage, { w: 500 })}
+            srcSet={cldSrcSet(mainImage, [300, 500, 700])}
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             alt={product.images?.[0]?.alt || product.name}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             loading="lazy"
+            decoding="async"
           />
 
           {/* Discount badge */}

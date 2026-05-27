@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Minus, Trash2, ShoppingBag } from 'lucide-react';
 import useCartStore from '../../stores/cartStore';
+import { cld } from '../../lib/cloudinary';
 
 export default function CartDrawer() {
   const { items, isDrawerOpen, toggleDrawer, removeItem, updateQuantity, subtotal } =
@@ -123,9 +124,11 @@ function CartDrawerItem({ item, onRemove, onUpdateQty }) {
   return (
     <div className="flex gap-3">
       <img
-        src={imageUrl}
+        src={cld(imageUrl, { w: 160 })}
         alt={product.name}
         className="h-20 w-20 rounded-lg object-cover bg-neutral-100 shrink-0"
+        loading="lazy"
+        decoding="async"
       />
       <div className="flex-1 min-w-0">
         <h4 className="text-sm font-medium text-neutral-900 truncate">

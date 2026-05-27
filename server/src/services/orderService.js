@@ -6,6 +6,7 @@ import razorpay from '../config/razorpay.js';
 import generateOrderNumber from '../utils/generateOrderNumber.js';
 import AppError from '../utils/AppError.js';
 import { sendOrderConfirmationEmail, sendOrderStatusEmail } from '../utils/email.js';
+import { createNotification } from '../utils/notify.js';
 
 /**
  * Valid status transitions map.
@@ -279,6 +280,9 @@ export const createCODOrder = async (userId, cartItems, shippingAddress, couponC
   // 11. Send order confirmation email
   await sendOrderConfirmationEmail(order);
 
+  // 12. Create admin notification
+  createNotification({ title: 'New COD order', message: `Order ${orderNumber} — ₹${total.toFixed(0)}`, type: 'order', link: '/admin/orders' });
+
   return order;
 };
 
@@ -397,6 +401,9 @@ export const verifyRazorpayPayment = async (razorpayOrderId, razorpayPaymentId, 
 
   // 7. Send confirmation email
   await sendOrderConfirmationEmail(order);
+
+  // 8. Create admin notification
+  createNotification({ title: 'New Razorpay order', message: `Order ${order.orderNumber} — ₹${order.total.toFixed(0)}`, type: 'order', link: '/admin/orders' });
 
   return order;
 };

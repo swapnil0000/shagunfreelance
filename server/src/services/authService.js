@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import AppError from '../utils/AppError.js';
 import { signToken } from '../utils/jwt.js';
@@ -35,10 +36,10 @@ export const registerUser = async (name, email, password) => {
 
 /**
  * Authenticate a user with email and password.
- * Returns a generic "Invalid credentials" message on failure.
+ * If admin has TOTP enabled, returns a short-lived temp token instead of the full JWT.
  */
 export const authenticateUser = async (email, password) => {
-  const user = await User.findOne({ email }).select('+password');
+  const user = await User.findOne({ email }).select('+password +totpSecret +totpEnabled');
   if (!user || !user.password) {
     throw new AppError('Invalid credentials', 401);
   }
@@ -48,8 +49,60 @@ export const authenticateUser = async (email, password) => {
     throw new AppError('Invalid credentials', 401);
   }
 
-  const token = signToken(user._id, user.role);
+  if (user.isSuspended) {
+    throw new AppError('Your account has been suspended', 403);
+  }
 
+  // Update last login time
+  await User.findByIdAndUpdate(user._id, { lastLoginAt: new Date() });
+
+  // Admin with TOTP enabled → return temp token for second factor
+  if (user.role === 'admin' && user.totpEnabled) {
+    const tempToken = jwt.sign(
+      { userId: user._id, role: user.role, purpose: 'totp-verify' },
+      process.env.JWT_SECRET,
+      { expiresIn: '5m' }
+    );
+    return { requireTotp: true, tempToken };
+  }
+
+  const token = signToken(user._id, user.role);
+  return { token, user: sanitizeUser(user) };
+};
+
+/**
+ * Verify a TOTP code presented after password-based login.
+ */
+export const verifyTotpLogin = async (tempToken, totpCode) => {
+  let payload;
+  try {
+    payload = jwt.verify(tempToken, process.env.JWT_SECRET);
+  } catch {
+    throw new AppError('Session expired. Please log in again.', 401);
+  }
+
+  if (payload.purpose !== 'totp-verify') {
+    throw new AppError('Invalid token', 401);
+  }
+
+  const speakeasy = await import('speakeasy');
+  const user = await User.findById(payload.userId).select('+totpSecret');
+  if (!user || !user.totpEnabled || !user.totpSecret) {
+    throw new AppError('2FA is not enabled for this account', 400);
+  }
+
+  const valid = speakeasy.default.totp.verify({
+    secret:   user.totpSecret,
+    encoding: 'base32',
+    token:    totpCode,
+    window:   1,
+  });
+
+  if (!valid) {
+    throw new AppError('Invalid authenticator code', 401);
+  }
+
+  const token = signToken(user._id, user.role);
   return { token, user: sanitizeUser(user) };
 };
 

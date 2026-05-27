@@ -12,7 +12,7 @@ const createTransporter = () => {
   });
 };
 
-const sendEmail = async ({ to, subject, html }) => {
+export const sendEmail = async ({ to, subject, html }) => {
   if (!to) {
     console.warn('[email] Skipped — no recipient address for subject:', subject);
     return;

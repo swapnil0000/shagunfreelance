@@ -16,6 +16,9 @@ import newsletterRoutes from './routes/newsletterRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import cmsRoutes from './routes/cmsRoutes.js';
+import ticketRoutes from './routes/ticketRoutes.js';
 
 const app = express();
 
@@ -62,6 +65,9 @@ app.use('/api/newsletter', newsletterRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/settings', settingsRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/cms',     cmsRoutes);
+app.use('/api/tickets', ticketRoutes);
 
 // Global error handler
 app.use(errorHandler);

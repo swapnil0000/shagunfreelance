@@ -11,7 +11,13 @@ import {
   resetPasswordHandler,
   getMe,
   updateMe,
+  totpVerifyLogin,
+  totpSetup,
+  totpEnable,
+  totpDisable,
+  totpStatus,
 } from '../controllers/authController.js';
+import { authorize } from '../middleware/auth.js';
 
 const router = Router();
 
@@ -92,5 +98,15 @@ router.post(
 // ─── Profile (Protected) ─────────────────────────────────────────────────────
 router.get('/me', authenticate, getMe);
 router.put('/me', authenticate, updateMe);
+
+// ─── TOTP 2FA ────────────────────────────────────────────────────────────────
+// Public: second step of admin login
+router.post('/totp/verify-login', totpVerifyLogin);
+
+// Protected admin-only: setup and manage 2FA
+router.get('/totp/status',  authenticate, authorize('admin'), totpStatus);
+router.get('/totp/setup',   authenticate, authorize('admin'), totpSetup);
+router.post('/totp/enable', authenticate, authorize('admin'), totpEnable);
+router.post('/totp/disable',authenticate, authorize('admin'), totpDisable);
 
 export default router;

@@ -11,6 +11,7 @@ import {
   getAllOrdersHandler,
   downloadInvoiceHandler,
   updateOrderStatusHandler,
+  processRefundHandler,
 } from '../controllers/orderController.js';
 
 const router = Router();
@@ -159,6 +160,9 @@ router.put(
 
 // GET /api/orders/:id/invoice — authenticated, owner or admin
 router.get('/:id/invoice', authenticate, downloadInvoiceHandler);
+
+// POST /api/orders/:id/refund — admin only
+router.post('/:id/refund', authenticate, authorize('admin'), processRefundHandler);
 
 // GET /api/orders/:id — authenticated, owner or admin
 router.get('/:id', authenticate, getOrderByIdHandler);

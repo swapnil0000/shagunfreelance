@@ -49,6 +49,13 @@ const orderSchema = new mongoose.Schema({
   isDelivered: { type: Boolean, default: false },
   deliveredAt: { type: Date },
   notes:       { type: String },
+  refund: {
+    status:     { type: String, enum: ['none', 'pending', 'processed', 'failed'], default: 'none' },
+    razorpayRefundId: { type: String },
+    amount:     { type: Number },
+    reason:     { type: String },
+    processedAt:{ type: Date },
+  },
 }, { timestamps: true });
 
 // Indexes (orderNumber index is created automatically by unique: true)

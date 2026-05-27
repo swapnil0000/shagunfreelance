@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema({
   addresses: [addressSchema],
   resetPasswordToken:   { type: String },
   resetPasswordExpires: { type: Date },
+  totpSecret:    { type: String, select: false },
+  totpEnabled:   { type: Boolean, default: false },
+  isSuspended:   { type: Boolean, default: false },
+  lastLoginAt:   { type: Date },
 }, { timestamps: true });
 
 // Indexes (email index is created automatically by unique: true)

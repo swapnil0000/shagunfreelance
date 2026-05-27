@@ -40,6 +40,14 @@ const AdminOrders = lazy(() => import(/* webpackChunkName: "admin" */ './pages/a
 const AdminCustomers = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminCustomers'));
 const AdminCoupons = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminCoupons'));
 const AdminSettings = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminSettings'));
+const AdminAuditLogs    = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminAuditLogs'));
+const AdminContacts     = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminContacts'));
+const AdminTransactions = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminTransactions'));
+const AdminCMS              = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminCMS'));
+const AdminBlog             = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminBlog'));
+const AdminEmailTemplates   = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminEmailTemplates'));
+const AdminReports          = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminReports'));
+const AdminTickets          = lazy(() => import(/* webpackChunkName: "admin" */ './pages/admin/AdminTickets'));
 
 function Loading() {
   return (
@@ -90,6 +98,14 @@ export default function App() {
               <Route path="customers" element={<AdminCustomers />} />
               <Route path="coupons" element={<AdminCoupons />} />
               <Route path="settings" element={<AdminSettings />} />
+              <Route path="contacts"     element={<AdminContacts />} />
+              <Route path="transactions" element={<AdminTransactions />} />
+              <Route path="audit-logs"   element={<AdminAuditLogs />} />
+              <Route path="cms"             element={<AdminCMS />} />
+              <Route path="blog"            element={<AdminBlog />} />
+              <Route path="email-templates" element={<AdminEmailTemplates />} />
+              <Route path="reports"         element={<AdminReports />} />
+              <Route path="tickets"         element={<AdminTickets />} />
             </Route>
 
             {/* 404 */}

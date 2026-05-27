@@ -1,142 +1,207 @@
-import { useState, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Search, Users } from 'lucide-react';
+import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Search, UserX, UserCheck, ChevronLeft, ChevronRight } from 'lucide-react';
+import { toast } from 'sonner';
 import api from '../../lib/axios';
 import Skeleton from '../../components/ui/Skeleton';
+import Badge from '../../components/ui/Badge';
 
-const formatCurrency = (amount) =>
-  new Intl.NumberFormat('en-IN', {
-    style: 'currency',
-    currency: 'INR',
-    maximumFractionDigits: 0,
-  }).format(amount);
+function formatCurrency(amount) {
+  return new Intl.NumberFormat('en-IN', {
+    style: 'currency', currency: 'INR', maximumFractionDigits: 0,
+  }).format(amount || 0);
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '—';
+  return new Date(dateStr).toLocaleDateString('en-IN', {
+    day: 'numeric', month: 'short', year: 'numeric',
+  });
+}
 
 export default function AdminCustomers() {
-  const [search, setSearch] = useState('');
+  const queryClient = useQueryClient();
+  const [search, setSearch]               = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [page, setPage]                   = useState(1);
+  const [suspendedFilter, setSuspendedFilter] = useState('');
+  const limit = 20;
 
-  // Fetch all orders and derive customer data
+  const handleSearch = (val) => {
+    setSearch(val);
+    clearTimeout(window._customerSearchTimer);
+    window._customerSearchTimer = setTimeout(() => {
+      setDebouncedSearch(val);
+      setPage(1);
+    }, 350);
+  };
+
   const { data, isLoading } = useQuery({
-    queryKey: ['admin-orders'],
+    queryKey: ['admin', 'customers', debouncedSearch, suspendedFilter, page],
     queryFn: async () => {
-      const res = await api.get('/orders');
-      return res.data.data.orders;
+      const params = new URLSearchParams({ page, limit });
+      if (debouncedSearch) params.append('search', debouncedSearch);
+      if (suspendedFilter) params.append('suspended', suspendedFilter);
+      const res = await api.get(`/admin/customers?${params}`);
+      return res.data.data;
     },
+    staleTime: 30 * 1000,
   });
 
-  // Derive unique customers from orders
-  const customers = useMemo(() => {
-    if (!data) return [];
+  const suspendMutation = useMutation({
+    mutationFn: (id) => api.patch(`/admin/customers/${id}/suspend`),
+    onSuccess: (res) => {
+      const isSuspended = res.data.data.isSuspended;
+      toast.success(isSuspended ? 'Customer suspended' : 'Customer reactivated');
+      queryClient.invalidateQueries({ queryKey: ['admin', 'customers'] });
+    },
+    onError: () => toast.error('Action failed'),
+  });
 
-    const customerMap = new Map();
-
-    data.forEach((order) => {
-      if (!order.user?._id) return;
-
-      const userId = order.user._id;
-      if (customerMap.has(userId)) {
-        const existing = customerMap.get(userId);
-        existing.totalOrders += 1;
-        existing.totalSpent += order.total || 0;
-      } else {
-        customerMap.set(userId, {
-          _id: userId,
-          name: order.user.name || 'N/A',
-          email: order.user.email || 'N/A',
-          totalOrders: 1,
-          totalSpent: order.total || 0,
-        });
-      }
-    });
-
-    return Array.from(customerMap.values());
-  }, [data]);
-
-  // Client-side search filter
-  const filteredCustomers = useMemo(() => {
-    if (!search.trim()) return customers;
-    const query = search.toLowerCase();
-    return customers.filter(
-      (c) =>
-        c.name.toLowerCase().includes(query) ||
-        c.email.toLowerCase().includes(query)
-    );
-  }, [customers, search]);
+  const customers  = data?.customers  || [];
+  const pagination = data?.pagination || {};
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="font-heading text-2xl font-semibold text-neutral-900">
-          Customers
-        </h1>
-        <p className="text-sm text-neutral-500">
-          {customers.length} total customer{customers.length !== 1 ? 's' : ''}
-        </p>
+    <div className="space-y-5">
+      <h1 className="font-heading text-2xl font-semibold text-neutral-900">Customers</h1>
+
+      {/* ── Filters ──────────────────────────────────────────────────────── */}
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="relative flex-1 min-w-[200px] max-w-sm">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
+          <input
+            type="text"
+            placeholder="Search by name or email…"
+            value={search}
+            onChange={(e) => handleSearch(e.target.value)}
+            className="w-full rounded-lg border border-neutral-300 bg-white py-2.5 pl-9 pr-4 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-200"
+          />
+        </div>
+
+        <select
+          value={suspendedFilter}
+          onChange={(e) => { setSuspendedFilter(e.target.value); setPage(1); }}
+          className="rounded-lg border border-neutral-300 bg-white px-3 py-2.5 text-sm focus:border-brand-500 focus:outline-none"
+        >
+          <option value="">All customers</option>
+          <option value="false">Active only</option>
+          <option value="true">Suspended only</option>
+        </select>
+
+        {pagination.total !== undefined && (
+          <span className="ml-auto text-sm text-neutral-500">
+            {pagination.total} customer{pagination.total !== 1 ? 's' : ''}
+          </span>
+        )}
       </div>
 
-      {/* Search */}
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
-        <input
-          type="text"
-          placeholder="Search by name or email..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="w-full rounded-lg border border-neutral-300 py-2.5 pl-10 pr-4 text-sm text-neutral-800 placeholder:text-neutral-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
-        />
+      {/* ── Table ────────────────────────────────────────────────────────── */}
+      <div className="rounded-xl border border-neutral-200 bg-white">
+        {isLoading ? (
+          <div className="space-y-3 p-5">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <Skeleton key={i} className="h-10 w-full" />
+            ))}
+          </div>
+        ) : customers.length === 0 ? (
+          <div className="flex flex-col items-center justify-center gap-2 py-16 text-neutral-400">
+            <Search className="h-8 w-8" />
+            <p className="text-sm">No customers found</p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-neutral-100 text-left text-neutral-500">
+                  <th className="px-5 py-3 font-medium">Customer</th>
+                  <th className="px-5 py-3 font-medium">Phone</th>
+                  <th className="px-5 py-3 font-medium">Orders</th>
+                  <th className="px-5 py-3 font-medium">Total Spent</th>
+                  <th className="px-5 py-3 font-medium">Joined</th>
+                  <th className="px-5 py-3 font-medium">Status</th>
+                  <th className="px-5 py-3 font-medium">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-neutral-100">
+                {customers.map((customer) => (
+                  <tr key={customer._id} className="hover:bg-neutral-50">
+                    <td className="px-5 py-3">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-neutral-100 text-xs font-semibold text-neutral-600">
+                          {customer.name?.[0]?.toUpperCase() || '?'}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="truncate font-medium text-neutral-900">{customer.name}</p>
+                          <p className="truncate text-xs text-neutral-400">{customer.email}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="whitespace-nowrap px-5 py-3 text-neutral-600">
+                      {customer.phone || '—'}
+                    </td>
+                    <td className="whitespace-nowrap px-5 py-3 font-medium text-neutral-900">
+                      {customer.totalOrders}
+                    </td>
+                    <td className="whitespace-nowrap px-5 py-3 text-neutral-900">
+                      {formatCurrency(customer.totalSpent)}
+                    </td>
+                    <td className="whitespace-nowrap px-5 py-3 text-neutral-500">
+                      {formatDate(customer.createdAt)}
+                    </td>
+                    <td className="whitespace-nowrap px-5 py-3">
+                      <Badge variant={customer.isSuspended ? 'error' : 'success'}>
+                        {customer.isSuspended ? 'Suspended' : 'Active'}
+                      </Badge>
+                    </td>
+                    <td className="whitespace-nowrap px-5 py-3">
+                      <button
+                        onClick={() => suspendMutation.mutate(customer._id)}
+                        disabled={suspendMutation.isPending}
+                        className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors ${
+                          customer.isSuspended
+                            ? 'text-emerald-600 hover:bg-emerald-50'
+                            : 'text-red-500 hover:bg-red-50'
+                        }`}
+                      >
+                        {customer.isSuspended ? (
+                          <><UserCheck className="h-3.5 w-3.5" /> Reactivate</>
+                        ) : (
+                          <><UserX className="h-3.5 w-3.5" /> Suspend</>
+                        )}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
-      {/* Customers Table */}
-      <div className="overflow-x-auto rounded-lg border border-neutral-200">
-        <table className="w-full text-left text-sm">
-          <thead className="border-b border-neutral-200 bg-neutral-50">
-            <tr>
-              <th className="px-4 py-3 font-medium text-neutral-600">Name</th>
-              <th className="px-4 py-3 font-medium text-neutral-600">Email</th>
-              <th className="px-4 py-3 font-medium text-neutral-600">Total Orders</th>
-              <th className="px-4 py-3 font-medium text-neutral-600">Total Spent</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-neutral-200">
-            {isLoading ? (
-              Array.from({ length: 5 }).map((_, i) => (
-                <tr key={i}>
-                  <td className="px-4 py-3"><Skeleton className="h-4 w-28" /></td>
-                  <td className="px-4 py-3"><Skeleton className="h-4 w-36" /></td>
-                  <td className="px-4 py-3"><Skeleton className="h-4 w-12" /></td>
-                  <td className="px-4 py-3"><Skeleton className="h-4 w-20" /></td>
-                </tr>
-              ))
-            ) : filteredCustomers.length === 0 ? (
-              <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-neutral-500">
-                  <div className="flex flex-col items-center gap-2">
-                    <Users className="h-8 w-8 text-neutral-300" />
-                    <p>No customers found.</p>
-                  </div>
-                </td>
-              </tr>
-            ) : (
-              filteredCustomers.map((customer) => (
-                <tr key={customer._id} className="hover:bg-neutral-50">
-                  <td className="px-4 py-3 font-medium text-neutral-900">
-                    {customer.name}
-                  </td>
-                  <td className="px-4 py-3 text-neutral-600">
-                    {customer.email}
-                  </td>
-                  <td className="px-4 py-3 text-neutral-700">
-                    {customer.totalOrders}
-                  </td>
-                  <td className="px-4 py-3 text-neutral-700">
-                    {formatCurrency(customer.totalSpent)}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      {/* ── Pagination ───────────────────────────────────────────────────── */}
+      {pagination.totalPages > 1 && (
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-neutral-500">
+            Page {pagination.page} of {pagination.totalPages}
+          </span>
+          <div className="flex gap-2">
+            <button
+              disabled={page <= 1}
+              onClick={() => setPage((p) => p - 1)}
+              className="flex items-center gap-1 rounded-lg border border-neutral-300 px-3 py-1.5 text-neutral-600 hover:bg-neutral-50 disabled:opacity-40"
+            >
+              <ChevronLeft className="h-4 w-4" /> Prev
+            </button>
+            <button
+              disabled={page >= pagination.totalPages}
+              onClick={() => setPage((p) => p + 1)}
+              className="flex items-center gap-1 rounded-lg border border-neutral-300 px-3 py-1.5 text-neutral-600 hover:bg-neutral-50 disabled:opacity-40"
+            >
+              Next <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

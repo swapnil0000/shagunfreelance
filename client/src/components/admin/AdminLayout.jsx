@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { NavLink, Outlet, Navigate, useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { NavLink, Outlet, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import {
   LayoutDashboard,
   Package,
@@ -7,24 +8,71 @@ import {
   Users,
   Ticket,
   Settings,
+  ClipboardList,
+  MessageSquare,
+  CreditCard,
+  FileText,
+  BookOpen,
+  Mail,
+  BarChart3,
+  HeadphonesIcon,
   Menu,
   X,
 } from 'lucide-react';
 import useAuthStore from '../../stores/authStore';
+import NotificationBell from './NotificationBell';
+
+const IDLE_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
+
+function useIdleTimeout(onIdle) {
+  const timerRef = useRef(null);
+
+  const reset = useCallback(() => {
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(onIdle, IDLE_TIMEOUT_MS);
+  }, [onIdle]);
+
+  useEffect(() => {
+    const events = ['mousedown', 'keydown', 'scroll', 'touchstart', 'click'];
+    events.forEach((e) => window.addEventListener(e, reset, { passive: true }));
+    reset();
+    return () => {
+      clearTimeout(timerRef.current);
+      events.forEach((e) => window.removeEventListener(e, reset));
+    };
+  }, [reset]);
+}
 
 const navItems = [
-  { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/admin/products', label: 'Products', icon: Package },
-  { to: '/admin/orders', label: 'Orders', icon: ShoppingCart },
-  { to: '/admin/customers', label: 'Customers', icon: Users },
-  { to: '/admin/coupons', label: 'Coupons', icon: Ticket },
-  { to: '/admin/settings', label: 'Settings', icon: Settings },
+  { to: '/admin',            label: 'Dashboard',  icon: LayoutDashboard, end: true },
+  { to: '/admin/products',   label: 'Products',   icon: Package },
+  { to: '/admin/orders',     label: 'Orders',     icon: ShoppingCart },
+  { to: '/admin/customers',  label: 'Customers',  icon: Users },
+  { to: '/admin/coupons',      label: 'Coupons',       icon: Ticket },
+  { to: '/admin/transactions', label: 'Transactions',  icon: CreditCard },
+  { to: '/admin/contacts',     label: 'Messages',      icon: MessageSquare },
+  { to: '/admin/cms',              label: 'CMS Pages',       icon: FileText },
+  { to: '/admin/blog',             label: 'Blog',            icon: BookOpen },
+  { to: '/admin/reports',          label: 'Reports',         icon: BarChart3 },
+  { to: '/admin/tickets',          label: 'Support',         icon: HeadphonesIcon },
+  { to: '/admin/email-templates',  label: 'Email Templates', icon: Mail },
+  { to: '/admin/audit-logs',       label: 'Audit Logs',      icon: ClipboardList },
+  { to: '/admin/settings',     label: 'Settings',      icon: Settings },
 ];
 
 export default function AdminLayout() {
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, logout } = useAuthStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleIdle = useCallback(() => {
+    logout();
+    toast.info('You were logged out due to inactivity');
+    navigate('/login', { replace: true });
+  }, [logout, navigate]);
+
+  useIdleTimeout(handleIdle);
 
   if (!isAuthenticated) {
     return <Navigate to={`/login?redirect=${encodeURIComponent(location.pathname)}`} replace />;
@@ -57,13 +105,18 @@ export default function AdminLayout() {
             <span className="font-heading text-lg font-semibold text-brand-700">
               Zimor Admin
             </span>
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="rounded-md p-1 text-neutral-500 hover:bg-neutral-100 lg:hidden"
-              aria-label="Close sidebar"
-            >
-              <X className="h-5 w-5" />
-            </button>
+            <div className="flex items-center gap-1">
+              <div className="hidden lg:block">
+                <NotificationBell />
+              </div>
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="rounded-md p-1 text-neutral-500 hover:bg-neutral-100 lg:hidden"
+                aria-label="Close sidebar"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
           </div>
 
           {/* Navigation */}
@@ -93,17 +146,20 @@ export default function AdminLayout() {
       {/* Main content */}
       <div className="flex flex-1 flex-col">
         {/* Mobile header */}
-        <div className="flex items-center border-b border-neutral-200 px-4 py-3 lg:hidden">
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="rounded-md p-1.5 text-neutral-600 hover:bg-neutral-100"
-            aria-label="Open sidebar"
-          >
-            <Menu className="h-5 w-5" />
-          </button>
-          <span className="ml-3 font-heading text-sm font-semibold text-brand-700">
-            Zimor Admin
-          </span>
+        <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3 lg:hidden">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="rounded-md p-1.5 text-neutral-600 hover:bg-neutral-100"
+              aria-label="Open sidebar"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            <span className="font-heading text-sm font-semibold text-brand-700">
+              Zimor Admin
+            </span>
+          </div>
+          <NotificationBell />
         </div>
 
         {/* Page content */}

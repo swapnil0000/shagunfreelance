@@ -8,8 +8,13 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 5 * 60 * 1000, // 5 minutes
+      gcTime: 30 * 60 * 1000, // keep cached pages 30 min so back-nav doesn't refetch
       retry: 1,
       refetchOnWindowFocus: false,
+    },
+    mutations: {
+      // Never auto-retry mutations — order/payment calls are not idempotent.
+      retry: 0,
     },
   },
 });

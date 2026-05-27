@@ -1,6 +1,5 @@
-/* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
-
+/* Google Fonts are loaded via <link rel="preconnect"> + stylesheet in index.html
+   so they don't block CSS parsing here. */
 @import "tailwindcss";
 
 /* ============================================

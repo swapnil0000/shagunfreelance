@@ -4,7 +4,36 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Warm up cross-origin connections used early on every page -->
+    <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
+    <link rel="dns-prefetch" href="https://res.cloudinary.com" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Fonts loaded as a non-render-blocking stylesheet link (was a CSS @import) -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+    />
+
     <title>Zimor India — Premium Women's Workbags</title>
+    <meta
+      name="description"
+      content="Zimor India — premium women's workbags and handbags. Structured, elegant leather bags crafted for the modern professional."
+    />
+    <meta name="theme-color" content="#1a1a1a" />
+
+    <!-- Open Graph / social sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Zimor India" />
+    <meta property="og:title" content="Zimor India — Premium Women's Workbags" />
+    <meta
+      property="og:description"
+      content="Structured, elegant leather workbags and handbags crafted for the modern professional."
+    />
+    <meta property="og:image" content="/image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <div id="root"></div>

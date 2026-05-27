@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -68,6 +69,14 @@ export default function ReviewSection({ productId }) {
           <Button variant="outline" size="sm" onClick={() => setShowForm(true)}>
             Write a Review
           </Button>
+        )}
+        {!isAuthenticated && (
+          <Link
+            to="/login"
+            className="text-sm font-medium text-brand-600 hover:text-brand-700"
+          >
+            Log in to write a review
+          </Link>
         )}
       </div>
 
@@ -150,6 +159,14 @@ export default function ReviewSection({ productId }) {
             <Button variant="outline" size="sm" onClick={() => setShowForm(true)}>
               Write a Review
             </Button>
+          )}
+          {!isAuthenticated && (
+            <Link
+              to="/login"
+              className="text-sm font-medium text-brand-600 hover:text-brand-700"
+            >
+              Log in to write a review
+            </Link>
           )}
         </div>
       ) : (

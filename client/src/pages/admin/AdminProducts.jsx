@@ -178,39 +178,48 @@ export default function AdminProducts() {
     setModalOpen(true);
   };
 
-  const openEditModal = (product) => {
+  const openEditModal = async (product) => {
+    // Open the modal immediately with card-level data so the basic fields
+    // appear right away while we fetch the full document in the background.
     setEditingProduct(product);
-    setForm({
-      name: product.name || '',
-      description: product.description || '',
-      price: String(product.price || ''),
-      compareAtPrice: String(product.compareAtPrice || ''),
-      category: product.category || 'shoulder-bags',
-      images: product.images || [],
-      sizes: (product.sizes || []).join(', '),
-      colors: product.colors?.length > 0 ? product.colors : [{ name: '', hex: '#000000' }],
-      stock: String(product.stock || '0'),
-      isFeatured: product.isFeatured || false,
-      // 9999 is the schema "unset" sentinel — show blank in the input.
-      featuredOrder:
-        product.featuredOrder == null || product.featuredOrder >= 9999
-          ? ''
-          : String(product.featuredOrder),
-      isActive: product.isActive !== false,
-      features: toArray(product.features),
-      material: toArray(product.material),
-      hardware: toArray(product.hardware),
-      innerLining: toArray(product.innerLining),
-      careInstructions: toArray(product.careInstructions),
-      dimensionLength: product.dimensionLength || '',
-      dimensionHeight: product.dimensionHeight || '',
-      dimensionWidth: product.dimensionWidth || '',
-      strapDrop: product.strapDrop || '',
-      weight: product.weight || '',
-      keyHighlights: toArray(product.keyHighlights),
-      stylingGuide: toArray(product.stylingGuide),
-    });
     setModalOpen(true);
+
+    try {
+      const { data } = await api.get(`/products/admin/${product._id}`);
+      const p = data.data.product;
+      setForm({
+        name: p.name || '',
+        description: p.description || '',
+        price: String(p.price || ''),
+        compareAtPrice: String(p.compareAtPrice || ''),
+        category: p.category || 'shoulder-bags',
+        images: p.images || [],
+        sizes: (p.sizes || []).join(', '),
+        colors: p.colors?.length > 0 ? p.colors : [{ name: '', hex: '#000000' }],
+        stock: String(p.stock || '0'),
+        isFeatured: p.isFeatured || false,
+        featuredOrder:
+          p.featuredOrder == null || p.featuredOrder >= 9999
+            ? ''
+            : String(p.featuredOrder),
+        isActive: p.isActive !== false,
+        features: toArray(p.features),
+        material: toArray(p.material),
+        hardware: toArray(p.hardware),
+        innerLining: toArray(p.innerLining),
+        careInstructions: toArray(p.careInstructions),
+        dimensionLength: p.dimensionLength || '',
+        dimensionHeight: p.dimensionHeight || '',
+        dimensionWidth: p.dimensionWidth || '',
+        strapDrop: p.strapDrop || '',
+        weight: p.weight || '',
+        keyHighlights: toArray(p.keyHighlights),
+        stylingGuide: toArray(p.stylingGuide),
+      });
+    } catch {
+      toast.error('Failed to load product details');
+      closeModal();
+    }
   };
 
   const closeModal = () => {

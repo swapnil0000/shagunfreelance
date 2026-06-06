@@ -3,6 +3,7 @@ import { Sparkles } from 'lucide-react';
 
 const messages = [
   'Free Shipping Across India | No Hidden Charges',
+  'Cash on Delivery Available | Pay When You Receive',
   'Secure Checkout & Safe Payments Guaranteed',
   'Designed for the Way India Works',
   '7-Day Easy Returns | Shop with Confidence'

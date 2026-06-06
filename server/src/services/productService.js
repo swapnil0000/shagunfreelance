@@ -150,6 +150,15 @@ export const reorderFeaturedProducts = async (ids) => {
 };
 
 /**
+ * Get a single product by ID for admin editing (no isActive filter).
+ */
+export const getProductByIdAdmin = async (id) => {
+  const product = await Product.findById(id).lean();
+  if (!product) throw new AppError('Product not found', 404);
+  return product;
+};
+
+/**
  * Soft-delete a product by setting isActive to false (admin).
  */
 export const deleteProduct = async (id) => {

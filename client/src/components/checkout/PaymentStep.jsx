@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { CreditCard, ChevronLeft, ShieldCheck, Truck, Lock, Smartphone, Building2, Wallet } from 'lucide-react';
+import { CreditCard, ChevronLeft, ShieldCheck, Truck, Lock, Smartphone, Building2, Wallet, Banknote } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '../../lib/axios';
 import useCartStore from '../../stores/cartStore';
 import Button from '../ui/Button';
 import { cld } from '../../lib/cloudinary';
 
-const PAYMENT_METHODS = [
+const ONLINE_METHODS = [
   { icon: Smartphone, label: 'UPI' },
   { icon: CreditCard, label: 'Cards' },
   { icon: Building2, label: 'Net Banking' },
@@ -16,6 +16,7 @@ const PAYMENT_METHODS = [
 
 export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
   const [loading, setLoading] = useState(false);
+  const [selectedMethod, setSelectedMethod] = useState('razorpay');
   const [razorpayReady, setRazorpayReady] = useState(!!window.Razorpay);
 
   useEffect(() => {
@@ -31,7 +32,15 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
   const { items, subtotal, discount, shipping, total, coupon, clearCart } = useCartStore();
   const formatCurrency = (amount) => `₹${amount.toLocaleString('en-IN')}`;
 
-  const handlePayment = async () => {
+  const getCartItems = () =>
+    items.map((item) => ({
+      productId: item.product._id,
+      quantity: item.quantity,
+      size: item.size,
+      color: item.color,
+    }));
+
+  const handleRazorpay = async () => {
     if (!razorpayReady || !window.Razorpay) {
       toast.error('Payment gateway is still loading. Please try again in a moment.');
       return;
@@ -39,15 +48,8 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
 
     setLoading(true);
     try {
-      const cartItems = items.map((item) => ({
-        productId: item.product._id,
-        quantity: item.quantity,
-        size: item.size,
-        color: item.color,
-      }));
-
       const { data: responseData } = await api.post('/orders/razorpay/create', {
-        cartItems,
+        cartItems: getCartItems(),
         shippingAddress,
         couponCode: coupon?.code || null,
       });
@@ -95,6 +97,27 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
     }
   };
 
+  const handleCOD = async () => {
+    setLoading(true);
+    try {
+      const { data: responseData } = await api.post('/orders/cod', {
+        cartItems: getCartItems(),
+        shippingAddress,
+        couponCode: coupon?.code || null,
+      });
+      clearCart();
+      onSuccess(responseData.data.order);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to place order. Please try again.');
+      setLoading(false);
+    }
+  };
+
+  const handleProceed = () => {
+    if (selectedMethod === 'cod') handleCOD();
+    else handleRazorpay();
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 20 }}
@@ -108,8 +131,47 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
           <div>
             <h3 className="text-base font-semibold text-neutral-900">Payment</h3>
             <p className="text-sm text-neutral-500 mt-0.5">
-              Complete your purchase securely via Razorpay
+              Choose how you'd like to pay
             </p>
+          </div>
+
+          {/* Payment method selector */}
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setSelectedMethod('razorpay')}
+              className={`flex flex-col items-start gap-2 rounded-xl border-2 p-4 text-left transition-all duration-200 ${
+                selectedMethod === 'razorpay'
+                  ? 'border-neutral-900 bg-neutral-50'
+                  : 'border-neutral-200 bg-white hover:border-neutral-300'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <CreditCard className={`h-4 w-4 ${selectedMethod === 'razorpay' ? 'text-neutral-900' : 'text-neutral-400'}`} />
+                <span className={`text-sm font-semibold ${selectedMethod === 'razorpay' ? 'text-neutral-900' : 'text-neutral-500'}`}>
+                  Pay Online
+                </span>
+              </div>
+              <p className="text-[11px] text-neutral-400 leading-snug">UPI, Cards, Net Banking & Wallets</p>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setSelectedMethod('cod')}
+              className={`flex flex-col items-start gap-2 rounded-xl border-2 p-4 text-left transition-all duration-200 ${
+                selectedMethod === 'cod'
+                  ? 'border-neutral-900 bg-neutral-50'
+                  : 'border-neutral-200 bg-white hover:border-neutral-300'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Banknote className={`h-4 w-4 ${selectedMethod === 'cod' ? 'text-neutral-900' : 'text-neutral-400'}`} />
+                <span className={`text-sm font-semibold ${selectedMethod === 'cod' ? 'text-neutral-900' : 'text-neutral-500'}`}>
+                  Cash on Delivery
+                </span>
+              </div>
+              <p className="text-[11px] text-neutral-400 leading-snug">Pay when your order arrives</p>
+            </button>
           </div>
 
           {/* Amount card */}
@@ -117,44 +179,74 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2">
                 <div className="h-8 w-8 rounded-full bg-white/10 flex items-center justify-center">
-                  <CreditCard className="h-4 w-4" />
+                  {selectedMethod === 'cod' ? (
+                    <Banknote className="h-4 w-4" />
+                  ) : (
+                    <CreditCard className="h-4 w-4" />
+                  )}
                 </div>
-                <span className="text-sm font-medium">Razorpay</span>
+                <span className="text-sm font-medium">
+                  {selectedMethod === 'cod' ? 'Cash on Delivery' : 'Razorpay'}
+                </span>
               </div>
-              <div className="flex items-center gap-1 text-xs text-neutral-400">
-                <Lock className="h-3 w-3" />
-                <span>Secure</span>
-              </div>
+              {selectedMethod === 'razorpay' && (
+                <div className="flex items-center gap-1 text-xs text-neutral-400">
+                  <Lock className="h-3 w-3" />
+                  <span>Secure</span>
+                </div>
+              )}
             </div>
-            <p className="text-xs text-neutral-400 mb-1">Amount to pay</p>
+            <p className="text-xs text-neutral-400 mb-1">
+              {selectedMethod === 'cod' ? 'Amount payable on delivery' : 'Amount to pay'}
+            </p>
             <p className="text-3xl font-bold tabular-nums">{formatCurrency(total)}</p>
           </div>
 
-          {/* Accepted methods */}
-          <div>
-            <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-3">
-              Accepted Payment Methods
-            </p>
-            <div className="grid grid-cols-4 gap-2">
-              {PAYMENT_METHODS.map(({ icon: Icon, label }) => (
-                <div
-                  key={label}
-                  className="flex flex-col items-center gap-2 rounded-lg border border-neutral-200 bg-white p-3 hover:border-neutral-300 transition-colors"
-                >
-                  <Icon className="h-4 w-4 text-neutral-600" />
-                  <span className="text-[11px] font-medium text-neutral-500">{label}</span>
+          {selectedMethod === 'razorpay' ? (
+            <>
+              {/* Accepted online methods */}
+              <div>
+                <p className="text-xs font-medium text-neutral-500 uppercase tracking-wider mb-3">
+                  Accepted Payment Methods
+                </p>
+                <div className="grid grid-cols-4 gap-2">
+                  {ONLINE_METHODS.map(({ icon: Icon, label }) => (
+                    <div
+                      key={label}
+                      className="flex flex-col items-center gap-2 rounded-lg border border-neutral-200 bg-white p-3 hover:border-neutral-300 transition-colors"
+                    >
+                      <Icon className="h-4 w-4 text-neutral-600" />
+                      <span className="text-[11px] font-medium text-neutral-500">{label}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
 
-          {/* Security badge */}
-          <div className="flex items-start gap-3 rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-3">
-            <ShieldCheck className="h-4 w-4 text-success mt-0.5 shrink-0" />
-            <p className="text-xs text-neutral-500 leading-relaxed">
-              Your payment is protected with 256-bit SSL encryption. We never store your card details.
-            </p>
-          </div>
+              {/* Security badge */}
+              <div className="flex items-start gap-3 rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-3">
+                <ShieldCheck className="h-4 w-4 text-success mt-0.5 shrink-0" />
+                <p className="text-xs text-neutral-500 leading-relaxed">
+                  Your payment is protected with 256-bit SSL encryption. We never store your card details.
+                </p>
+              </div>
+            </>
+          ) : (
+            /* COD info */
+            <div className="space-y-3">
+              <div className="flex items-start gap-3 rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-3">
+                <Banknote className="h-4 w-4 text-neutral-500 mt-0.5 shrink-0" />
+                <p className="text-xs text-neutral-500 leading-relaxed">
+                  Pay in cash when your order is delivered. Please keep exact change ready.
+                </p>
+              </div>
+              <div className="flex items-start gap-3 rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-3">
+                <Truck className="h-4 w-4 text-neutral-500 mt-0.5 shrink-0" />
+                <p className="text-xs text-neutral-500 leading-relaxed">
+                  Your order will be confirmed immediately and dispatched within 1–2 business days.
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right — Order Summary */}
@@ -233,15 +325,26 @@ export default function PaymentStep({ shippingAddress, onBack, onSuccess }) {
           <ChevronLeft className="h-4 w-4" />
           Back to Shipping
         </Button>
-        <Button
-          onClick={handlePayment}
-          loading={loading}
-          disabled={!razorpayReady}
-          className="sm:ml-auto"
-        >
-          <Lock className="h-4 w-4" />
-          {!razorpayReady ? 'Loading Gateway...' : `Pay ${formatCurrency(total)}`}
-        </Button>
+        {selectedMethod === 'cod' ? (
+          <Button
+            onClick={handleProceed}
+            loading={loading}
+            className="sm:ml-auto"
+          >
+            <Banknote className="h-4 w-4" />
+            Place Order (COD)
+          </Button>
+        ) : (
+          <Button
+            onClick={handleProceed}
+            loading={loading}
+            disabled={!razorpayReady}
+            className="sm:ml-auto"
+          >
+            <Lock className="h-4 w-4" />
+            {!razorpayReady ? 'Loading Gateway...' : `Pay ${formatCurrency(total)}`}
+          </Button>
+        )}
       </div>
     </motion.div>
   );

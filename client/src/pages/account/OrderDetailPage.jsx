@@ -53,7 +53,7 @@ export default function OrderDetailPage() {
 
   const { data: order, isLoading, error } = useQuery({
     queryKey: ['order', id],
-    queryFn: () => api.get(`/orders/${id}`).then((r) => r.data.order || r.data),
+    queryFn: () => api.get(`/orders/${id}`).then((r) => r.data.data?.order),
     enabled: isAuthenticated && !!id,
     staleTime: 60 * 1000,
   });

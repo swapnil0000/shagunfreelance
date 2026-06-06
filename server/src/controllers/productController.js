@@ -54,6 +54,18 @@ export const reorderFeaturedProducts = async (req, res, next) => {
 };
 
 /**
+ * GET /api/products/admin/:id (admin) — full product fields, no isActive filter.
+ */
+export const getProductByIdAdmin = async (req, res, next) => {
+  try {
+    const product = await productService.getProductByIdAdmin(req.params.id);
+    res.status(200).json({ status: 'success', data: { product } });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * POST /api/products (admin)
  */
 export const createProduct = async (req, res, next) => {

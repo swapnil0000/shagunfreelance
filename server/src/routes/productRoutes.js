@@ -6,6 +6,7 @@ import {
   getProducts,
   getFeaturedProducts,
   getProductBySlug,
+  getProductByIdAdmin,
   createProduct,
   updateProduct,
   deleteProduct,
@@ -17,6 +18,10 @@ const router = Router();
 // ─── Public Routes ───────────────────────────────────────────────────────────
 router.get('/', getProducts);
 router.get('/featured', getFeaturedProducts);
+
+// Admin detail endpoint must be registered before /:slug to avoid being swallowed by the slug param.
+router.get('/admin/:id', authenticate, authorize('admin'), getProductByIdAdmin);
+
 router.get('/:slug', getProductBySlug);
 
 // ─── Admin Routes ────────────────────────────────────────────────────────────

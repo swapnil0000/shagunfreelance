@@ -5,7 +5,7 @@ import AppError from '../utils/AppError.js';
 // arrays (description, features, careInstructions, stylingGuide, dimensions...)
 // which are only needed on the product detail page.
 const CARD_FIELDS =
-  'name slug price compareAtPrice images averageRating numReviews stock sizes colors category isFeatured';
+  'name slug price compareAtPrice images averageRating numReviews stock sizes colors category isFeatured featuredOrder';
 
 /**
  * Get products with filtering, sorting, and pagination.
@@ -57,7 +57,17 @@ export const getProducts = async ({ category, minPrice, maxPrice, search, sort, 
  * Get featured products (active and featured).
  */
 export const getFeaturedProducts = async () => {
-  return Product.find({ isActive: true, isFeatured: true }).select(CARD_FIELDS).lean();
+  const products = await Product.find({ isActive: true, isFeatured: true })
+    .select(CARD_FIELDS)
+    .lean();
+  // Sort by admin-set featuredOrder (1, 2, 3 ...); 0 / unset sorts last,
+  // tiebreak by newest first.
+  return products.sort((a, b) => {
+    const ao = a.featuredOrder || Number.MAX_SAFE_INTEGER;
+    const bo = b.featuredOrder || Number.MAX_SAFE_INTEGER;
+    if (ao !== bo) return ao - bo;
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
 };
 
 /**

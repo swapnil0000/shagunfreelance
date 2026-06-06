@@ -40,6 +40,9 @@ const productSchema = new mongoose.Schema({
   weight:           { type: String },
   keyHighlights:    [{ type: String }],
   stylingGuide:     [{ type: String }],
+  // Manual sort position for the homepage "Featured Collection".
+  // Lower number appears first; 0 / unset is treated as "after all set values".
+  featuredOrder:    { type: Number, default: 0 },
 }, { timestamps: true });
 
 // Every listing query filters on isActive; compound indexes cover the common

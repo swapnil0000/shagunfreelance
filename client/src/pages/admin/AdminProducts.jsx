@@ -39,6 +39,7 @@ const INITIAL_FORM = {
   colors: [{ name: '', hex: '#000000' }],
   stock: '0',
   isFeatured: false,
+  featuredOrder: '0',
   isActive: true,
   features: [],
   material: [],
@@ -187,6 +188,7 @@ export default function AdminProducts() {
       colors: product.colors?.length > 0 ? product.colors : [{ name: '', hex: '#000000' }],
       stock: String(product.stock || '0'),
       isFeatured: product.isFeatured || false,
+      featuredOrder: String(product.featuredOrder ?? 0),
       isActive: product.isActive !== false,
       features: toArray(product.features),
       material: toArray(product.material),
@@ -249,6 +251,7 @@ export default function AdminProducts() {
       colors: form.colors.filter((c) => c.name.trim()),
       stock: parseInt(form.stock, 10) || 0,
       isFeatured: form.isFeatured,
+      featuredOrder: parseInt(form.featuredOrder, 10) || 0,
       isActive: form.isActive,
       features: form.features.filter((f) => f.trim()),
       material: form.material.filter((m) => m.trim()),
@@ -823,7 +826,7 @@ function ProductFormModal({
               {/* ── Visibility ── */}
               <fieldset className="space-y-3">
                 <legend className="text-sm font-semibold text-neutral-700 mb-2">Visibility</legend>
-                <div className="flex flex-wrap gap-6">
+                <div className="flex flex-wrap items-end gap-6">
                   <label className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer">
                     <input
                       type="checkbox"
@@ -833,6 +836,25 @@ function ProductFormModal({
                     />
                     Featured Product
                   </label>
+                  {form.isFeatured && (
+                    <div className="w-32">
+                      <label htmlFor="featuredOrder" className="mb-1 block text-xs font-medium text-neutral-600">
+                        Featured Order
+                      </label>
+                      <input
+                        id="featuredOrder"
+                        type="number"
+                        min="0"
+                        value={form.featuredOrder}
+                        onChange={(e) => updateField('featuredOrder', e.target.value)}
+                        placeholder="1, 2, 3..."
+                        className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                      />
+                      <p className="mt-1 text-[11px] text-neutral-400">
+                        Lower = shown first on home (0 = end)
+                      </p>
+                    </div>
+                  )}
                   <label className="flex items-center gap-2 text-sm text-neutral-700 cursor-pointer">
                     <input
                       type="checkbox"

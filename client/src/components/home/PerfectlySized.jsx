@@ -5,8 +5,8 @@ import { cld } from '../../lib/cloudinary';
 
 const CATEGORIES = [
   { name: 'Shoulder Bags', slug: 'shoulder-bags' },
-  { name: 'Laptop Bags', slug: 'laptop-bags' },
-  { name: 'Tote Bags', slug: 'tote-bags' },
+  { name: 'Tote Bags',     slug: 'tote-bags' },
+  { name: 'Laptop Bags',   slug: 'laptop-bags' },
 ];
 
 function CategoryCard({ name, slug, index }) {

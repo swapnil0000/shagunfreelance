@@ -9,7 +9,7 @@ const faqs = [
   },
   {
     title: 'How long does shipping take?',
-    content: "We ship across India within 5–7 business days. Orders above ₹999 qualify for free shipping. You'll receive tracking details via email once your order is dispatched.",
+    content: "We ship across India within 5–7 business days. You'll receive tracking details via email once your order is dispatched.",
   },
   {
     title: 'What is your return policy?',

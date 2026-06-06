@@ -10,7 +10,10 @@ function useFeaturedProducts() {
   return useQuery({
     queryKey: ['products', 'featured'],
     queryFn: () => api.get('/products/featured').then((r) => r.data?.data ?? r.data),
-    staleTime: 5 * 60 * 1000,
+    // Short stale window — admins reorder featured products and the home page
+    // should reflect that without a 5-min wait. Matches the server's 30s TTL.
+    staleTime: 30 * 1000,
+    refetchOnMount: 'always',
   });
 }
 

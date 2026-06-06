@@ -11,6 +11,8 @@ import {
   Image,
   Loader2,
   Star,
+  ArrowUpDown,
+  GripVertical,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import api from '../../lib/axios';
@@ -39,7 +41,7 @@ const INITIAL_FORM = {
   colors: [{ name: '', hex: '#000000' }],
   stock: '0',
   isFeatured: false,
-  featuredOrder: '0',
+  featuredOrder: '',
   isActive: true,
   features: [],
   material: [],
@@ -67,6 +69,7 @@ export default function AdminProducts() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [modalOpen, setModalOpen] = useState(false);
+  const [reorderOpen, setReorderOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [form, setForm] = useState(INITIAL_FORM);
@@ -188,7 +191,11 @@ export default function AdminProducts() {
       colors: product.colors?.length > 0 ? product.colors : [{ name: '', hex: '#000000' }],
       stock: String(product.stock || '0'),
       isFeatured: product.isFeatured || false,
-      featuredOrder: String(product.featuredOrder ?? 0),
+      // 9999 is the schema "unset" sentinel — show blank in the input.
+      featuredOrder:
+        product.featuredOrder == null || product.featuredOrder >= 9999
+          ? ''
+          : String(product.featuredOrder),
       isActive: product.isActive !== false,
       features: toArray(product.features),
       material: toArray(product.material),
@@ -251,7 +258,8 @@ export default function AdminProducts() {
       colors: form.colors.filter((c) => c.name.trim()),
       stock: parseInt(form.stock, 10) || 0,
       isFeatured: form.isFeatured,
-      featuredOrder: parseInt(form.featuredOrder, 10) || 0,
+      // Empty / 0 → 9999 (unset → sorts last). Drag-and-drop sets explicit 1..N.
+      featuredOrder: parseInt(form.featuredOrder, 10) || 9999,
       isActive: form.isActive,
       features: form.features.filter((f) => f.trim()),
       material: form.material.filter((m) => m.trim()),
@@ -287,10 +295,16 @@ export default function AdminProducts() {
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="font-heading text-2xl font-semibold text-neutral-900">Products</h1>
-        <Button onClick={openCreateModal} size="sm">
-          <Plus className="h-4 w-4" />
-          Add Product
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button onClick={() => setReorderOpen(true)} size="sm" variant="outline">
+            <ArrowUpDown className="h-4 w-4" />
+            Reorder Featured
+          </Button>
+          <Button onClick={openCreateModal} size="sm">
+            <Plus className="h-4 w-4" />
+            Add Product
+          </Button>
+        </div>
       </div>
 
       <div className="relative max-w-sm">
@@ -442,6 +456,11 @@ export default function AdminProducts() {
         onClose={() => setDeleteConfirm(null)}
         onConfirm={() => deleteMutation.mutate(deleteConfirm._id)}
         isDeleting={deleteMutation.isPending}
+      />
+
+      <ReorderFeaturedModal
+        isOpen={reorderOpen}
+        onClose={() => setReorderOpen(false)}
       />
     </div>
   );
@@ -851,7 +870,7 @@ function ProductFormModal({
                         className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500"
                       />
                       <p className="mt-1 text-[11px] text-neutral-400">
-                        Lower = shown first on home (0 = end)
+                        Lower = shown first (leave blank to sort last)
                       </p>
                     </div>
                   )}
@@ -921,6 +940,205 @@ function DeleteConfirmModal({ product, onClose, onConfirm, isDeleting }) {
           </div>
         </motion.div>
       </motion.div>
+    </AnimatePresence>
+  );
+}
+
+
+// ─── Reorder Featured Products Modal (drag-and-drop) ─────────────────────────
+
+function ReorderFeaturedModal({ isOpen, onClose }) {
+  const queryClient = useQueryClient();
+  const [items, setItems] = useState([]);
+  const [syncedFrom, setSyncedFrom] = useState(null);
+  const [dragIdx, setDragIdx] = useState(null);
+  const [overIdx, setOverIdx] = useState(null);
+
+  // Load current featured products whenever the modal opens.
+  const { data, isLoading } = useQuery({
+    queryKey: ['products', 'featured'],
+    queryFn: () => api.get('/products/featured').then((r) => r.data.data.products),
+    enabled: isOpen,
+    staleTime: 0,
+  });
+
+  // React 19-friendly sync: when fresh data arrives, copy it into the local
+  // (drag-mutable) list. Done in render via a ref check, not an effect.
+  if (data && data !== syncedFrom) {
+    setSyncedFrom(data);
+    setItems(data);
+  }
+
+  const saveMutation = useMutation({
+    mutationFn: (ids) => api.patch('/products/featured-order', { ids }),
+    onSuccess: () => {
+      toast.success('Featured order updated');
+      queryClient.invalidateQueries({ queryKey: ['products', 'featured'] });
+      queryClient.invalidateQueries({ queryKey: ['admin-products'] });
+      onClose();
+    },
+    onError: (err) => toast.error(err.response?.data?.message || 'Failed to save order'),
+  });
+
+  const handleDragStart = (i) => setDragIdx(i);
+  const handleDragOver = (e, i) => { e.preventDefault(); setOverIdx(i); };
+  const handleDragEnd = () => { setDragIdx(null); setOverIdx(null); };
+  const handleDrop = (e, dropIdx) => {
+    e.preventDefault();
+    if (dragIdx === null || dragIdx === dropIdx) return handleDragEnd();
+    setItems((prev) => {
+      const next = [...prev];
+      const [moved] = next.splice(dragIdx, 1);
+      next.splice(dropIdx, 0, moved);
+      return next;
+    });
+    handleDragEnd();
+  };
+
+  const move = (i, dir) => {
+    const j = i + dir;
+    if (j < 0 || j >= items.length) return;
+    setItems((prev) => {
+      const next = [...prev];
+      [next[i], next[j]] = [next[j], next[i]];
+      return next;
+    });
+  };
+
+  const save = () => {
+    if (items.length === 0) return;
+    saveMutation.mutate(items.map((p) => p._id));
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto p-4 pt-10 pb-10"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <div className="fixed inset-0 bg-black/50" onClick={onClose} aria-hidden="true" />
+
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="reorder-modal-title"
+            className="relative w-full max-w-lg rounded-xl bg-white p-6 shadow-xl"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+          >
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <h2 id="reorder-modal-title" className="font-heading text-xl font-semibold text-neutral-900">
+                  Reorder Featured Products
+                </h2>
+                <p className="mt-1 text-xs text-neutral-500">
+                  Drag rows to reorder. The top row appears first on the homepage.
+                </p>
+              </div>
+              <button
+                onClick={onClose}
+                className="rounded-lg p-1.5 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-700 transition-colors"
+                aria-label="Close modal"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {isLoading ? (
+              <div className="space-y-2">
+                {Array.from({ length: 3 }).map((_, i) => (
+                  <Skeleton key={i} className="h-14 w-full rounded-lg" />
+                ))}
+              </div>
+            ) : items.length === 0 ? (
+              <p className="py-8 text-center text-sm text-neutral-500">
+                No featured products yet. Mark a product as "Featured" in the edit form first.
+              </p>
+            ) : (
+              <ul className="space-y-2">
+                {items.map((p, i) => (
+                  <li
+                    key={p._id}
+                    draggable
+                    onDragStart={() => handleDragStart(i)}
+                    onDragOver={(e) => handleDragOver(e, i)}
+                    onDrop={(e) => handleDrop(e, i)}
+                    onDragEnd={handleDragEnd}
+                    className={`flex items-center gap-3 rounded-lg border bg-white p-2.5 transition-colors cursor-move ${
+                      dragIdx === i ? 'opacity-40' : ''
+                    } ${
+                      overIdx === i && dragIdx !== i
+                        ? 'border-brand-500 bg-brand-50'
+                        : 'border-neutral-200'
+                    }`}
+                  >
+                    <GripVertical className="h-5 w-5 shrink-0 text-neutral-400" />
+                    <span className="w-6 shrink-0 text-center text-xs font-semibold text-neutral-500">
+                      {i + 1}
+                    </span>
+                    {p.images?.[0]?.url ? (
+                      <img
+                        src={p.images[0].url}
+                        alt={p.name}
+                        className="h-10 w-10 shrink-0 rounded-md object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-neutral-100">
+                        <Image className="h-4 w-4 text-neutral-400" />
+                      </div>
+                    )}
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium text-neutral-900">{p.name}</p>
+                      <p className="text-xs capitalize text-neutral-500">
+                        {p.category?.replace(/-/g, ' ')}
+                      </p>
+                    </div>
+                    <div className="flex shrink-0 gap-0.5">
+                      <button
+                        type="button"
+                        onClick={() => move(i, -1)}
+                        disabled={i === 0}
+                        className="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 disabled:opacity-30 disabled:hover:bg-transparent"
+                        aria-label="Move up"
+                      >
+                        ▲
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => move(i, 1)}
+                        disabled={i === items.length - 1}
+                        className="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 disabled:opacity-30 disabled:hover:bg-transparent"
+                        aria-label="Move down"
+                      >
+                        ▼
+                      </button>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <div className="mt-6 flex items-center justify-end gap-3 border-t border-neutral-200 pt-4">
+              <Button variant="ghost" size="sm" onClick={onClose} disabled={saveMutation.isPending}>
+                Cancel
+              </Button>
+              <Button
+                size="sm"
+                onClick={save}
+                loading={saveMutation.isPending}
+                disabled={items.length === 0}
+              >
+                Save Order
+              </Button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
     </AnimatePresence>
   );
 }

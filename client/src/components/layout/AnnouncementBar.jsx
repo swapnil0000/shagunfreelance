@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { Sparkles } from 'lucide-react';
 
 const messages = [
-  '🚚 Free Shipping on All Orders',
-  '💎 Premium Quality Workbags',
-  '🇮🇳 Made in India with Love',
+  'Free Shipping Across India | No Hidden Charges',
+  'Secure Checkout & Safe Payments Guaranteed',
+  'Designed for the Way India Works',
+  '7-Day Easy Returns | Shop with Confidence'
 ];
 
 export default function AnnouncementBar() {

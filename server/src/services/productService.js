@@ -33,7 +33,10 @@ export const getProducts = async ({ category, minPrice, maxPrice, search, sort, 
     'rating':     { averageRating: -1 },
     'popular':    { numReviews: -1 },
   };
-  const sortBy = sortOptions[sort] || { createdAt: -1 };
+  // Default = admin-set featuredOrder first (lowest wins), then newest.
+  // This keeps the Shop default order in sync with the homepage Featured
+  // Collection. Explicit sorts (price, newest, rating, popular) override.
+  const sortBy = sortOptions[sort] || { featuredOrder: 1, createdAt: -1 };
 
   const skip = (page - 1) * limit;
 
@@ -57,17 +60,12 @@ export const getProducts = async ({ category, minPrice, maxPrice, search, sort, 
  * Get featured products (active and featured).
  */
 export const getFeaturedProducts = async () => {
-  const products = await Product.find({ isActive: true, isFeatured: true })
+  // featuredOrder defaults to 9999 in the schema, so unset products sort
+  // naturally after admin-ordered ones — no in-memory sort needed.
+  return Product.find({ isActive: true, isFeatured: true })
     .select(CARD_FIELDS)
+    .sort({ featuredOrder: 1, createdAt: -1 })
     .lean();
-  // Sort by admin-set featuredOrder (1, 2, 3 ...); 0 / unset sorts last,
-  // tiebreak by newest first.
-  return products.sort((a, b) => {
-    const ao = a.featuredOrder || Number.MAX_SAFE_INTEGER;
-    const bo = b.featuredOrder || Number.MAX_SAFE_INTEGER;
-    if (ao !== bo) return ao - bo;
-    return new Date(b.createdAt) - new Date(a.createdAt);
-  });
 };
 
 /**
@@ -132,6 +130,23 @@ export const updateProduct = async (id, data) => {
   await product.save();
 
   return product;
+};
+
+/**
+ * Bulk-update featured order: assigns featuredOrder = 1..N based on array position.
+ * Used by the admin drag-and-drop reorder UI.
+ */
+export const reorderFeaturedProducts = async (ids) => {
+  if (!Array.isArray(ids) || ids.length === 0) {
+    throw new AppError('ids must be a non-empty array', 400);
+  }
+  const ops = ids.map((id, index) => ({
+    updateOne: {
+      filter: { _id: id },
+      update: { $set: { featuredOrder: index + 1 } },
+    },
+  }));
+  await Product.bulkWrite(ops);
 };
 
 /**

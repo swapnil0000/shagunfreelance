@@ -40,9 +40,10 @@ const productSchema = new mongoose.Schema({
   weight:           { type: String },
   keyHighlights:    [{ type: String }],
   stylingGuide:     [{ type: String }],
-  // Manual sort position for the homepage "Featured Collection".
-  // Lower number appears first; 0 / unset is treated as "after all set values".
-  featuredOrder:    { type: Number, default: 0 },
+  // Manual sort position used by both the Featured Collection (homepage)
+  // and the default Shop listing. Lower number appears first; unset/new
+  // products default to 9999 so they sort AFTER any admin-ordered products.
+  featuredOrder:    { type: Number, default: 9999 },
 }, { timestamps: true });
 
 // Every listing query filters on isActive; compound indexes cover the common

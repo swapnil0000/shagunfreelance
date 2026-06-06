@@ -9,6 +9,7 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
+  reorderFeaturedProducts,
 } from '../controllers/productController.js';
 
 const router = Router();
@@ -51,6 +52,19 @@ router.put(
   ],
   validate,
   updateProduct
+);
+
+// Bulk reorder featured products (drag-and-drop in admin)
+router.patch(
+  '/featured-order',
+  authenticate,
+  authorize('admin'),
+  [
+    body('ids').isArray({ min: 1 }).withMessage('ids must be a non-empty array'),
+    body('ids.*').isMongoId().withMessage('Each id must be a valid Mongo id'),
+  ],
+  validate,
+  reorderFeaturedProducts
 );
 
 router.delete('/:id', authenticate, authorize('admin'), deleteProduct);

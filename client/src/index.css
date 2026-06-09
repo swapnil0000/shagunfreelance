@@ -51,9 +51,10 @@
   --color-error: #dc2626;
   --color-info: #2563eb;
 
-  /* Fonts */
+  /* Fonts — single family across the whole project (Inter) */
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Playfair Display', Georgia, serif;
+  --font-heading: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 /* ============================================

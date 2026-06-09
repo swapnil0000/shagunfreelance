@@ -8,13 +8,13 @@ export default function ImageGallery({ images = [] }) {
   return (
     <div className="flex flex-col gap-3">
       {/* Main image */}
-      <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-neutral-100">
+      <div className="relative w-full overflow-hidden rounded-2xl bg-neutral-100 ">
         <img
           src={cld(gallery[activeIndex]?.url, { w: 800 })}
           srcSet={cldSrcSet(gallery[activeIndex]?.url, [600, 800, 1200])}
           sizes="(max-width: 768px) 100vw, 50vw"
           alt={gallery[activeIndex]?.alt || 'Product'}
-          className="h-full w-full object-cover"
+          className="w-full object-contain"
           fetchpriority="high"
           decoding="async"
           draggable={false}

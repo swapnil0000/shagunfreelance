@@ -3,28 +3,27 @@ import { Link } from 'react-router-dom';
 import { ArrowUpRight, Play } from 'lucide-react';
 
 const looks = [
-  // {
-  //   title: 'Office Power',
-  //   description: 'Command the boardroom with structured elegance',
-  //   category: 'laptop-bags',
-  //   image: './brandgitl.jpeg',
-  //   // To add video in future, add: video: 'https://your-cdn.com/reel.mp4'
-  //   video: null,
-  // },
+  {
+    title: 'City Edit',
+    description: 'Statement pieces for everyday glam',
+    category: 'shoulder-bags',
+    image: '/brandgirl2.webp',
+    video: null,
+  },
+  {
+    title: 'Evening Muse',
+    description: 'Elevate every occasion with ease',
+    category: 'shoulder-bags',
+    image: '/brandgirl3.webp',
+    video: null,
+  },
   {
     title: 'Weekend Vibes',
     description: 'Effortless style for brunch and beyond',
     category: 'shoulder-bags',
-     image: '/brandgitl.jpeg',
-     video: null,
+    image: '/brandgitl.jpeg',
+    video: null,
   },
-  // {
-  //   title: 'Travel Ready',
-  //   description: 'Spacious, chic, and always by your side',
-  //   category: 'tote-bags',
-  //   image: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=600&q=80&auto=format&fit=crop',
-  //   video: null,
-  // },
 ];
 
 export default function SeeItStyled() {

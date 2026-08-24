@@ -29,7 +29,7 @@ const policies = {
       },
       {
         heading: 'How to Initiate a Return',
-        text: 'To initiate a return, email us at support@zimorindia.com with your order number and reason for return. Our team will guide you through the process.',
+        text: 'To initiate a return, email us at Zimorindia@gmail.com with your order number and reason for return. Our team will guide you through the process.',
       },
       {
         heading: 'Refund Process',
@@ -62,7 +62,7 @@ const policies = {
       },
       {
         heading: 'Your Rights',
-        text: 'You may request access to, correction of, or deletion of your personal data at any time by contacting us at support@zimorindia.com.',
+        text: 'You may request access to, correction of, or deletion of your personal data at any time by contacting us at Zimorindia@gmail.com.',
       },
     ],
   },
@@ -157,10 +157,10 @@ export default function PolicyPage() {
           <p className="text-sm text-neutral-500">
             Last updated: January 2025. For questions about our policies, contact us at{' '}
             <a
-              href="mailto:support@zimorindia.com"
+              href="mailto:Zimorindia@gmail.com"
               className="text-brand-600 hover:text-brand-700"
             >
-              support@zimorindia.com
+              Zimorindia@gmail.com
             </a>
           </p>
         </div>

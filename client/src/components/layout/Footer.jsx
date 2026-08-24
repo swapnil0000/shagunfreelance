@@ -131,7 +131,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 shrink-0" />
-                <a href="mailto:support@zimorindia.com" className="text-sm hover:text-white transition-colors">support@zimorindia.com</a>
+                <a href="mailto:Zimorindia@gmail.com" className="text-sm hover:text-white transition-colors">Zimorindia@gmail.com</a>
               </li>
             </ul>
           </div>

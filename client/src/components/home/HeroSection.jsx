@@ -3,9 +3,8 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Star, ShieldCheck, Truck } from 'lucide-react';
 
 const TICKER = [
-  'Premium Workbags', 'Premium Material', 'Free Shipping All Orders',
-  'Handmade with Love', 'Premium Workbags', 'Premium Material',
-  'Free Shipping All Orders', 'Handmade with Love',
+  'Made from 100 % superior  faux leather', 'Designed for everyday work & style', 'Free shipping across India',
+  'Thoughtfully crafted with love',
 ];
 
 const stats = [

@@ -13,9 +13,9 @@ const contactMethods = [
   {
     icon: Mail,
     title: 'Email Us',
-    detail: 'support@zimorindia.com',
+    detail: 'Zimorindia@gmail.com',
     sub: 'We reply within 2–4 hours',
-    link: 'mailto:support@zimorindia.com',
+    link: 'mailto:Zimorindia@gmail.com',
   },
   {
     icon: MessageCircle,

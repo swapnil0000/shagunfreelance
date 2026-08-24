@@ -44,9 +44,9 @@ const values = [
   },
   {
     number: '02',
-    title: ' Buit to last',
+    title: 'Quality that lasts',
     description:
-      'Made with durable premium materials and fine hand-finished detailing for long-lasting everyday use.',
+      'Made with Superior Faux leather and fine hand-finished detailing for long-lasting everyday use.',
   },
   {
     number: '03',

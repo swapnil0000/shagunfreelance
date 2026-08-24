@@ -60,7 +60,7 @@ export const sendOrderConfirmationEmail = async (order) => {
     <p>Thank you for shopping with Zimor India!</p>
     <p style="margin-top:16px;font-size:12px;color:#666;">
       Zimor India | D 59/198-KA-1-P, Shivpurwa, Varanasi, UP – 221010<br/>
-      📞 +91 89536 96928 | ✉️ support@zimorindia.com
+      📞 +91 89536 96928 | ✉️ Zimorindia@gmail.com
     </p>
   `;
 
@@ -129,7 +129,7 @@ export const sendContactEmails = async ({ name, email, phone, subject, message }
       <p style="font-size:14px;color:#444;">For urgent queries, reach us on WhatsApp: <strong>+91 89536 96928</strong></p>
       <p style="margin-top:24px;font-size:12px;color:#888;">
         Zimor India | D 59/198-KA-1-P, Shivpurwa, Varanasi, UP – 221010<br/>
-        📞 +91 89536 96928 | ✉️ support@zimorindia.com
+        📞 +91 89536 96928 | ✉️ Zimorindia@gmail.com
       </p>
     `,
   });

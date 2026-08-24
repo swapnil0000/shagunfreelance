@@ -18,7 +18,7 @@ const generateInvoice = (order, res) => {
   // Company header
   doc.fontSize(20).text('Zimor India', { align: 'center' });
   doc.fontSize(10).text('D 59/198-KA-1-P, Shivpurwa, Varanasi, UP – 221010', { align: 'center' });
-  doc.fontSize(10).text('+91 89536 96928 | support@zimorindia.com', { align: 'center' });
+  doc.fontSize(10).text('+91 89536 96928 | Zimorindia@gmail.com', { align: 'center' });
   doc.moveDown();
 
   // Invoice title

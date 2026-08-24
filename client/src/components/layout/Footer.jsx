@@ -9,7 +9,7 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <h3 className="font-heading text-xl font-bold text-white mb-3">
-              Zimor India
+              Zimor
             </h3>
             <p className="text-sm leading-relaxed mb-4">
               Made to Move With You
@@ -123,7 +123,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 mt-0.5 shrink-0" />
-                <span className="text-sm">D 59/198-KA-1-P, Shivpurwa, Varanasi, Uttar Pradesh – 221010</span>
+                <span className="text-sm">Shivdaspur, manduadih, varanasi, uttar pradesh-  221103</span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 shrink-0" />

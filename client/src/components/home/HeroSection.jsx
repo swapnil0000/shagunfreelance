@@ -9,8 +9,8 @@ const TICKER = [
 ];
 
 const stats = [
-  { value: '10+', label: 'Happy Customers' },
-  { value: '100%', label: 'Premium Quality' },
+  { value: '300+', label: 'Orders' },
+  { value: '100%', label: 'Superior Faux leather' },
   { value: '4.9★', label: 'Avg Rating' },
 ];
 
@@ -80,7 +80,7 @@ export default function HeroSection() {
             >
               <div className="h-px w-8 bg-white/40" />
               <span className="text-xs font-semibold uppercase tracking-[0.22em] text-white/50">
-                Zimor India
+                Zimor 
               </span>
             </motion.div>
 
@@ -92,12 +92,12 @@ export default function HeroSection() {
                 className="font-heading font-black leading-[0.88] text-white"
                 style={{ fontSize: 'clamp(60px, 6vw, 96px)' }}
               >
-                BUILT
+                 Made 
                 <br />
                 FOR
                 <br />
                 <span className="bg-gradient-to-b from-white to-neutral-500 bg-clip-text text-transparent">
-                  WORK.
+                  THE WAY YOU WORK.
                 </span>
               </motion.h1>
             </div>
@@ -108,8 +108,8 @@ export default function HeroSection() {
               transition={{ duration: 0.7, ease: 'easeOut', delay: 0.3 }}
               className="mt-5 max-w-[300px] text-[15px] leading-relaxed text-white/50"
             >
-              PREMIUM WOMEN’S WORK BAGS 
-              <span className="text-white/80"> • MADE IN INDIA</span>
+             Smart, considered work bags that move effortlessly from your desk to wherever the day takes you.
+              {/* <span className="text-white/80"> • MADE IN INDIA</span> */}
             </motion.p>
 
             <motion.div

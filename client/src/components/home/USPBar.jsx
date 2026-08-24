@@ -11,14 +11,14 @@ const usps = [
   },
   {
     icon: Gem,
-    title: 'Premium Quality',
+    title: ' Buit to last',
     description: 'Materials built to last',
     color: 'bg-neutral-900 text-white',
     border: 'hover:border-neutral-700',
   },
   {
     icon: RefreshCw,
-    title: '7-Day Returns',
+    title: '15-Day Returns',
     description: 'No questions asked',
     color: 'bg-neutral-100 text-neutral-700',
     border: 'hover:border-neutral-300',

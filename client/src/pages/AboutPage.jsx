@@ -3,35 +3,35 @@ import { ArrowRight, MoveDown, Briefcase, ShieldCheck, Package, MapPin, Sparkles
 import { Link } from 'react-router-dom';
 
 const stats = [
-  { value: '10+',   label: 'Bags Delivered' },
+  { value: '300+',   label: 'orders' },
   { value: '4.9★',  label: 'Customer Rating' },
-  { value: '100%',  label: 'Premium Material' },
+  { value: '100%',  label: 'Superior Faux leather' },
 ];
 
 const features = [
   {
     icon: Briefcase,
-    title: 'Designed for the Modern Working Woman',
+    title: 'Made for Everyday Work',
     description:
-      'Thoughtfully crafted to match your workday — from office meetings to everyday hustle with style and functionality.',
+      'Designed around the things you actually carry—your laptop, documents, charger, bottle and daily essentials.',
   },
   {
     icon: ShieldCheck,
-    title: 'Premium Quality That Lasts',
+    title: 'Quality You Can Rely On',
     description:
-      'Made with durable premium materials and fine hand-finished detailing for long-lasting everyday use.',
+      'We focus on durable materials, strong construction and practical details designed for regular, everyday use.',
   },
   {
     icon: Package,
-    title: 'Smart & Spacious Organization',
+    title: 'Organised Without Feeling Bulky',
     description:
-      'Fits your essentials effortlessly — laptop, documents, charger, makeup, and more — without compromising elegance.',
+      'Dedicated spaces help keep your essentials easy to find, while the overall design stays clean and comfortable to carry.',
   },
   {
     icon: MapPin,
-    title: 'Proudly Designed & Made in India',
+    title: 'Designed & Made in India',
     description:
-      'Every Zimor bag is designed, developed, and manufactured in-house with attention to quality, comfort, and timeless design.',
+      'Every Zimor bag is designed and manufactured in India, with attention to functionality, construction and everyday usability.',
   },
 ];
 
@@ -44,7 +44,7 @@ const values = [
   },
   {
     number: '02',
-    title: 'Premium Quality That Lasts',
+    title: ' Buit to last',
     description:
       'Made with durable premium materials and fine hand-finished detailing for long-lasting everyday use.',
   },
@@ -122,16 +122,16 @@ export default function AboutPage() {
             {/* Badge */}
             <span className="inline-flex items-center gap-2 rounded-full border border-brand-400/40 bg-brand-500/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-brand-300 mb-7 backdrop-blur-sm">
               <Sparkles className="h-3 w-3 shrink-0" />
-               PREMIUM WOMEN’S WORK BAGS. MADE IN INDIA
+               MODERN WORK BAGS. THAUGHTFULLY DESIGNED.
             </span>
 
             {/* Heading */}
             <h1 className="font-heading text-5xl font-bold text-white sm:text-6xl lg:text-7xl xl:text-[5.5rem] leading-[1.02] max-w-2xl">
-              Carry Confidence.
+                Carry Your Day.
               <br />
-              <span className="italic text-brand-300 underline decoration-brand-500/50 decoration-2 underline-offset-8">
-                Lead Every Room.
-              </span>
+              {/* <span className="italic text-brand-300 underline decoration-brand-500/50 decoration-2 underline-offset-8">
+               THAUGHTFULLY DESIGNED.
+              </span> */}
             </h1>
 
             {/* Decorative rule */}
@@ -139,7 +139,7 @@ export default function AboutPage() {
 
             {/* Subtitle */}
             <p className="mt-4 max-w-sm text-base text-white/60 leading-relaxed">
-              Crafted in India with premium materials and timeless design, Zimor work bags are made for modern women balancing work, style, and everyday life.
+            Thoughtfully designed work bags for modern women - balancing smart functionality, understated style, and everyday comfort.
             </p>
 
             {/* CTAs */}
@@ -164,7 +164,7 @@ export default function AboutPage() {
               <span className="mx-1 text-white/15">·</span>
               4.9 rated
               <span className="mx-1 text-white/15">·</span>
-              10+ bags delivered
+               300+ orders
               <span className="mx-1 text-white/15">·</span>
               Proudly Made in India
             </p>
@@ -302,7 +302,7 @@ export default function AboutPage() {
             <div className="absolute inset-0 translate-x-4 translate-y-4 rounded-3xl border-2 border-brand-200" />
             <div className="relative overflow-hidden rounded-3xl bg-neutral-100">
               <img
-                src="/about.jpeg"
+                src="/about.webp"
                 alt="Zimor artisan crafting a bag"
                 className="w-full object-cover aspect-[4/5]"
                 loading="lazy"

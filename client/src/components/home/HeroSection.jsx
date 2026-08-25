@@ -245,25 +245,6 @@ export default function HeroSection() {
         </motion.div>
       </div>
 
-      {/* ── Scrolling ticker (desktop only) ── */}
-      <div className="hidden lg:flex overflow-hidden border-t border-white/8 bg-white/[0.03] py-3">
-        <motion.div
-          animate={{ x: ['0%', '-50%'] }}
-          transition={{ duration: 28, ease: 'linear', repeat: Infinity }}
-          className="flex shrink-0 whitespace-nowrap"
-        >
-          {[...TICKER, ...TICKER].map((item, i) => (
-            <span
-              key={i}
-              className="inline-flex items-center gap-5 px-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/25"
-            >
-              {item}
-              <span className="text-white/15">◆</span>
-            </span>
-          ))}
-        </motion.div>
-      </div>
-
       {/* ── MOBILE: stacked ── */}
       <div className="lg:hidden">
         <div
@@ -298,11 +279,11 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="font-heading text-[52px] font-black leading-[0.88] text-white sm:text-[64px]"
+            className="font-heading text-[44px] font-black leading-[0.88] text-white sm:text-[56px]"
           >
-            BUILT<br />FOR<br />
+            Made<br />FOR<br />
             <span className="bg-gradient-to-b from-white to-neutral-500 bg-clip-text text-transparent">
-              WORK.
+              THE WAY YOU WORK.
             </span>
           </motion.h1>
 
@@ -312,8 +293,8 @@ export default function HeroSection() {
             transition={{ duration: 0.7, delay: 0.15 }}
             className="mt-5 text-sm leading-relaxed text-white/50 sm:text-base"
           >
-            PREMIUM WOMEN’S WORK BAGS <br/>
-            <span className="text-white/80"> • MADE IN INDIA </span> 
+            Smart, considered work bags that move effortlessly from your desk to
+            wherever the day takes you.
           </motion.p>
 
           <motion.div
@@ -348,6 +329,25 @@ export default function HeroSection() {
             ))}
           </motion.div>
         </div>
+      </div>
+
+      {/* ── Scrolling ticker ── */}
+      <div className="flex overflow-hidden border-t border-white/8 bg-white/[0.03] py-3">
+        <motion.div
+          animate={{ x: ['0%', '-50%'] }}
+          transition={{ duration: 28, ease: 'linear', repeat: Infinity }}
+          className="flex shrink-0 whitespace-nowrap"
+        >
+          {[...TICKER, ...TICKER].map((item, i) => (
+            <span
+              key={i}
+              className="inline-flex items-center gap-5 px-6 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/25"
+            >
+              {item}
+              <span className="text-white/15">◆</span>
+            </span>
+          ))}
+        </motion.div>
       </div>
 
     </section>

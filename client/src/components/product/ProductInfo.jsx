@@ -223,7 +223,7 @@ export default function ProductInfo({ product }) {
           </div>
           <div className="flex items-center gap-1.5 text-xs text-neutral-500">
             <RotateCcw className="h-4 w-4 text-brand-600" />
-            15-day returns
+            7-day returns
           </div>
         </div>
 
